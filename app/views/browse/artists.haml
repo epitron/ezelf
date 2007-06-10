@@ -4,12 +4,12 @@
 #browser{ :style => "font-family: Tahoma" }
   - @artists.each do |artist|
     %h2
-      = link_to image_tag("play24"), :controller=>"stream", :action=>"artist", :id=>artist.id
+      = link_to image_tag("play24.png"), :controller=>"stream", :action=>"artist", :id=>artist.id
       = artist.name
     - artist.albums.each do |album|
       %ul
         %h3
-          = link_to image_tag("play16"), :controller=>"stream", :action=>"album", :id=>album.id
+          = link_to image_tag("play16.png"), :controller=>"stream", :action=>"album", :id=>album.id
           = album.name
         %ul
           - album.tracks.each do |track|
