@@ -1,16 +1,17 @@
+%h1 EzElf Now Contains:
 
-#browser
+
+#browser{ :style => "font-family: Tahoma" }
   - @artists.each do |artist|
-    %ul
-      %h2
-        = link_to image_tag("play24"), :controller=>"stream", :action=>"artist", :id=>artist.id
-        = artist.name
-        - artist.albums.each do |album|
-          %ul
-            %h3
-              = link_to image_tag("play16"), :controller=>"stream", :action=>"album", :id=>album.id
-              = album.name
-              - album.tracks.each do |track|
-                %ul
-                  == #{track.number}.
-                  = link_to_track(track)
+    %h2
+      = link_to image_tag("play24"), :controller=>"stream", :action=>"artist", :id=>artist.id
+      = artist.name
+    - artist.albums.each do |album|
+      %ul
+        %h3
+          = link_to image_tag("play16"), :controller=>"stream", :action=>"album", :id=>album.id
+          = album.name
+        %ul
+          - album.tracks.each do |track|
+            == #{track.number}.
+            = link_to_track(track)
