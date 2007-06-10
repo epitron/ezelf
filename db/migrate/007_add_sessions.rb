@@ -5,9 +5,10 @@ class AddSessions < ActiveRecord::Migration
 			t.column :session_id, :string
 			t.column :data, :text
 			t.column :updated_at, :datetime
+			t.column :created_at, :datetime
 		end
-	
 		add_index :sessions, :session_id
+		add_index :sessions, :updated_at
 	end
 	
 	def self.down
