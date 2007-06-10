@@ -1,0 +1,12 @@
+
+#browser
+  - @artists.each do |artist|
+    %ul
+      = link_to artist.name, :controller=>"stream", :action=>"artist", :id=>artist.id
+      - artist.albums.each do |album|
+        %ul
+          = link_to album.name, :controller=>"stream", :action=>"album", :id=>album.id
+          - album.tracks.each do |track|
+            %ul
+              == #{track.number}.
+              = link_to_track(track)
