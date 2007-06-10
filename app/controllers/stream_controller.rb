@@ -87,5 +87,12 @@ class StreamController < ApplicationController
 		render "stream/playlist"
 	end
 	
-	
+
+	def shuffle
+		num = params[:id].to_i
+		num = 400 if num > 400
+		@tracks = Track.find_by_sql( ["SELECT * FROM tracks ORDER BY rand() LIMIT ?", num])
+		headers["Content-Type"] = "audio/x-mpegurl; charset=utf-8"
+		render "stream/playlist"
+	end	
 end
