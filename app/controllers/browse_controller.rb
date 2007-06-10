@@ -4,7 +4,7 @@ class BrowseController < ApplicationController
 	end
 
 	def artists
-		@artists = Artist.find :all, :include=>[:albums, :tracks]		
+		@artists = Artist.find(:all, :include=>[:albums, :tracks]).select{|artist| artist.albums.any?}
 	end
 	
 	def tracks
