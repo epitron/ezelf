@@ -16,6 +16,10 @@ class Track < ActiveRecord::Base
 	end
 		
 	def self.add_file( file )
+		# TODO: bug -- albums with > 1 artist get associated with the last artist. 
+		#       |_ to fix, put all Tag's in an array keyed by album, and mark ones with > 1 artist as "various".
+		#       |_ support "Album Artist" tag
+		
 		tag = ID3Lib::Tag.new(file)
 		
 		artist 	= Artist.find_or_create_by_name(tag.artist)

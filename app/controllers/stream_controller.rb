@@ -60,15 +60,22 @@ class StreamController < ApplicationController
 		end
 		
 		#pp response.headers
-	end		
+	end
+	
+	def xsendfile(path, options)
+		headers["X-Sendfile"] = path
+		headers["Content-Type"] = options[:type] if options[:type]
+		#headers["Content-Disposition"] = "attachment; file=\"$somefile\""
+		render :text=>""
+	end
 
 	def track
 		track = Track.find(params[:id])
 		#pp request.env
 		#"HTTP_RANGE"=>"bytes=878672-",
 		#send_file track.file, :type => 'audio/mpeg', :stream => true, :buffer_size => 4096, :disposition => 'inline'
-		stream_file track.file, :type => 'audio/mpeg', :stream => true, :buffer_size => 4096, :disposition => 'inline'
-		
+		#stream_file track.file, :type => 'audio/mpeg', :stream => true, :buffer_size => 4096, :disposition => 'inline'	
+		xsendfile track.file, :type => 'audio/mpeg'
 	end
 	
 	def album
