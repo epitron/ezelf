@@ -63,10 +63,12 @@ class StreamController < ApplicationController
 	end
 	
 	def xsendfile(path, options)
+		headers["Content-Type"] = "application/force-download"
 		headers["X-Sendfile"] = path
-		headers["Content-Type"] = options[:type] if options[:type]
-		headers["Content-Disposition"] = "attachment; file=\"#{path}\""
-		render :text=>""
+		#headers["Content-Type"] = options[:type] if options[:type]
+		headers["Content-Length"] = File.size(path)
+		headers["Content-Disposition"] = "attachment; file=\"#{File.basename path}\""
+		render :nothing => true 
 	end
 
 	def track
@@ -74,8 +76,8 @@ class StreamController < ApplicationController
 		#pp request.env
 		#"HTTP_RANGE"=>"bytes=878672-",
 		#send_file track.file, :type => 'audio/mpeg', :stream => true, :buffer_size => 4096, :disposition => 'inline'
-		#stream_file track.file, :type => 'audio/mpeg', :stream => true, :buffer_size => 4096, :disposition => 'inline'	
-		xsendfile track.file, :type => 'audio/mpeg'
+		stream_file track.file, :type => 'audio/mpeg', :stream => true, :buffer_size => 4096, :disposition => 'inline'	
+		#xsendfile track.file, :type => 'audio/mpeg'
 	end
 	
 	def album

@@ -1,4 +1,4 @@
 ### Global defaults
 
 dirs:
-  - "d:/mp3/[PRE-CRASH]"
+  - "/home/epi/mp3/albums"
