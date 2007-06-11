@@ -65,7 +65,7 @@ class StreamController < ApplicationController
 	def xsendfile(path, options)
 		headers["X-Sendfile"] = path
 		headers["Content-Type"] = options[:type] if options[:type]
-		#headers["Content-Disposition"] = "attachment; file=\"$somefile\""
+		headers["Content-Disposition"] = "attachment; file=\"#{path}\""
 		render :text=>""
 	end
 
