@@ -29,12 +29,14 @@ class StreamController < ApplicationController
 		options[:length]   ||= File.size(path)
 		options[:filename] ||= File.basename(path)
 		send_file_headers! options
-		#headers["Accept-Ranges"] = "bytes"
-		#headers["Content-Length"] = options[:length]
+		
+		headers["Last-Modified"] = File.mtime(path).rfc2822 # "Sun, 26 Feb 2006 21:18:23 GMT"
+		headers["Accept-Ranges"] = "bytes"
+		headers["Content-Length"] = options[:length]
+		headers["Content-Type"] = "audio/mpeg"
+		headers["ETag"] = SHA1.new(path).to_s
 		#headers["Connection"] = "close"
-		#headers["Content-Type"] = "audio/mpeg"
 		#headers["Cache-Control"] = "public"
-		#headers["ETag"] = SHA1.new(path).to_s
 		
 		@performed_render = false
 		#pp request.env
@@ -63,11 +65,16 @@ class StreamController < ApplicationController
 	end
 	
 	def xsendfile(path, options)
+		headers["Content-Transfer-Encoding"] = "binary"
 		headers["Content-Type"] = "application/force-download"
-		headers["X-Sendfile"] = path
 		#headers["Content-Type"] = options[:type] if options[:type]
-		headers["Content-Length"] = File.size(path)
+
+		headers["X-Sendfile"] = path
 		headers["Content-Disposition"] = "attachment; file=\"#{File.basename path}\""
+		#headers["Content-Length"] = File.size(path)
+
+		# TODO: What does @performed_render change?
+		#@performed_render = false
 		render :nothing => true 
 	end
 
