@@ -69,3 +69,10 @@ SqlSessionStore.session_class = MysqlSession
 # Mime::Type.register "application/x-mobile", :mobile
 
 # Include your application configuration below
+
+require 'id3lib'
+require 'id3lib_extensions'
+
+
+
+

@@ -2,14 +2,14 @@
 # migrations feature of ActiveRecord to incrementally modify your database, and
 # then regenerate this schema definition.
 
-ActiveRecord::Schema.define(:version => 7) do
+ActiveRecord::Schema.define(:version => 8) do
 
   create_table "albums", :force => true do |t|
     t.column "name",         :string
     t.column "artist_id",    :integer
     t.column "year",         :integer
     t.column "tracks_count", :integer
-    t.column "various",      :boolean, :default => false
+    t.column "compilation",  :boolean
   end
 
   add_index "albums", ["artist_id"], :name => "index_albums_on_artist_id"
@@ -58,15 +58,18 @@ ActiveRecord::Schema.define(:version => 7) do
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
 
   create_table "tracks", :force => true do |t|
-    t.column "title",    :string
-    t.column "file",     :string
-    t.column "album_id", :integer
-    t.column "number",   :integer
-    t.column "disc",     :integer
+    t.column "title",         :string
+    t.column "album_id",      :integer
+    t.column "number",        :integer
+    t.column "disc",          :integer
+    t.column "artist_id",     :integer
+    t.column "root",          :string
+    t.column "relative_path", :string
+    t.column "filename",      :string
   end
 
+  add_index "tracks", ["root", "relative_path", "filename"], :name => "index_tracks_on_root_and_relative_path_and_filename", :unique => true
   add_index "tracks", ["title"], :name => "index_tracks_on_title"
-  add_index "tracks", ["file"], :name => "index_tracks_on_file"
   add_index "tracks", ["album_id"], :name => "index_tracks_on_album_id"
   add_index "tracks", ["number"], :name => "index_tracks_on_number"
 
