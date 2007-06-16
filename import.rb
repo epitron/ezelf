@@ -1,5 +1,6 @@
 require 'rubygems'
-require 'dbcon'
+#require 'dbcon'
+require 'config/environment'
 require 'id3lib'
 require 'id3lib_extensions'
 
@@ -12,7 +13,7 @@ Artist.delete_all
 for dir in SETTINGS.dirs
 	puts "importing: #{dir}"
 	for fullpath in Dir["#{dir}/**/*.mp3"]
-		puts " - #{file}"
+		puts " - #{fullpath}"
 		path = fullpath.gsub(dir, '').gsub(%r{^/}, '')
 		Track.add_file(dir, path)
 	end	

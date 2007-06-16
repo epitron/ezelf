@@ -1,0 +1,37 @@
+<table class="sl_list">
+  <thead>
+	<tr>
+  <% list_columns.each do |column| %>
+    <%= column.render_th(streamlined_request_context, self )%>
+  <% end %>
+  <%= streamlined_table_row_button_header %>
+  </tr>
+  </thead>
+  <tbody>
+  <% odd = false %>
+  <% for item in @streamlined_items %>
+    <% odd = !odd %>
+    <tr class="<%= odd ? 'odd' : 'even'%>">
+    <% list_columns.each do |column| %>
+      <td><%= !column.render_td(self, item).blank? ? column.render_td(self, item) : '&nbsp;' %></td>
+    <% end %>
+    <%= streamlined_table_row_buttons(item) %>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+
+
+<% if @streamlined_item_pages != [] && @streamlined_item_pages.current.previous %>
+<script type="text/javascript">
+if($('previous_page')) {
+	Element.show('previous_page');
+}
+</script>
+<% else %>
+<script type="text/javascript">
+if($('previous_page')) {
+	Element.hide('previous_page');
+}
+</script>
+<% end %>

@@ -70,8 +70,7 @@ SqlSessionStore.session_class = MysqlSession
 
 # Include your application configuration below
 
-require 'id3lib'
-require 'id3lib_extensions'
+require 'id3lib_with_extensions'
 
 
 

@@ -83,7 +83,7 @@ class StreamController < ApplicationController
 		#pp request.env
 		#"HTTP_RANGE"=>"bytes=878672-",
 		#send_file track.file, :type => 'audio/mpeg', :stream => true, :buffer_size => 4096, :disposition => 'inline'
-		stream_file track.file, :type => 'audio/mpeg', :stream => true, :buffer_size => 4096, :disposition => 'inline'	
+		stream_file track.fullpath, :type => 'audio/mpeg', :stream => true, :buffer_size => 4096, :disposition => 'inline'	
 		#xsendfile track.file, :type => 'audio/mpeg'
 	end
 	

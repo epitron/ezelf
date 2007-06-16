@@ -13,6 +13,10 @@ class Track < ActiveRecord::Base
 		@dirs ||= relative_path.split('/')[0..-2]
 	end
 	
+	def fullpath
+		File.join( root, relative_path, filename )
+	end
+	
 	def self.all
 		Track.find_by_sql("SELECT * FROM artists,albums,tracks WHERE tracks.album_id = albums.id AND albums.artist_id = artists.id ORDER BY artists.name,albums.name,tracks.number")
 	end

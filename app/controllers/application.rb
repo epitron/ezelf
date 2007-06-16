@@ -2,6 +2,8 @@
 # Likewise, all the methods added will be available for all controllers.
 
 =begin
+
+request.env ?
 {"SERVER_NAME"=>"localhost",
  "PATH_INFO"=>"/stream/track/177.mp3",
  "HTTP_USER_AGENT"=>
@@ -22,7 +24,30 @@
 =end
 
 class ApplicationController < ActionController::Base
-  # Pick a unique cookie name to distinguish our session data from others'
-  session :session_key => '_ezelf_session_id'
-  
+
+	include LoginSystem
+
+	session :session_key => '_ezelf_session_id'
+
+	if SETTINGS.disable_authentication
+		def login_filter
+			unless session[:user_id]
+				session[:user_id] = 0
+				@user = User.find 0
+			end
+			return true
+		end
+	end
+
+	before_filter :login_filter
+	before_filter :show_env
+	
+	def show_env
+		puts ":::::::::::::::Env::::::::::::::::::"
+		pp request.env
+		puts
+		
+		# if an HTTPAuth username is supplied, use it as a "User Key" and find the user's session.
+	end
+	
 end

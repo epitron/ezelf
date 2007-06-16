@@ -11,4 +11,7 @@ class BrowseController < ApplicationController
 		@tracks = Track.all
 	end
 	
+	def index
+	end
+	
 end

@@ -1,8 +1,18 @@
+%h1 EZ Elf Pro v10.eleven
 
-#browser
-- @albums.each do |album|
-%tr
-%td= album.artist.name
-%td= album.name
-		
-		
+%h3 Things you can do (some can't be done):
+
+%ul
+  %li
+    = link_to "Browse by artists", :controller=>"browse", :action=>"artists"
+  %li
+    Shuffle: |
+    - for n in [50, 100, 400] do
+      = link_to "#{n} songs", :action=>"shuffle", :id=>n
+      |
+  %li
+    Browse by Albums
+  %li
+    Browse Files
+  %li
+    Listening History / Stats
