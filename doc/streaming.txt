@@ -1,0 +1,159 @@
+
+
+
+=== stream => PLAY =====
+
+GET /files/jam%20(Rich,%20Marc,%20Nate%20and%20Chris)%20-%20Bottles%20and%20Cans%20(19-feb-2006).mp3 HTTP/1.0
+Host: chris.ill-logic.com
+User-Agent: WinampMPEG/5.35
+# Accept: */*
+# Icy-MetaData:1
+Connection: close
+
+HTTP/1.1 200 OK
+Date: Mon, 11 Jun 2007 04:39:34 GMT
+Server: Apache/2.0.55 (Ubuntu) mod_fastcgi/2.4.2 mod_python/3.1.4 Python/2.4.3 PHP/4.4.2-1build1 mod_scgi/1.9 mod_webkit2/0.5
+Last-Modified: Sun, 26 Feb 2006 21:18:23 GMT
+# ETag: "63e09-9b82f2-2255c5c0"
+# Accept-Ranges: bytes
+# Content-Length: 10191602
+Connection: close
+Content-Type: audio/mpeg
+	
+=== stream => SEEK =====
+	
+GET /files/jam%20(Rich,%20Marc,%20Nate%20and%20Chris)%20-%20Bottles%20and%20Cans%20(19-feb-2006).mp3 HTTP/1.1
+Host: chris.ill-logic.com
+User-Agent: WinampMPEG/5.35
+# Accept: */*
+# Range: bytes=2719564-
+Connection: close
+
+HTTP/1.1 206 Partial Content
+Date: Mon, 11 Jun 2007 04:39:42 GMT
+Server: Apache/2.0.55 (Ubuntu) mod_fastcgi/2.4.2 mod_python/3.1.4 Python/2.4.3 PHP/4.4.2-1build1 mod_scgi/1.9 mod_webkit2/0.5
+Last-Modified: Sun, 26 Feb 2006 21:18:23 GMT
+# ETag: "63e09-9b82f2-2255c5c0"
+# Accept-Ranges: bytes
+Content-Length: 7472038
+# Content-Range: bytes 2719564-10191601/10191602
+Connection: close
+Content-Type: audio/mpeg	
+
+
+
+
+
+=== proper resume, initiate =====
+
+GET /files/John_Crumboldt_-_Careers.mp3 HTTP/1.1
+User-Agent: Opera/9.20 (Windows NT 5.1; U; en)
+Host: chris.ill-logic.com
+#Accept: text/html, application/xml;q=0.9, application/xhtml+xml, image/png, image/jpeg, image/gif, image/x-xbitmap, */*;q=0.1
+Accept-Language: en-US,en;q=0.9
+Accept-Charset: iso-8859-1, utf-8, utf-16, *;q=0.1
+Accept-Encoding: deflate, gzip, x-gzip, identity, *;q=0
+Connection: Keep-Alive, TE
+TE: deflate, gzip, chunked, identity, trailers
+
+HTTP/1.1 200 OK
+Date: Sun, 10 Jun 2007 23:44:42 GMT
+Server: Apache/2.0.55 (Ubuntu) mod_fastcgi/2.4.2 mod_python/3.1.4 Python/2.4.3 PHP/4.4.2-1build1 mod_scgi/1.9 mod_webkit2/0.5
+#Last-Modified: Sat, 22 Jul 2006 21:05:30 GMT
+#ETag: "287155-15a71f0-f9177a80"
+Accept-Ranges: bytes
+Content-Length: 22704624
+Keep-Alive: timeout=5, max=100
+Connection: Keep-Alive
+Content-Type: audio/mpeg
+
+
+=== proper resume, resume =====
+
+GET /files/John_Crumboldt_-_Careers.mp3 HTTP/1.1
+User-Agent: Opera/9.20 (Windows NT 5.1; U; en)
+Host: chris.ill-logic.com
+#Accept: text/html, application/xml;q=0.9, application/xhtml+xml, image/png, image/jpeg, image/gif, image/x-xbitmap, */*;q=0.1
+Accept-Language: en-US,en;q=0.9
+Accept-Charset: iso-8859-1, utf-8, utf-16, *;q=0.1
+Accept-Encoding: deflate, gzip, x-gzip, identity, *;q=0
+#If-Range: "287155-15a71f0-f9177a80"
+Connection: Keep-Alive, TE
+TE: deflate, gzip, chunked, identity, trailers
+#Range: bytes=756100-
+
+HTTP/1.1 206 Partial Content
+Date: Sun, 10 Jun 2007 23:44:47 GMT
+Server: Apache/2.0.55 (Ubuntu) mod_fastcgi/2.4.2 mod_python/3.1.4 Python/2.4.3 PHP/4.4.2-1build1 mod_scgi/1.9 mod_webkit2/0.5
+#Last-Modified: Sat, 22 Jul 2006 21:05:30 GMT
+#ETag: "287155-15a71f0-f9177a80"
+Accept-Ranges: bytes
+Content-Length: 21948524
+#Content-Range: bytes 756100-22704623/22704624
+Keep-Alive: timeout=5, max=100
+Connection: Keep-Alive
+Content-Type: audio/mpeg
+
+
+
+
+
+
+
+
+=== my attempt, initiate ======
+
+GET /stream/track/247.mp3 HTTP/1.1
+User-Agent: Opera/9.20 (Windows NT 5.1; U; en)
+Host: b.hob.ponzo.net:3000
+Accept: text/html, application/xml;q=0.9, application/xhtml+xml, image/png, image/jpeg, image/gif, image/x-xbitmap, */*;q=0.1
+Accept-Language: en-US,en;q=0.9
+Accept-Charset: iso-8859-1, utf-8, utf-16, *;q=0.1
+Accept-Encoding: deflate, gzip, x-gzip, identity, *;q=0
+Cookie: _ezelf_session_id=cff6307e0226bbffe1a20986b0420b93
+Cookie2: $Version=1
+Cache-Control: no-cache
+Connection: Keep-Alive, TE
+TE: deflate, gzip, chunked, identity, trailers
+
+HTTP/1.1 200 OK
+Connection: close
+Date: Sun, 10 Jun 2007 23:46:38 GMT
+Set-Cookie: _ezelf_session_id=cff6307e0226bbffe1a20986b0420b93; path=/
+Status: 200 OK
+Content-Transfer-Encoding: binary
+Cache-Control: private
+Content-Disposition: inline; filename="06 - marvin gaye - t plays it cool.mp3"
+Server: Mongrel 1.0.1
+Content-Type: audio/mpeg
+Content-Length: 2898982
+
+=== my attempt, resume ======
+
+GET /stream/track/247.mp3 HTTP/1.1
+User-Agent: Opera/9.20 (Windows NT 5.1; U; en)
+Host: b.hob.ponzo.net:3000
+Accept: text/html, application/xml;q=0.9, application/xhtml+xml, image/png, image/jpeg, image/gif, image/x-xbitmap, */*;q=0.1
+Accept-Language: en-US,en;q=0.9
+Accept-Charset: iso-8859-1, utf-8, utf-16, *;q=0.1
+Accept-Encoding: deflate, gzip, x-gzip, identity, *;q=0
+If-Range: Sun, 10 Jun 2007 23:46:38 GMT
+Cookie: _ezelf_session_id=cff6307e0226bbffe1a20986b0420b93
+Cookie2: $Version=1
+Connection: Keep-Alive, TE
+TE: deflate, gzip, chunked, identity, trailers
+Range: bytes=406184-
+
+
+HTTP/1.1 200 OK
+Connection: close
+Date: Sun, 10 Jun 2007 23:46:42 GMT
+Set-Cookie: _ezelf_session_id=cff6307e0226bbffe1a20986b0420b93; path=/
+Status: 200 OK
+Content-Range: bytes 406184-2898981/2898982
+Content-Transfer-Encoding: binary
+Cache-Control: private
+Content-Disposition: inline; filename="06 - marvin gaye - t plays it cool.mp3"
+Server: Mongrel 1.0.1
+Content-Type: audio/mpeg
+Content-Length: 2898982
