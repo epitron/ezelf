@@ -1,0 +1,13 @@
+%h2 Login time.
+
+%form{ :action=>"login", :method=>"post" }
+  Login:
+  = text_field "user", "name"
+  %br/
+  
+  Password:
+  = password_field "user", "password"
+  %br/
+  
+  = submit_tag "Go!"
+  

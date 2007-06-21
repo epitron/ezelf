@@ -23,92 +23,108 @@ Content-Type: audio/mpeg
 =end
 
 class StreamController < ApplicationController
-	def stream_file(path, options)
-		raise MissingFile, "Cannot read file #{path}" unless File.file?(path) and File.readable?(path)
-		
-		options[:length]   ||= File.size(path)
-		options[:filename] ||= File.basename(path)
-		send_file_headers! options
-		
-		headers["Last-Modified"] = File.mtime(path).rfc2822 # "Sun, 26 Feb 2006 21:18:23 GMT"
-		headers["Accept-Ranges"] = "bytes"
-		headers["Content-Length"] = options[:length]
-		headers["Content-Type"] = "audio/mpeg"
-		headers["ETag"] = SHA1.new(path).to_s
-		#headers["Connection"] = "close"
-		#headers["Cache-Control"] = "public"
-		
-		@performed_render = false
-		#pp request.env
-		
-		file = File.open(path, 'rb')
-		if request.env["HTTP_RANGE"] =~ /bytes=(\d+)-(.*)$/ || request.env["HTTP_CONTENT_RANGE"] =~ /bytes (\d+)-(.*)$/
-			file.seek($1.to_i)
-			headers["Content-Range"] = "bytes #{file.pos}-#{options[:length] - 1}/#{options[:length]}"
-			puts "Sending range: #{headers["Content-Range"]}"
-		end
-		
-		if options[:stream]
-			render :status => options[:status], :text => Proc.new { |response, output|
-				logger.info "Streaming file #{path}" unless logger.nil?
-				len = options[:buffer_size] || 4096
-				while buf = file.read(len)
-					output.write(buf)
-				end
-			}
-		else
-			logger.info "Sending file #{path}" unless logger.nil?
-			render :status => options[:status], :text => file.read
-		end
-		
-		#pp response.headers
-	end
-	
-	def xsendfile(path, options)
-		headers["Content-Transfer-Encoding"] = "binary"
-		headers["Content-Type"] = "application/force-download"
-		#headers["Content-Type"] = options[:type] if options[:type]
 
-		headers["X-Sendfile"] = path
-		headers["Content-Disposition"] = "attachment; file=\"#{File.basename path}\""
-		#headers["Content-Length"] = File.size(path)
+    session :off, :only => %w[track]
 
-		# TODO: What does @performed_render change?
-		#@performed_render = false
-		render :nothing => true 
-	end
+    def session_from_params
+        if key = params[:key]
+            key
+        end
+    end
 
-	def track
-		track = Track.find(params[:id])
-		#pp request.env
-		#"HTTP_RANGE"=>"bytes=878672-",
-		#send_file track.file, :type => 'audio/mpeg', :stream => true, :buffer_size => 4096, :disposition => 'inline'
-		stream_file track.fullpath, :type => 'audio/mpeg', :stream => true, :buffer_size => 4096, :disposition => 'inline'	
-		#xsendfile track.file, :type => 'audio/mpeg'
-	end
-	
-	def album
-		@album = Album.find(params[:id])
-		@tracks = @album.tracks
-		
-		headers["Content-Type"] = "audio/x-mpegurl; charset=utf-8"
-		render "stream/playlist"
-	end
+    def stream_file(path, options)
+        raise MissingFile, "Cannot read file #{path}" unless File.file?(path) and File.readable?(path)
 
-	def artist
-		@artist = Artist.find(params[:id])
-		@tracks = @artist.albums.map(&:tracks).flatten
-		
-		headers["Content-Type"] = "audio/x-mpegurl; charset=utf-8"
-		render "stream/playlist"
-	end
-	
+        options[:length]   ||= File.size(path)
+        options[:filename] ||= File.basename(path)
+        send_file_headers! options
 
-	def shuffle
-		num = params[:id].to_i
-		num = 400 if num > 400
-		@tracks = Track.find_by_sql( ["SELECT * FROM tracks ORDER BY rand() LIMIT ?", num])
-		headers["Content-Type"] = "audio/x-mpegurl; charset=utf-8"
-		render "stream/playlist"
-	end	
+        headers["Last-Modified"] = File.mtime(path).rfc2822 # "Sun, 26 Feb 2006 21:18:23 GMT"
+        headers["Accept-Ranges"] = "bytes"
+        headers["Content-Length"] = options[:length]
+        headers["Content-Type"] = "audio/mpeg"
+        headers["ETag"] = SHA1.new(path).to_s
+        #headers["Connection"] = "close"
+        #headers["Cache-Control"] = "public"
+
+        @performed_render = false
+        #pp request.env
+
+        file = File.open(path, 'rb')
+        if request.env["HTTP_RANGE"] =~ /bytes=(\d+)-(.*)$/ || request.env["HTTP_CONTENT_RANGE"] =~ /bytes (\d+)-(.*)$/
+            file.seek($1.to_i)
+            headers["Content-Range"] = "bytes #{file.pos}-#{options[:length] - 1}/#{options[:length]}"
+            puts "Sending range: #{headers["Content-Range"]}"
+        end
+
+        if options[:stream]
+            render :status => options[:status], :text => Proc.new { |response, output|
+                logger.info "Streaming file #{path}" unless logger.nil?
+                len = options[:buffer_size] || 4096
+                while buf = file.read(len)
+                    output.write(buf)
+                end
+            }
+        else
+            logger.info "Sending file #{path}" unless logger.nil?
+            render :status => options[:status], :text => file.read
+        end
+
+        #pp response.headers
+    end
+
+    def xsendfile(path, options)
+        headers["Content-Transfer-Encoding"] = "binary"
+        headers["Content-Type"] = "application/force-download"
+        #headers["Content-Type"] = options[:type] if options[:type]
+
+        headers["X-Sendfile"] = path
+        headers["Content-Disposition"] = "attachment; file=\"#{File.basename path}\""
+        #headers["Content-Length"] = File.size(path)
+
+        # TODO: What does @performed_render change?
+        #@performed_render = false
+        render :nothing => true
+    end
+
+    def track
+        track = Track.find(params[:id])
+        #pp request.env
+        #"HTTP_RANGE"=>"bytes=878672-",
+        #send_file track.file, :type => 'audio/mpeg', :stream => true, :buffer_size => 4096, :disposition => 'inline'
+        stream_file track.fullpath, :type => 'audio/mpeg', :stream => true, :buffer_size => 4096, :disposition => 'inline'
+        #xsendfile track.file, :type => 'audio/mpeg'
+    end
+
+
+
+    ### Playlists
+
+    def playlist_filter
+        headers["Content-Type"] = "audio/x-mpegurl; charset=utf-8"
+        render "stream/playlist"
+    end
+
+    after_filter :playlist_filter, :only=>[:album, :artist, :shuffle, :folder]
+
+    def album
+        @album = Album.find(params[:id])
+        @tracks = @album.tracks
+    end
+
+    def artist
+        @artist = Artist.find(params[:id])
+        @tracks = @artist.albums.map(&:tracks).flatten
+    end
+
+    def shuffle
+        num = params[:id].to_i
+        num = 400 if num > 400
+        @tracks = Track.find_by_sql( ["SELECT * FROM tracks ORDER BY rand() LIMIT ?", num])
+    end
+
+    def folder
+        @tracks = Track.find :all, :conditions=>{:relative_path => params[:id]}
+    end
+
 end

@@ -1,5 +1,5 @@
 #EXTM3U
 <% for track in @tracks -%>
-#EXTINF:-1,<%= "#{track.artist.name} - #{track.album.name} - #{"%0.2d" % track.number}. #{track.title}" %>
+#EXTINF:<%= track.seconds %>,<%= "#{track.artist.name} - #{track.album.name} - #{"%0.2d" % track.number}. #{track.title}" %>
 http://<%= request.host_with_port %><%= url_for :action=>"track", :id=>track.id %>.mp3
 <% end -%>

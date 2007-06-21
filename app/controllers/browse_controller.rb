@@ -1,16 +1,32 @@
 class BrowseController < ApplicationController
-	def index
-		redirect_to :action=>"artists"
-	end
+    def index
+        redirect_to :action=>"artists"
+    end
 
-	def artists
-		@artists = Artist.find(:all, :include=>{ :albums => :tracks }, :order=>"artists.name").select{|artist| artist.albums.any?}
-	end
-	
-	def tracks
-		@tracks = Track.all
-	end
-	
+    def artists
+        @artists = Artist.find(:all, :include=>{ :albums => :tracks }, :order=>"artists.name").select{|artist| artist.albums.any?}
+    end
+
+    def tracks
+        @tracks = Track.all
+    end
+
+    def files
+        alltracks = Track.find :all, :order=>"root, relative_path, filename"
+        @tree = alltracks.group_by{|o| o.relative_path}
+    end
+
+    def index
+    end
+
+    def session_key
+        render :text=>session.inspect.gsub('<','&lt;').gsub('>','&gt;')+"<pre>#{session.methods.inspect}</pre>"
+    end
+
+    def requestinfo
+    end
+
+
 	def index
 	end
 	

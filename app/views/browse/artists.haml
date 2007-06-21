@@ -15,4 +15,6 @@
         %ul
           - album.tracks.each do |track|
             == #{track.number}.
-            = link_to_track(track)
+            = link_to_track(track.title, track)
+
+
