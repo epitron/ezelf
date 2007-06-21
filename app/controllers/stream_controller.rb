@@ -100,31 +100,35 @@ class StreamController < ApplicationController
 
     ### Playlists
 
-    def playlist_filter
+    def render_playlist
         headers["Content-Type"] = "audio/x-mpegurl; charset=utf-8"
         render "stream/playlist"
     end
 
-    after_filter :playlist_filter, :only=>[:album, :artist, :shuffle, :folder]
+    #after_filter :playlist_filter, :only=>[:album, :artist, :shuffle, :folder]
 
     def album
         @album = Album.find(params[:id])
         @tracks = @album.tracks
+        render_playlist
     end
 
     def artist
         @artist = Artist.find(params[:id])
         @tracks = @artist.albums.map(&:tracks).flatten
+        render_playlist
     end
 
     def shuffle
         num = params[:id].to_i
         num = 400 if num > 400
         @tracks = Track.find_by_sql( ["SELECT * FROM tracks ORDER BY rand() LIMIT ?", num])
+        render_playlist
     end
 
     def folder
-        @tracks = Track.find :all, :conditions=>{:relative_path => params[:id]}
+        @tracks = Track.find :all, :conditions=>{:relative_path => params[:relative_path]}
+        render_playlist
     end
 
 end

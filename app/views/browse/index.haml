@@ -3,16 +3,12 @@
 %h3 Things you can do (some can't be done):
 
 %ul
+  %li= link_to "Browse Artists", :controller=>"browse", :action=>"artists"
+  %li= link_to "Browse Files", :controller=>"browse", :action=>"files"
   %li
-    = link_to "Browse by artists", :controller=>"browse", :action=>"artists"
-  %li
-    Shuffle: |
-    - for n in [50, 100, 400] do
-      = link_to "#{n} songs", :action=>"shuffle", :id=>n
-      |
-  %li
-    Browse by Albums
-  %li
-    Browse Files
-  %li
-    Listening History / Stats
+    Shuffle: [
+    - links = [50, 100, 400].map{|n| link_to "#{n} songs", :action=>"shuffle", :id=>n }
+    = links.join ' | '
+    ]
+  %li Browse Albums
+  %li Listening History / Stats

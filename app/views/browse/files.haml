@@ -1,0 +1,13 @@
+%center
+  %h1 ... Files ...
+
+
+#browser{ :style => "font-family: Tahoma" }
+  - @tree.each do |relative_path,tracks|
+    %h3
+      = link_to image_tag("play24.png"), :controller=>"stream", :action=>"folder", :relative_path=>relative_path
+      = relative_path + "/"
+    %ul
+      - tracks.each do |track|
+        %li= link_to_track(track.filename, track)
+

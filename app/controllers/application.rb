@@ -45,7 +45,11 @@ class ApplicationController < ActionController::Base
         def login_filter
             unless session[:user_id]
                 session[:user_id] = 0
-                @user = User.find(0) || User.new(:name=>"anonymous")
+                begin
+                    @user = User.find(0)
+                rescue
+                    @user = User.new(:name=>"anonymous")
+                end
             end
             return true
         end
