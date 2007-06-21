@@ -37,32 +37,32 @@ Processing BrowseController#session_key (for 127.0.0.1 at 2007-06-13 05:30:28) [
 
 class ApplicationController < ActionController::Base
 
-	include LoginSystem
+    include LoginSystem
 
-	session :session_key => '_ezelf_session_id'
+    session :session_key => '_ezelf_session_id'
 
-	if SETTINGS.disable_authentication
-            def login_filter
-                unless session[:user_id]
-                    session[:user_id] = 0
-                    @user = User.find 0
-                end
-                return true
+    if SETTINGS.disable_authentication
+        def login_filter
+            unless session[:user_id]
+                session[:user_id] = 0
+                @user = User.find(0) || User.new(:name=>"anonymous")
             end
-	end
+            return true
+        end
+    end
 
-        before_filter :session_from_params
-	before_filter :login_filter
-	before_filter :show_env
+    before_filter :session_from_params
+    before_filter :login_filter
+    before_filter :show_env
 
-        def session_from_params; end
+    def session_from_params; end
 
-	def show_env
-            puts ":::::::::::::::Env::::::::::::::::::"
-            pp request.env
-            puts
+    def show_env
+        puts ":::::::::::::::Env::::::::::::::::::"
+        pp request.env
+        puts
 
-            # if an HTTPAuth username is supplied, use it as a "User Key" and find the user's session.
-	end
+        # if an HTTPAuth username is supplied, use it as a "User Key" and find the user's session.
+    end
 
 end
