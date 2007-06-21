@@ -1,0 +1,103 @@
+----------------------------------
+ _            _
+| |_ ___   __| | ___  ___
+| __/ _ \ / _` |/ _ \/ __|
+| || (_) | (_| | (_) \__ \
+ \__\___/ \__,_|\___/|___/
+
+==================================
+
+
+=== libid3-ruby Extensions ==============
+
+Reference: http://www.id3.org/id3v2.4.0-frames
+           http://id3lib-ruby.rubyforge.org/doc/index.html
+
+* New attributes:
+        album_artist (:TPE2)
+        composer (:TCOM)
+        original_artist (:TOPE)
+
+
+=== ezElf ============================
+
+* "Album Artist" should come from as many fields as possible
+  (TPE2, TOPE, TCOM), but the web tag-editor should pick one
+  (how about the one that EasyTag prefers! :D)
+
+* Simple helpers for doing Ajax stuff
+  |_ expand_button (object, action)
+  |_ collapse_button (object)
+
+* Restfulness!
+  |_ /tracks/102 => info
+  |_ /tracks/102;edit => edit
+  |_ /tracks/102.mp3 => stream
+  |_ /tracks/102.mp3;session=a8d9fyu9823h89fh2w3f98h => authenticated stream
+  |_ /albums/298 => info
+  |_ /albums/298;edit => edit all tags
+  |_ /albums/298.m3u => playlist
+  |_ /albums/298.zip => download it
+
+* HISTORY view
+  |_ praise good tracks ( \o/ ) / scold bad tracks ( >:R )
+  |_ connect together tracks that "sound good together"
+
+* On the site, have "You are currently listening to: ..." at the top
+  |_ ajax auto-refresh! :D OR, push-based javascript updates
+
+* Custom cookies and user identification system
+  * before_filter that associates a unique user with a unique key (short, like tinyurl) and looks up their account
+  * /stream/track should accept the user key in the url to retrieve the session (or use IP if it's missing)
+    |_ "http://<big key>@<hostname>/stream/<track id>.mp3"
+    |_ add "last_ip" to User model
+
+* Flag top-3 tracks with a thumbs-up icon
+
+* Associate artists, albums, or songs by linking "what sounds good together"
+
+* Ajaxiness (things expand!)
+
+* Compute track length for each mp3
+    MP3 Header Format:
+
+        http://home.swipnet.se/grd/mp3info/frmheader/index.html
+
+        This site also details a class in C, which reads the header and returns the data in more manageable variable types.
+
+        number_of_frames = File.size / FrameLengthInBytes
+        length of mp3 (seconds) = number of frames / (423/11 or 38.4545)
+
+
+* Browse music by Filesystem
+  * add "path[]" to Track model (split the filename)
+    |_ peraps add: "dir", "dirs[]", "root", and "filename", and make "path" == dir+root+filename
+
+
+=== E improvements ============
+
+* Suggest to the "e" guy how he can improve the Undo panel by making it wrap the undos (up to a maximum of 3 lines or something)
+
+* "Windows Explorer Menu Editor" included or something. god, I hate those menus.
+  |_ has knowledge of all the entries that come stock when windows is installed so that it can
+
+* hide .svn dirs
+
+* tab bar tweaks
+  |_ mouse wheel should scroll it
+  |_ scroll arrows should indicate where highlighted tab is
+  |_ ctrl-tab should bring up a tab-stack
+
+
+
+  === Programming Language Improvements ==============
+
+* changes in DB should automatically modify code (and prompt if the change causes conflicting or ambiguous code updates)
+
+* database and
+
+
+
+
+
+

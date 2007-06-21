@@ -1,0 +1,13 @@
+======= Rails Tricks =========
+
+Session Control (http://errtheblog.com/post/24):
+  session :off, :if => proc { |request| request.server_name == 'localhost' }
+  session :off, :except => %w[delete edit create save]
+  session :disabled => false, :only => %w[delete edit create save]
+
+======= Commandline Tricks =========
+
+Nuke sessions:
+  rake db:sessions:clear
+
+

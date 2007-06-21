@@ -2,14 +2,14 @@
 # migrations feature of ActiveRecord to incrementally modify your database, and
 # then regenerate this schema definition.
 
-ActiveRecord::Schema.define(:version => 8) do
+ActiveRecord::Schema.define(:version => 6) do
 
   create_table "albums", :force => true do |t|
     t.column "name",         :string
     t.column "artist_id",    :integer
     t.column "year",         :integer
     t.column "tracks_count", :integer
-    t.column "compilation",  :boolean
+    t.column "various",      :boolean
   end
 
   add_index "albums", ["artist_id"], :name => "index_albums_on_artist_id"
@@ -47,28 +47,13 @@ ActiveRecord::Schema.define(:version => 8) do
   add_index "playlists_tracks", ["track_id"], :name => "index_playlists_tracks_on_track_id"
   add_index "playlists_tracks", ["playlist_id"], :name => "index_playlists_tracks_on_playlist_id"
 
-  create_table "sessions", :force => true do |t|
-    t.column "session_id", :string
-    t.column "data",       :text
-    t.column "updated_at", :datetime
-    t.column "created_at", :datetime
-  end
-
-  add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
-  add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
-
   create_table "tracks", :force => true do |t|
-    t.column "title",         :string
-    t.column "album_id",      :integer
-    t.column "number",        :integer
-    t.column "disc",          :integer
-    t.column "artist_id",     :integer
-    t.column "root",          :string
-    t.column "relative_path", :string
-    t.column "filename",      :string
+    t.column "title",    :string
+    t.column "album_id", :integer
+    t.column "number",   :integer
+    t.column "disc",     :integer
   end
 
-  add_index "tracks", ["root", "relative_path", "filename"], :name => "index_tracks_on_root_and_relative_path_and_filename", :unique => true
   add_index "tracks", ["title"], :name => "index_tracks_on_title"
   add_index "tracks", ["album_id"], :name => "index_tracks_on_album_id"
   add_index "tracks", ["number"], :name => "index_tracks_on_number"
@@ -79,6 +64,7 @@ ActiveRecord::Schema.define(:version => 8) do
     t.column "fullname",   :string
     t.column "email",      :string
     t.column "created_at", :string
+    t.column "validated",  :boolean, :default => false
   end
 
   add_index "users", ["name"], :name => "index_users_on_name"
