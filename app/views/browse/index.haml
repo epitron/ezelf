@@ -7,7 +7,7 @@
   %li= link_to "Browse Files", :controller=>"browse", :action=>"files"
   %li
     Shuffle: [
-    - links = [50, 100, 400].map{|n| link_to "#{n} songs", :action=>"shuffle", :id=>n }
+    - links = [50, 100, 400].map{|n| link_to "#{n} songs", :controller=>"stream", :action=>"shuffle", :id=>n }
     = links.join ' | '
     ]
   %li Browse Albums
