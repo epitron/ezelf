@@ -4,6 +4,7 @@ module ApplicationHelper
         [
             ["Home", { :controller => "browse", :action => "index" }],
             ["Users", { :controller => "users", :action => "index" }],
+            ["Sources", { :controller => "sources", :action => "index" }],
         ]
     end
 

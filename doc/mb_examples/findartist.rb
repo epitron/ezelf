@@ -1,5 +1,6 @@
-#!/usr/bin/ruby 
+#!/usr/bin/ruby
 
+require 'rubygems'
 require 'musicbrainz'
 
 # allocate a new MusicBrainz client
@@ -48,7 +49,7 @@ if mb.query MusicBrainz::Query::FindArtistByName, query_string
     artist_id = mb.result MusicBrainz::Query::ArtistGetArtistId
     puts 'ArtistId: ' << mb.id_from_url(artist_id)
 
-    puts 
+    puts
   }
 else
   $stderr.puts 'Error: ' << mb.error

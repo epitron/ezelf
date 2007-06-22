@@ -2,7 +2,7 @@
 # migrations feature of ActiveRecord to incrementally modify your database, and
 # then regenerate this schema definition.
 
-ActiveRecord::Schema.define(:version => 9) do
+ActiveRecord::Schema.define(:version => 10) do
 
   create_table "albums", :force => true do |t|
     t.column "name",         :string
@@ -57,21 +57,29 @@ ActiveRecord::Schema.define(:version => 9) do
   add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
 
+  create_table "sources", :force => true do |t|
+    t.column "name",        :string
+    t.column "description", :string
+    t.column "uri",         :string
+  end
+
   create_table "tracks", :force => true do |t|
     t.column "title",         :string
     t.column "album_id",      :integer
     t.column "number",        :integer
     t.column "disc",          :integer
     t.column "artist_id",     :integer
-    t.column "root",          :string
     t.column "relative_path", :string
     t.column "filename",      :string
+    t.column "source_id",     :integer
   end
 
-  add_index "tracks", ["root", "relative_path", "filename"], :name => "index_tracks_on_root_and_relative_path_and_filename", :unique => true
   add_index "tracks", ["title"], :name => "index_tracks_on_title"
   add_index "tracks", ["album_id"], :name => "index_tracks_on_album_id"
   add_index "tracks", ["number"], :name => "index_tracks_on_number"
+  add_index "tracks", ["relative_path"], :name => "index_tracks_on_relative_path"
+  add_index "tracks", ["filename"], :name => "index_tracks_on_filename"
+  add_index "tracks", ["source_id"], :name => "index_tracks_on_source_id"
 
   create_table "users", :force => true do |t|
     t.column "name",       :string

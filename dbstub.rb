@@ -61,9 +61,10 @@ def tablename_to_constant(tablename)
 end	
 
 def connect_to(options={}, autoload_models=true)
+	p options
 	options[:adapter] ||= 'mysql'
 	options[:host] ||= 'localhost'
-	options[:database] ||= options[:db] || 'ws'
+	options[:database] ||= options["database"]
 	options[:username] ||= 'root'
 	options[:password] ||= ''
 

@@ -26,6 +26,8 @@ class StreamController < ApplicationController
 
     session :off, :only => %w[track]
 
+    layout false
+
     def session_from_params
         if key = params[:key]
             key

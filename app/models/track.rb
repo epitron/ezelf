@@ -4,6 +4,7 @@ class Track < ActiveRecord::Base
 
     belongs_to :album
     belongs_to :artist
+    belongs_to :source
 
     def artist
         @attributes[:artist] || album.artist
@@ -25,11 +26,12 @@ class Track < ActiveRecord::Base
         Track.find_by_sql("SELECT * FROM artists,albums,tracks WHERE tracks.album_id = albums.id AND albums.artist_id = artists.id ORDER BY artists.name,albums.name,tracks.number")
     end
 
-    def self.add_file( root, path_and_filename )
+    def self.add_file( source, path_and_filename )
         # TODO: bug -- albums with > 1 artist get associated with the last artist.
         #       |_ to fix, put all Tag's in an array keyed by album, and mark ones with > 1 artist as "various".
         #       |_ support "Album Artist" tag
 
+        root = source.uri
         fullpath = File.join( root, path_and_filename )
         relative_path, filename = File.split(path_and_filename)
 
@@ -37,10 +39,11 @@ class Track < ActiveRecord::Base
 
         # find/create track, album, and artist
 
-        track   = Track.find_or_create_by_root_and_relative_path_and_filename(root, relative_path, filename)
+        track   = Track.find_or_create_by_source_id_and_relative_path_and_filename(source.id, relative_path, filename)
         album   = Album.find_or_create_by_name(tag.album)
         artist  = Artist.find_or_create_by_name(tag.artist)
 
+        # set the albums and artists
         if tag.album_artist and tag.album_artist != tag.artist   # this is probably a compilation album...
             # find/create a new artist for the album as a whole
             album_artist = Artist.find_or_create_by_name(tag.album_artist)
@@ -51,14 +54,12 @@ class Track < ActiveRecord::Base
             album.tracks << track
             album.compilation = true
         else
-
             album.tracks  << track  # track goes in album
             artist.albums << album  # album goes in artist
         end
 
         track.title         = tag.title
         track.number        = tag.track.to_i
-        track.root          = root
         track.relative_path = relative_path
         track.filename      = filename
 

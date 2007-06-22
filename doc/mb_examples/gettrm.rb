@@ -1,3 +1,4 @@
+require 'rubygems'
 #!/usr/bin/ruby 
 
 require 'musicbrainz'
@@ -34,16 +35,16 @@ if mb.query MusicBrainz::Query::TrackInfoFromTRMId, query
     track_uri = mb.result MusicBrainz::Query::TrackGetTrackId
 
     # extract the artist name from the track
-    puts 'Artist: ' << artist if 
-      artist = mb.result(MusicBrainz::Query::TrackGetArtistName)
+    artist = mb.result(MusicBrainz::Query::TrackGetArtistName)
+    puts 'Artist: ' << artist if artist
 
     # extract the track name
-    puts 'Track: ' << track if 
-      track = mb.result(MusicBrainz::Query::TrackGetTrackName)
+    track = mb.result(MusicBrainz::Query::TrackGetTrackName)
+    puts 'Track: ' << track if track
 
     # extract the track duration
-    puts 'Duration: ' << dur  << ' ms' if 
-      dur = mb.result(MusicBrainz::Query::TrackGetTrackDuration)
+    dur = mb.result(MusicBrainz::Query::TrackGetTrackDuration)
+    puts 'Duration: ' << dur  << ' ms' if dur
 
     mb.select MusicBrainz::Query::SelectTrackAlbum
 
@@ -52,8 +53,8 @@ if mb.query MusicBrainz::Query::TrackInfoFromTRMId, query
     puts 'TrackNum: ' << track_num.to_s if track_num > 0 && track_num < 100
       
     # extract the album name from the track
-    puts 'Album: ' << album if
-      album = mb.result(MusicBrainz::Query::AlbumGetAlbumName)
+    album = mb.result(MusicBrainz::Query::AlbumGetAlbumName)
+    puts 'Album: ' << album if album
   }
 else
   $stderr.puts 'Error: ' << mb.error

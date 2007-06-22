@@ -11,3 +11,11 @@ Nuke sessions:
   rake db:sessions:clear
 
 
+======= Unicode ===================
+
+require 'iconv'
+# will convert from UTF16 to UTF8
+Iconv.new('utf-8', 'utf-16').iconv(person.name)
+
+http://wiki.rubyonrails.org/rails/pages/HowToUseUnicodeStrings
+

@@ -1,3 +1,4 @@
+require 'rubygems'
 #!/usr/bin/ruby
 
 require 'musicbrainz'

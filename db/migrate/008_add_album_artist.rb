@@ -4,7 +4,9 @@ class AddAlbumArtist < ActiveRecord::Migration
   	add_column :tracks, :root, :string
   	add_column :tracks, :relative_path, :string
   	add_column :tracks, :filename, :string
-  	add_index :tracks, [:root, :relative_path, :filename], :unique => true
+  	add_index :tracks, :root
+  	add_index :tracks, :relative_path
+	add_index :tracks, :filename
   	remove_column :tracks, :file
 
   	rename_column :albums, :various, :compilation

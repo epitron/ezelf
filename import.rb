@@ -11,11 +11,26 @@ Artist.delete_all
 
 #SETTINGS.dirs = [ "/d/mp3/[PRE-CRASH]/Cake - Fashion Nugget (1996)" ]
 
-for dir in SETTINGS.dirs
-	puts "importing: #{dir}"
-	for fullpath in Dir["#{dir}/**/*.mp3"]
-		puts " - #{fullpath}"
-		path = fullpath.gsub(dir, '').gsub(%r{^/}, '')
-		Track.add_file(dir, path)
-	end
+for source in Source.find(:all)
+
+    next unless source.dir?
+
+    puts "===== source: #{source.name} ========================"
+    puts "from: #{source.uri}"
+    puts
+
+    root = source.uri
+    for mp3path in Dir["#{root}/**/*.mp3"]
+
+        # remove the root, and the leading slash
+        mp3path = mp3path.gsub(root, '').gsub(%r{^/}, '')
+        puts " - #{mp3path}"
+
+        # create a new track
+        Track.add_file(source, mp3path)
+
+    end
+
+    puts
+
 end
