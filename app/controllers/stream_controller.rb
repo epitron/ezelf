@@ -129,7 +129,7 @@ class StreamController < ApplicationController
     end
 
     def folder
-        @tracks = Track.find :all, :conditions=>{:relative_path => params[:relative_path]}
+        @tracks = Track.find :all, :conditions=>{:relative_path => params[:relative_path]}, :order=>"relative_path, filename"
         render_playlist
     end
 
