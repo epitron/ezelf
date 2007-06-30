@@ -81,9 +81,9 @@ class Track < ActiveRecord::Base
         track.number        = tag.tracknum
         track.relative_path = source.properly_encode_path(relative_path)
         track.filename      = source.properly_encode_path(filename)
-        track.bitrate		= tag.bitrate
-        track.length		= tag.length
-        track.vbr			= tag.vbr
+        track.bitrate		= mp3.bitrate
+        track.length		= mp3.length
+        track.vbr			= mp3.vbr
 
         track.save
         album.save
