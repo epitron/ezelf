@@ -1,9 +1,16 @@
-require 'rubygems'
-#require 'dbcon'
-require 'config/environment'
-require 'id3lib_with_extensions'
+puts "loading dbcon..."
+require 'dbcon'
+#puts "loading rails environment..."
+#require 'config/environment'
+
+puts "loading mp3info_with_extensions..."
+require 'pp'
+require 'mp3info_with_extensions'
 
 # http://id3lib-ruby.rubyforge.org/doc/index.html
+
+
+puts "deleting all Tracks, Albums and Artists..."
 
 Track.delete_all
 Album.delete_all
@@ -11,26 +18,34 @@ Artist.delete_all
 
 #SETTINGS.dirs = [ "/d/mp3/[PRE-CRASH]/Cake - Fashion Nugget (1996)" ]
 
-for source in Source.find(:all)
+sources = Source.find(:all)
 
-    next unless source.dir?
+pp sources
 
-    puts "===== source: #{source.name} ========================"
-    puts "from: #{source.uri}"
-    puts
+if sources.any?
 
-    root = source.uri
-    for mp3path in Dir["#{root}/**/*.mp3"]
-
-        # remove the root, and the leading slash
-        mp3path = mp3path.gsub(root, '').gsub(%r{^/}, '')
-        puts " - #{mp3path}"
-
-        # create a new track
-        Track.add_file(source, mp3path)
-
-    end
-
-    puts
-
+	for source in sources
+		puts "checking dir: #{source.uri}"
+		puts File.directory?(source.uri) ? "...exists!" : "...NOT exists?!?!"
+	    next unless source.dir?
+	
+	    puts "===== importing all tracks from #{source.name} ========================"
+	    puts "uri: #{source.uri}"
+	    puts
+	
+	    root = source.uri
+	    for mp3path in Dir["#{root}/**/*.mp3"]
+	
+	        # remove the root, and the leading slash
+	        mp3path = mp3path.gsub(root, '').gsub(%r{^/}, '')
+	        puts " - #{mp3path}"
+	
+	        # create a new track
+	        Track.add_file(source, mp3path)
+	
+	    end
+	end
+	
+else
+	puts "No sources?"
 end

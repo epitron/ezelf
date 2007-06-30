@@ -1,3 +1,13 @@
+# == Schema Information
+# Schema version: 10
+#
+# Table name: playlists
+#
+#  id      :integer(11)   not null, primary key
+#  name    :string(255)   
+#  user_id :integer(11)   
+#
+
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 one:
   id: 1

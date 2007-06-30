@@ -1,10 +1,3 @@
-def Object.sequence *args
-  args.each do |arg|
-    self.call arg, rest
-  end
-end
-
-
 class LameEncoder
   
   # These constants come from the LAME documentation
@@ -126,3 +119,11 @@ class LameEncoder
   end
   
 end
+
+def Object.sequence(*args)
+  args.each do |arg|
+    self.call arg, rest
+  end
+end
+
+

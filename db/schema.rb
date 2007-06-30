@@ -2,7 +2,7 @@
 # migrations feature of ActiveRecord to incrementally modify your database, and
 # then regenerate this schema definition.
 
-ActiveRecord::Schema.define(:version => 10) do
+ActiveRecord::Schema.define(:version => 12) do
 
   create_table "albums", :force => true do |t|
     t.column "name",         :string
@@ -61,17 +61,21 @@ ActiveRecord::Schema.define(:version => 10) do
     t.column "name",        :string
     t.column "description", :string
     t.column "uri",         :string
+    t.column "encoding",    :string
   end
 
   create_table "tracks", :force => true do |t|
     t.column "title",         :string
     t.column "album_id",      :integer
-    t.column "number",        :integer
+    t.column "number",        :string,  :limit => 10
     t.column "disc",          :integer
     t.column "artist_id",     :integer
     t.column "relative_path", :string
     t.column "filename",      :string
     t.column "source_id",     :integer
+    t.column "length",        :float
+    t.column "bitrate",       :integer
+    t.column "vbr",           :boolean
   end
 
   add_index "tracks", ["title"], :name => "index_tracks_on_title"

@@ -1,4 +1,21 @@
+# == Schema Information
+# Schema version: 10
+#
+# Table name: tracks
+#
+#  id            :integer(11)   not null, primary key
+#  title         :string(255)   
+#  album_id      :integer(11)   
+#  number        :integer(11)   
+#  disc          :integer(11)   
+#  artist_id     :integer(11)   
+#  relative_path :string(255)   
+#  filename      :string(255)   
+#  source_id     :integer(11)   
+#
+
 # http://id3lib-ruby.rubyforge.org/doc/index.html
+# http://ruby-mp3info.rubyforge.org/
 
 class Track < ActiveRecord::Base
 
@@ -19,7 +36,7 @@ class Track < ActiveRecord::Base
     end
 
     def fullpath
-        File.join( root, relative_path, filename )
+        File.join( source.uri, relative_path, filename )
     end
 
     def self.all
@@ -35,7 +52,9 @@ class Track < ActiveRecord::Base
         fullpath = File.join( root, path_and_filename )
         relative_path, filename = File.split(path_and_filename)
 
-        tag = ID3Lib::Tag.new(fullpath)
+		mp3 = Mp3Info::new(fullpath)
+        tag = mp3.tag
+        pp tag
 
         # find/create track, album, and artist
 
@@ -44,7 +63,7 @@ class Track < ActiveRecord::Base
         artist  = Artist.find_or_create_by_name(tag.artist)
 
         # set the albums and artists
-        if tag.album_artist and tag.album_artist != tag.artist   # this is probably a compilation album...
+        if false #tag.album_artist and tag.album_artist != tag.artist   # this is probably a compilation album...
             # find/create a new artist for the album as a whole
             album_artist = Artist.find_or_create_by_name(tag.album_artist)
             # link album
@@ -59,9 +78,12 @@ class Track < ActiveRecord::Base
         end
 
         track.title         = tag.title
-        track.number        = tag.track.to_i
-        track.relative_path = relative_path
-        track.filename      = filename
+        track.number        = tag.tracknum
+        track.relative_path = source.properly_encode_path(relative_path)
+        track.filename      = source.properly_encode_path(filename)
+        track.bitrate		= tag.bitrate
+        track.length		= tag.length
+        track.vbr			= tag.vbr
 
         track.save
         album.save

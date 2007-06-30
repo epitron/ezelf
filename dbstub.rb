@@ -3,7 +3,6 @@
 require 'rubygems'
 require 'active_record'
 require 'active_support'
-require 'config/settings'
 
 $LOAD_PATH << "lib/"
 
@@ -66,7 +65,7 @@ def connect_to(options={}, autoload_models=true)
 	options[:host] ||= 'localhost'
 	options[:database] ||= options["database"]
 	options[:username] ||= 'root'
-	options[:password] ||= ''
+	#options[:password] ||= ''
 
 	include ActiveRecord
 	

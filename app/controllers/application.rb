@@ -41,7 +41,7 @@ class ApplicationController < ActionController::Base
 
     session :session_key => '_ezelf_session_id'
 
-    if SETTINGS.disable_authentication
+    if true #SETTINGS.disable_authentication
         def login_filter
             unless session[:user_id]
                 session[:user_id] = 0

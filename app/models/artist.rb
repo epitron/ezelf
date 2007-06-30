@@ -1,3 +1,13 @@
+# == Schema Information
+# Schema version: 10
+#
+# Table name: artists
+#
+#  id           :integer(11)   not null, primary key
+#  name         :string(255)   
+#  albums_count :integer(11)   
+#
+
 class Artist < ActiveRecord::Base
 	has_many :albums
 	has_many :album_tracks, :through=>:albums, :source=>:tracks

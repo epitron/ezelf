@@ -1,3 +1,4 @@
 @echo off
 rem ruby script\server --port 80 %*
-ruby script\server %*
+rem ruby script\server %*
+c:/ruby/bin/ruby.exe c:/ruby/bin/mongrel_rails start

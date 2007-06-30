@@ -12,7 +12,7 @@ trm.pcm_data samples, channels, bits
 # read data from file and pass it to the TRM handle
 # until MusicBrainz has enough information to generate
 # a signature
-fh = open(ARGV[0],'rb')
+fh = open(ARGV[0] || 'test/test.mp3','rb')
 while buf = fh.read(4096)
     break if trm.generate_signature(buf)
 end

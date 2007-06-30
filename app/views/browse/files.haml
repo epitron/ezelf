@@ -2,12 +2,20 @@
   %h1 ... Files ...
 
 
+%div
+  %a{:href=>'#', :onclick=>"$$('.foldable').each(function(el){el.hide()})"}= "<< Collapse All"
+  %a{:href=>'#', :onclick=>"$$('.foldable').each(function(el){el.show()})"}= "Expand All >>"
+
 #browser{ :style => "font-family: Tahoma" }
+
   - @tree.each do |relative_path,tracks|
+    - the_id = SHA1.new(relative_path).to_s
     %h3
       = link_to image_tag("play24.png"), :controller=>"stream", :action=>"folder", :relative_path=>relative_path
-      = relative_path + "/"
-    %ul
-      - tracks.each do |track|
-        %li= link_to_track(track.filename, track)
+      %a{:href=>'#', :onclick=>"Element.toggle('#{the_id}')"}= relative_path + "/"
+      
+    %div{:id=>the_id, :class=>"foldable", :style=>"display:none;"}
+      %ul
+        - tracks.each do |track|
+          %li= link_to_track(track.filename, track)
 

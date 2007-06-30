@@ -14,7 +14,7 @@ class BrowseController < ApplicationController
     end
 
     def files
-        alltracks = Track.find :all, :order=>"root, relative_path, filename"
+        alltracks = Track.find :all, :order=>"relative_path, filename"
         @tree = alltracks.group_by{|o| o.relative_path}.to_a.sort_by{|k,v| k}
     end
 
