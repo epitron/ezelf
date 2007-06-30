@@ -41,8 +41,11 @@ if sources.any?
 	        puts " - #{mp3path}"
 	
 	        # create a new track
-	        Track.add_file(source, mp3path)
-	
+	        begin
+	        	Track.add_file(source, mp3path)
+    	    rescue Mp3InfoError
+	    		next
+    		end
 	    end
 	end
 	
