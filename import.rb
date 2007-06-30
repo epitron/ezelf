@@ -1,26 +1,28 @@
+require 'pp'
+
+### ActiveRecord
 puts "loading dbcon..."
 require 'dbcon'
 #puts "loading rails environment..."
 #require 'config/environment'
 
+### Mp3Info
 puts "loading mp3info_with_extensions..."
-require 'pp'
 require 'mp3info_with_extensions'
+
 
 # http://id3lib-ruby.rubyforge.org/doc/index.html
 
 
 puts "deleting all Tracks, Albums and Artists..."
-
 Track.delete_all
 Album.delete_all
 Artist.delete_all
 
-#SETTINGS.dirs = [ "/d/mp3/[PRE-CRASH]/Cake - Fashion Nugget (1996)" ]
 
 sources = Source.find(:all)
 
-pp sources
+pp sources.map{|s|[s.name, s.uri]}
 
 if sources.any?
 
