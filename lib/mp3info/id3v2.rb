@@ -193,11 +193,11 @@ class ID3v2 < DelegateClass(Hash)
     case name
       when "COMM"
         #FIXME improve this
-	encoding, lang, str = value.unpack("ca3a*")
-	out = value.split(0.chr).last
+        encoding, lang, str = value.unpack("ca3a*")
+        out = value.split(0.chr).last
       else
-	encoding = value[0]     # language encoding bit 0 for iso_8859_1, 1 for unicode
-	out = value[1..-1] 
+        encoding = value[0]     # language encoding bit 0 for iso_8859_1, 1 for unicode
+        out = value[1..-1] 
     end
 
     if encoding == 1 #and name[0] == ?T
@@ -206,8 +206,9 @@ class ID3v2 < DelegateClass(Hash)
       #strip byte-order bytes at the beginning of the unicode string if they exists
       out[0..3] =~ /^[\xff\xfe]+$/ and out = out[2..-1]
       begin
-	out = Iconv.iconv("ISO-8859-1", "UNICODE", out)[0] 
+        out = Iconv.iconv("ISO-8859-1", "UTF-16", out)[0] 
       rescue Iconv::IllegalSequence, Iconv::InvalidCharacter
+      	# if there's an error, this returns "out" as-is
       end
     end
     out

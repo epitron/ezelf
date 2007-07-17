@@ -122,7 +122,7 @@ class StreamController < ApplicationController
     end
 
     def shuffle
-        num = params[:id].to_i
+        num = params[:id].blank? ? 50 : params[:id].to_i
         num = 400 if num > 400
         @tracks = Track.find_by_sql( ["SELECT * FROM tracks ORDER BY rand() LIMIT ?", num])
         render_playlist

@@ -6,21 +6,17 @@
   %a{:href=>'#', :onclick=>"$$('.foldable').each(function(el){el.hide()})"}= "<< Collapse All"
   %a{:href=>'#', :onclick=>"$$('.foldable').each(function(el){el.show()})"}= "Expand All >>"
 
-
 #browser{ :style => "font-family: Tahoma" }
+
   - @artists.each do |artist|
-    %h2
+  
+    .artist_title
       = link_to image_tag("play24.png"), :controller=>"stream", :action=>"artist", :id=>artist.id
-      %a{:href=>'#', :onclick=>"Element.toggle('#{artist.html_id}')"}= artist.name
-    %div{:id=>artist.html_id, :class=>"foldable", :style=>"display:none;"}
-      - artist.albums.each do |album|
-        %ul
-          %h3
-            = link_to image_tag("play16.png"), :controller=>"stream", :action=>"album", :id=>album.id
-            = album.name
-          %ul
-            - album.tracks.each do |track|
-              == #{track.number}.
-              = link_to_track(track.title, track)
+      %a{ :href=>'#', :onclick=>"Element.toggle('#{artist.html_id}')" }= artist.name
+      %span.albumcount= "(#{artist.albums.count})"
+            
+    %div{ :id=>artist.html_id, :class=>"expandable" }
+      = link_to_remote "expand >>", :url => { :action => 'expand_artist', :id => artist.id }
+    
 
 

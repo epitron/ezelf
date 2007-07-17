@@ -44,9 +44,10 @@ class Track < ActiveRecord::Base
     end
 
     def self.add_file( source, path_and_filename )
-        # TODO: bug -- albums with > 1 artist get associated with the last artist.
-        #       |_ to fix, put all Tag's in an array keyed by album, and mark ones with > 1 artist as "various".
-        #       |_ support "Album Artist" tag
+        # BUG: Albums with > 1 artist get associated with the last artist.
+        # |_ to fix, put all Tag's in an array keyed by album, and mark ones 
+        # |    with > 1 artist as "various".
+        # |_ support "Album Artist" tag (TPE2)
 
         root = source.uri
         fullpath = File.join( root, path_and_filename )

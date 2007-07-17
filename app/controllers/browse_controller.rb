@@ -28,6 +28,27 @@ class BrowseController < ApplicationController
     def requestinfo
     end
 
+    def fetch_from_html_id(modelname, html_id)
+      if html_id =~ /^([\w_]+)_(\d+)$/
+        assert modelname.to_s == $1
+        modelclass = modelname.classify.constantize
+        return modelclass.find $2.to_i
+      else
+        raise "Invalid html_id: #{html_id}"
+      end
+    end    
+
+    def expand_artist
+      #html_id = params[:id]
+      @artist = Artist.find params[:id] #fetch_from_html_id( :artist, html_id )
+      render :update do |page|
+        html_id = @artist.html_id
+        #page.visual_effect :fade, html_id
+        page.replace_html @artist.html_id, :partial => 'albums'
+        #page.visual_effect :appear
+      end    
+    end 
+
 
     def index
     end

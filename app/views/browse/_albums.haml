@@ -1,0 +1,9 @@
+- @artist.albums.each do |album|
+  %ul
+    %h3
+      = link_to image_tag("play16.png"), :controller=>"stream", :action=>"album", :id=>album.id
+      = album.name
+    %ul
+      - album.tracks.each do |track|
+        == #{track.number}.
+        = link_to_track(track.title, track)
