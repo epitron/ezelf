@@ -1,4 +1,4 @@
 require 'dbstub'
 
-init_dbstub
+DBStub.init
 
