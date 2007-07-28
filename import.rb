@@ -45,7 +45,8 @@ if sources.any?
 	        # create a new track
 	        begin
 	        	Track.add_file(source, mp3path)
-    	    rescue Mp3InfoError
+    	    rescue Mp3InfoError, NoMemoryError
+			puts "Error parsing mp3"
 	    		next
     		end
 	    end
