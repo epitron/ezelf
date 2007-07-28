@@ -17,11 +17,15 @@
 # http://id3lib-ruby.rubyforge.org/doc/index.html
 # http://ruby-mp3info.rubyforge.org/
 
+require 'pathname'
+
 class Track < ActiveRecord::Base
 
     belongs_to :album
     belongs_to :artist
     belongs_to :source
+    
+    belongs_to :folder
 
     def artist
         @attributes[:artist] || album.artist
@@ -29,10 +33,6 @@ class Track < ActiveRecord::Base
 
     def dirs
         @cached_dirs ||= relative_path.split '/'
-    end
-
-    def seconds
-        -1
     end
 
     def fullpath
@@ -43,7 +43,12 @@ class Track < ActiveRecord::Base
         Track.find_by_sql("SELECT * FROM artists,albums,tracks WHERE tracks.album_id = albums.id AND albums.artist_id = artists.id ORDER BY artists.name,albums.name,tracks.number")
     end
 
+	def self.format_tracknum(num)
+		num.to_s.gsub(/\d+/) {|m| "%0.2d" % m }
+	end
+	
     def self.add_file( source, path_and_filename )
+	
         # BUG: Albums with > 1 artist get associated with the last artist.
         # |_ to fix, put all Tag's in an array keyed by album, and mark ones 
         # |    with > 1 artist as "various".
@@ -53,9 +58,9 @@ class Track < ActiveRecord::Base
         fullpath = File.join( root, path_and_filename )
         relative_path, filename = File.split(path_and_filename)
 
-		mp3 = Mp3Info::new(fullpath)
+        mp3 = Mp3Info::new(fullpath)
         tag = mp3.tag
-        pp tag
+        #pp tag
 
         # find/create track, album, and artist
 
@@ -64,9 +69,18 @@ class Track < ActiveRecord::Base
         artist  = Artist.find_or_create_by_name(tag.artist)
 
         # set the albums and artists
-        if false #tag.album_artist and tag.album_artist != tag.artist   # this is probably a compilation album...
-            # find/create a new artist for the album as a whole
-            album_artist = Artist.find_or_create_by_name(tag.album_artist)
+        if (album.artist and album.artist != artist) or (tag.album_artist and tag.album_artist != tag.artist)
+			## Multiple Artists
+
+			#pp [tag.artist, tag.album_artist]
+			
+			if tag.album_artist
+				# find/create a new artist for the album as a whole
+				album_artist = Artist.find_or_create_by_name(tag.album_artist)
+			else
+				album_artist = Artist.find_or_create_by_name('Various Artists')
+			end
+			
             # link album
             album_artist.albums << album
             # link track to artist and album
@@ -74,17 +88,18 @@ class Track < ActiveRecord::Base
             album.tracks << track
             album.compilation = true
         else
+			## Single Artist
             album.tracks  << track  # track goes in album
             artist.albums << album  # album goes in artist
         end
 
         track.title         = tag.title
-        track.number        = tag.tracknum
+        track.number        = format_tracknum(tag.tracknum)
         track.relative_path = source.properly_encode_path(relative_path)
         track.filename      = source.properly_encode_path(filename)
-        track.bitrate		= mp3.bitrate
-        track.length		= mp3.length
-        track.vbr			= mp3.vbr
+        track.bitrate       = mp3.bitrate
+        track.length        = mp3.length
+        track.vbr           = mp3.vbr
 
         track.save
         album.save
@@ -93,4 +108,29 @@ class Track < ActiveRecord::Base
         return track
     end
 
+  class TreeNode
+    attr_accessor :parent, :node, :children
+    def initialize(parent, node, children=[])
+      @parent = parent
+      @node = node
+      @children = children
+    end
+  end
+
+  def directory_tree(root)
+    tree = {}
+    Pathname.new(root).entries.each do |entry|
+      case entry
+      when entry.directory?
+        puts "directory: #{entry}"
+        tree[entry] = directory_tree(entry)
+      when entry.file?
+        puts "file: #{entry}"
+        tree[entry] = 0
+      end
+    end
+    tree
+  end
+
 end
+

@@ -54,8 +54,8 @@ class Mp3Info
     "Tribal", "Acid Punk", "Acid Jazz", "Polka", "Retro", "Musical",
     "Rock & Roll", "Hard Rock", "Folk", "Folk/Rock", "National Folk", "Swing",
     "Fast-Fusion", "Bebob", "Latin", "Revival", "Celtic", "Bluegrass", "Avantgarde",
-    "Gothic Rock", "Progressive Rock", "Psychedelic Rock", "Symphonic Rock", "Slow Rock", "Big Band",
-    "Chorus", "Easy Listening", "Acoustic", "Humour", "Speech", "Chanson",
+    "Gothic Rock", "Progressive Rock", "Psychedelic Rock", "Symphonic Rock", "Slow Rock",
+    "Big Band", "Chorus", "Easy Listening", "Acoustic", "Humour", "Speech", "Chanson",
     "Opera", "Chamber Music", "Sonata", "Symphony", "Booty Bass", "Primus",
     "Porn Groove", "Satire", "Slow Jam", "Club", "Tango", "Samba",
     "Folklore", "Ballad", "Power Ballad", "Rhythmic Soul", "Freestyle", "Duet",
@@ -75,7 +75,8 @@ class Mp3Info
     "year"     => "TYER",
     "tracknum" => "TRCK",
     "comments" => "COMM",
-    "genre_s"  => "TCON"
+    "genre_s"  => "TCON",
+    "album_artist" => "TPE2",
   }
 
 
@@ -159,13 +160,15 @@ class Mp3Info
     @filename = filename
     @hastag1 = false
     
-    @tag1 = {}
-    @tag1.extend(HashKeys)
+    #@tag1 = {}
+    #@tag1.extend(HashKeys)
+    @tag1 = HashObject.new
 
     @tag2 = ID3v2.new
 
-    @file = File.new(filename, "rb")
-    @file.extend(Mp3FileMethods)
+    #@file = File.new(filename, "rb")
+    #@file.extend(Mp3FileMethods)
+    @file = Mp3FileObject.new(filename, "rb")
     
     begin
       parse_tags
@@ -174,92 +177,91 @@ class Mp3Info
       @tag = {}
 
       if hastag1?
-	@tag = @tag1.dup
+        @tag = @tag1.dup
       end
 
       if hastag2?
-	@tag = {}
-      #creation of a sort of "universal" tag, regardless of the tag version
-	V1_V2_TAG_MAPPING.each do |key1, key2| 
-	  t2 = @tag2[key2]
-	  next unless t2
-	  @tag[key1] = t2.is_a?(Array) ? t2.first : t2
-
-	  if key1 == "tracknum"
-	    val = @tag2[key2].is_a?(Array) ? @tag2[key2].first : @tag2[key2]
-	    @tag[key1] = val.to_i
-	  end
-	end
+        @tag = {}
+        #creation of a sort of "universal" tag, regardless of the tag version
+        V1_V2_TAG_MAPPING.each do |key1, key2| 
+          t2 = @tag2[key2]
+          next unless t2
+          @tag[key1] = t2.is_a?(Array) ? t2.first : t2
+          
+          if key1 == "tracknum"
+            val = @tag2[key2].is_a?(Array) ? @tag2[key2].first : @tag2[key2]
+            @tag[key1] = val.to_i
+          end
+        end
       end
-
+      
       @tag.extend(HashKeys)
       @tag_orig = @tag.dup
-
-
+      
       ### extracts MPEG info from MPEG header and stores it in the hash @mpeg
       ###  head (fixnum) = valid 4 byte MPEG header
       
-    found = false
-
+      found = false
+    
       5.times do
-	head = find_next_frame() 
-	#head.extend(NumericBits)
-	@mpeg_version = [2, 1][head[19]]
-	@layer = LAYER[head.bits(18,17)]
-	next if @layer.nil?
-	@bitrate = BITRATE[@mpeg_version-1][@layer-1][head.bits(15,12)-1]
-	@error_protection = head[16] == 0 ? true : false
-	@samplerate = SAMPLERATE[@mpeg_version-1][head.bits(11,10)]
-	@padding = (head[9] == 1 ? true : false)
-	@channel_mode = CHANNEL_MODE[@channel_num = head.bits(7,6)]
-	@copyright = (head[3] == 1 ? true : false)
-	@original = (head[2] == 1 ? true : false)
-	@vbr = false
-	found = true
-	break
+        head = find_next_frame() 
+        #head.extend(NumericBits)
+        @mpeg_version = [2, 1][head[19]]
+        @layer = LAYER[head.bits(18,17)]
+        next if @layer.nil?
+        @bitrate = BITRATE[@mpeg_version-1][@layer-1][head.bits(15,12)-1]
+        @error_protection = head[16] == 0 ? true : false
+        @samplerate = SAMPLERATE[@mpeg_version-1][head.bits(11,10)]
+        @padding = (head[9] == 1 ? true : false)
+        @channel_mode = CHANNEL_MODE[@channel_num = head.bits(7,6)]
+        @copyright = (head[3] == 1 ? true : false)
+        @original = (head[2] == 1 ? true : false)
+        @vbr = false
+        found = true
+        break
       end
 
       raise(Mp3InfoError, "Cannot find good frame") unless found
 
 
       seek = @mpeg_version == 1 ? 
-	(@channel_num == 3 ? 17 : 32) :       
-	(@channel_num == 3 ?  9 : 17)
-
+        (@channel_num == 3 ? 17 : 32) :       
+        (@channel_num == 3 ?  9 : 17)
+        
       @file.seek(seek, IO::SEEK_CUR)
       
       vbr_head = @file.read(4)
       if vbr_head == "Xing"
-	puts "Xing header (VBR) detected" if $DEBUG
-	flags = @file.get32bits
-	@streamsize = @frames = 0
-	flags[1] == 1 and @frames = @file.get32bits
-	flags[2] == 1 and @streamsize = @file.get32bits 
-	puts "#{@frames} frames" if $DEBUG
-	raise(Mp3InfoError, "bad VBR header") if @frames.zero?
-	# currently this just skips the TOC entries if they're found
-	@file.seek(100, IO::SEEK_CUR) if flags[0] == 1
-	@vbr_quality = @file.get32bits if flags[3] == 1
-	@length = (26/1000.0)*@frames
-	@bitrate = (((@streamsize/@frames)*@samplerate)/144) >> 10
-	@vbr = true
+        puts "Xing header (VBR) detected" if $DEBUG
+        flags = @file.get32bits
+        @streamsize = @frames = 0
+        flags[1] == 1 and @frames = @file.get32bits
+        flags[2] == 1 and @streamsize = @file.get32bits 
+        puts "#{@frames} frames" if $DEBUG
+        raise(Mp3InfoError, "bad VBR header") if @frames.zero?
+        # currently this just skips the TOC entries if they're found
+        @file.seek(100, IO::SEEK_CUR) if flags[0] == 1
+        @vbr_quality = @file.get32bits if flags[3] == 1
+        @length = (26/1000.0)*@frames
+        @bitrate = (((@streamsize/@frames)*@samplerate)/144) >> 10
+        @vbr = true
       else
-	# for cbr, calculate duration with the given bitrate
-	@streamsize = @file.stat.size - (@hastag1 ? TAGSIZE : 0) - (@tag2.valid? ? @tag2.io_position : 0)
-	@length = ((@streamsize << 3)/1000.0)/@bitrate
-	if @tag2["TLEN"]
-	  # but if another duration is given and it isn't close (within 5%)
-	  #  assume the mp3 is vbr and go with the given duration
-	  tlen = (@tag2["TLEN"].is_a?(Array) ? @tag2["TLEN"].last : @tag2["TLEN"]).to_i/1000
-	  percent_diff = ((@length.to_i-tlen)/tlen.to_f)
-	  if percent_diff.abs > 0.05
-	    # without the xing header, this is the best guess without reading
-	    #  every single frame
-	    @vbr = true
-	    @length = @tag2["TLEN"].to_i/1000
-	    @bitrate = (@streamsize / @bitrate) >> 10
-	  end
-	end
+        # for cbr, calculate duration with the given bitrate
+        @streamsize = @file.stat.size - (@hastag1 ? TAGSIZE : 0) - (@tag2.valid? ? @tag2.io_position : 0)
+        @length = ((@streamsize << 3)/1000.0)/@bitrate
+        if @tag2["TLEN"]
+          # but if another duration is given and it isn't close (within 5%)
+          #  assume the mp3 is vbr and go with the given duration
+          tlen = (@tag2["TLEN"].is_a?(Array) ? @tag2["TLEN"].last : @tag2["TLEN"]).to_i/1000
+          percent_diff = ((@length.to_i-tlen)/tlen.to_f)
+          if percent_diff.abs > 0.05
+            # without the xing header, this is the best guess without reading
+            #  every single frame
+            @vbr = true
+            @length = @tag2["TLEN"].to_i/1000
+            @bitrate = (@streamsize / @bitrate) >> 10
+          end
+        end
       end
     ensure
       @file.close
@@ -336,24 +338,24 @@ class Mp3Info
       @tag1_orig.update(@tag1)
       #puts "@tag1_orig: #{@tag1_orig.inspect}"
       File.open(@filename, 'rb+') do |file|
-	file.seek(-TAGSIZE, File::SEEK_END)
-	t = file.read(3)
-	if t != 'TAG'
-	  #append new tag
-	  file.seek(0, File::SEEK_END)
-	  file.write('TAG')
-	end
-	str = [
-	  @tag1_orig["title"]||"",
-	  @tag1_orig["artist"]||"",
-	  @tag1_orig["album"]||"",
-	  ((@tag1_orig["year"] != 0) ? ("%04d" % @tag1_orig["year"].to_i) : "\0\0\0\0"),
-	  @tag1_orig["comments"]||"",
-	  0,
-	  @tag1_orig["tracknum"]||0,
-	  @tag1_orig["genre"]||255
-	  ].pack("Z30Z30Z30Z4Z28CCC")
-	file.write(str)
+        file.seek(-TAGSIZE, File::SEEK_END)
+        t = file.read(3)
+        if t != 'TAG'
+          #append new tag
+          file.seek(0, File::SEEK_END)
+          file.write('TAG')
+        end
+        str = [
+          @tag1_orig["title"]||"",
+          @tag1_orig["artist"]||"",
+          @tag1_orig["album"]||"",
+          ((@tag1_orig["year"] != 0) ? ("%04d" % @tag1_orig["year"].to_i) : "\0\0\0\0"),
+          @tag1_orig["comments"]||"",
+          0,
+          @tag1_orig["tracknum"]||0,
+          @tag1_orig["genre"]||255
+          ].pack("Z30Z30Z30Z4Z28CCC")
+        file.write(str)
       end
     end
 
@@ -362,30 +364,30 @@ class Mp3Info
       raise(Mp3InfoError, "file is not writable") unless File.writable?(@filename)
       tempfile_name = nil
       File.open(@filename, 'rb+') do |file|
-	
-	#if tag2 already exists, seek to end of it
-	if @tag2.valid?
-	  file.seek(@tag2.io_position)
-	end
+        
+        #if tag2 already exists, seek to end of it
+        if @tag2.valid?
+          file.seek(@tag2.io_position)
+        end
   #      if @file.read(3) == "ID3"
   #        version_maj, version_min, flags = @file.read(3).unpack("CCB4")
   #        unsync, ext_header, experimental, footer = (0..3).collect { |i| flags[i].chr == '1' }
-  #	tag2_len = @file.get_syncsafe
+  #        tag2_len = @file.get_syncsafe
   #        @file.seek(@file.get_syncsafe - 4, IO::SEEK_CUR) if ext_header
-  #	@file.seek(tag2_len, IO::SEEK_CUR)
+  #        @file.seek(tag2_len, IO::SEEK_CUR)
   #      end
-	tempfile_name = @filename + ".tmp"
-	File.open(tempfile_name, "wb") do |tempfile|
-	  unless @tag2.empty?
-	    tempfile.write("ID3")
-	    tempfile.write(@tag2.to_bin)
-	  end
+        tempfile_name = @filename + ".tmp"
+        File.open(tempfile_name, "wb") do |tempfile|
+          unless @tag2.empty?
+            tempfile.write("ID3")
+            tempfile.write(@tag2.to_bin)
+          end
 
-	  bufsiz = file.stat.blksize || 4096
-	  while buf = file.read(bufsiz)
-	    tempfile.write(buf)
-	  end
-	end
+          bufsiz = file.stat.blksize || 4096
+          while buf = file.read(bufsiz)
+            tempfile.write(buf)
+          end
+        end
       end
       File.rename(tempfile_name, @filename)
     end
@@ -471,7 +473,7 @@ private
     dummyproof.times do |i|
       if @file.getc == 0xff
         data = @file.read(3)
-	raise Mp3InfoError if @file.eof?
+              raise Mp3InfoError if @file.eof?
         head = 0xff000000 + (data[0] << 16) + (data[1] << 8) + data[2]
         if check_head(head)
             return head

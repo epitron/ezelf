@@ -1,0 +1,67 @@
+body {
+  margin: 0px 0px 0px 0px;
+  font-family: "Lucida Grande",Verdana,Arial; }
+
+
+#tabbar {
+  background: #000033; }
+  #tabbar ul {
+    list-style-image: none;
+    list-style-type: none;
+    list-style-position: outside; }
+  #tabbar li {
+    float: left;
+    padding: 5px 10px 5px 10px;
+    margin-right: 5px; }
+  #tabbar li.unselected {
+    background: #3399ff; }
+  #tabbar li.selected {
+    background: #ffffff; }
+  #tabbar a {
+    text-decoration: none; }
+
+
+span.artistname {
+  font-weight: bold;
+  font-size: 14pt; }
+
+
+br.clear {
+  clear: both; }
+
+
+img.playbutton {
+  valign: baseline; }
+
+.artist_box {
+  background: #CDEB8B;
+  border: 1px dashed #FFFF88;
+  margin: 2px 5px 2px 5px;
+  padding: 3px 5px 3px 5px;
+  display: table; }
+
+
+#tabbar-graphical {
+  left: 0px;
+  top: 0px;
+  background-image: url('/images/tabs/main_tabs_background.gif');
+  background-repeat: repeat;
+  font-size: 12px;
+  padding-top: 10px;
+  padding-left: 10px; }
+
+   {
+    vertical-align: bottom; }
+
+   {
+    height: 17px; }
+
+   {
+    text-decoration: none;
+    height: 17px; }
+
+   {
+    background: #3399ff; }
+
+   {
+    background: #ffffff; }

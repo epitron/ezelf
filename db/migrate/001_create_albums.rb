@@ -1,5 +1,8 @@
 class CreateAlbums < ActiveRecord::Migration
   def self.up
+	puts "Setting UTF8..."
+  	execute "ALTER DATABASE #{current_database} DEFAULT CHARACTER SET utf8"
+
     create_table :albums, :options=>'ENGINE=MyISAM' do |t|
 		t.column :name, :string
 		t.column :artist_id, :integer

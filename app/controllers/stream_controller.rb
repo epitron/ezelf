@@ -104,7 +104,14 @@ class StreamController < ApplicationController
 
     def render_playlist
         headers["Content-Type"] = "audio/x-mpegurl; charset=utf-8"
-        render "stream/playlist"
+		output = []
+		output << "#EXTM3U"
+		for track in @tracks
+			output << "#EXTINF: #{track.length},#{track.artist.name} - #{track.album.name} - #{track.number}. #{track.title}"
+			output << "#{url_for :action=>"track", :id=>track.id}.mp3"
+		end
+		
+        render :text => output.join("\n")
     end
 
     #after_filter :playlist_filter, :only=>[:album, :artist, :shuffle, :folder]

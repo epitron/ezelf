@@ -6,9 +6,11 @@ class Mp3Info
     def method_missing(meth,*args)
       m = meth.id2name
       if /=$/ =~ m
-	self[m.chop] = (args.length<2 ? args[0] : args)
+	      self[m.chop] = (args.length<2 ? args[0] : args)
+	    elsif /\?$/ =~ m
+	      self[m.chop] != nil
       else
-	self[m]
+	      self[m]
       end
     end
   end
@@ -32,6 +34,14 @@ class Mp3Info
     end
   end
 
+end
+
+class HashObject < Hash
+  include Mp3Info::HashKeys
+end
+
+class Mp3FileObject < File
+  include Mp3Info::Mp3FileMethods
 end
 
 Fixnum.class_eval { include Mp3Info::NumericBits }

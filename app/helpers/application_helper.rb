@@ -24,9 +24,9 @@ module ApplicationHelper
         Tab.new( "home",     { :controller => "browse", :action => "index"  }  ),
         Tab.new( "artists",  { :controller => "browse", :action => "artists"  }  ),
         Tab.new( "files",    { :controller => "browse", :action => "files"    }  ),
-        Tab.new( "users",    { :controller => "users",  :action => "list"     }  ),
+        #Tab.new( "users",    { :controller => "users",  :action => "list"     }  ),
         Tab.new( "shuffle",  { :controller => "stream", :action => "shuffle"  }  ),
-        Tab.new( "stations", { :controller => "browse", :action => "stations" }  ),
+        #Tab.new( "stations", { :controller => "browse", :action => "stations" }  ),
       ]
     end
     
@@ -54,8 +54,8 @@ module ApplicationHelper
     def render_main_tabs_graphical
       tabs = main_tabs
       
-      tabbar = [ image_tag "tabs/main_tabs_unselected_leftmost.gif" ]
-      tabbar += tabs.zip( [image_tag "tabs/main_tabs_unselected_between.gif"] * tabs.length ).flatten
+      tabbar = [ image_tag("tabs/main_tabs_unselected_leftmost.gif") ]
+      tabbar += tabs.zip( [image_tag("tabs/main_tabs_unselected_between.gif")] * tabs.length ).flatten
       tabbar[-1] = image_tag "tabs/main_tabs_unselected_rightmost.gif"
       
       tabbar.each_with_index do |element, i|

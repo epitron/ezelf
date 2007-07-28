@@ -32,7 +32,7 @@ class BrowseController < ApplicationController
       if html_id =~ /^([\w_]+)_(\d+)$/
         assert modelname.to_s == $1
         modelclass = modelname.classify.constantize
-        return modelclass.find $2.to_i
+        return modelclass.find($2.to_i)
       else
         raise "Invalid html_id: #{html_id}"
       end

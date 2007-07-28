@@ -2,21 +2,16 @@
 %center
   %h1 ... Everything! (by Artist) ...
 
-%div
-  %a{:href=>'#', :onclick=>"$$('.foldable').each(function(el){el.hide()})"}= "<< Collapse All"
-  %a{:href=>'#', :onclick=>"$$('.foldable').each(function(el){el.show()})"}= "Expand All >>"
-
 #browser{ :style => "font-family: Tahoma" }
 
   - @artists.each do |artist|
+    .artist_box
+      .artist_title
+        = link_to image_tag("play24.png", :class=>"playbutton"), :controller=>"stream", :action=>"artist", :id=>artist.id
+        %span.artistname= link_to_remote artist.name, :url => { :action => 'expand_artist', :id => artist.id }
+        %span.albumcount= "(#{pluralize(artist.albums.count, "album")})"
+              
+      %div{ :id=>artist.html_id, :class=>"expandable" }
+      
   
-    .artist_title
-      = link_to image_tag("play24.png"), :controller=>"stream", :action=>"artist", :id=>artist.id
-      %a{ :href=>'#', :onclick=>"Element.toggle('#{artist.html_id}')" }= artist.name
-      %span.albumcount= "(#{artist.albums.count})"
-            
-    %div{ :id=>artist.html_id, :class=>"expandable" }
-      = link_to_remote "expand >>", :url => { :action => 'expand_artist', :id => artist.id }
-    
-
 

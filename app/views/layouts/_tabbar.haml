@@ -1,0 +1,6 @@
+#tabbar
+  %ul
+    - for tab in main_tabs
+      %li{:class=>tab_selected?(tab) ? "selected" : "unselected"}= link_to tab.name, tab.params
+
+%br
