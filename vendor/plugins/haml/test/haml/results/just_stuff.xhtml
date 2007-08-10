@@ -10,6 +10,7 @@
 Embedded? false!
 Embedded? true!
 Embedded? true!
+Embedded? twice! true!
 <div class='render'><em>wow!</em></div>
 stuff followed by whitespace
 <strong>block with whitespace</strong>
@@ -29,7 +30,8 @@ stuff followed by whitespace
   <strong>there can even be sub-tags!</strong>
   Or script!
 -->
-<p>class attribute shouldn't appear!</p>
+<p class=''>class attribute should appear!</p>
+<p>this attribute shouldn't appear</p>
 <!--[if lte IE6]> conditional comment! <![endif]-->
 <!--[if gte IE7]> 
   <p>Block conditional comment</p>
@@ -41,5 +43,19 @@ stuff followed by whitespace
   Woah a period.
 <![endif]-->
 testtest
-<foo />
-<foo />
+<br />
+<meta foo='bar' />
+<img />
+<hr />
+<link />
+<script>Inline content</script>
+<br>
+  Nested content
+</br>
+<p class='article bar foo' id='article_1'>Blah</p>
+<p class='article foo' id='article_1'>Blah</p>
+<p class='article quux qux' id='article_1'>Blump</p>
+Woah inner quotes
+<p class='dynamic_quote' dyn='3' quotes="single '">
+</p>
+<p class='dynamic_atomic' dyn='3' />

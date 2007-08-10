@@ -19,7 +19,7 @@ class MockTest < Test::Unit::TestCase
    mock = Mock.new
    expectation = mock.expects(:method1)
    assert_not_nil expectation
-   assert_equal [expectation], mock.expectations
+   assert_equal [expectation], mock.expectations.to_a
   end
   
   def test_should_not_stub_everything_by_default
@@ -105,20 +105,6 @@ class MockTest < Test::Unit::TestCase
     assert_equal [stub1, stub2].to_set, mock.expectations.to_set
   end
   
-  def test_should_find_matching_expectation
-    mock = Mock.new
-    expectation1 = mock.expects(:my_method).with(:argument1, :argument2)
-    expectation2 = mock.expects(:my_method).with(:argument3, :argument4)
-    assert_same expectation2, mock.matching_expectation(:my_method, :argument3, :argument4)
-  end
-  
-  def test_should_find_most_recent_matching_expectation
-    mock = Mock.new
-    expectation1 = mock.expects(:my_method).with(:argument1, :argument2)
-    expectation2 = mock.expects(:my_method).with(:argument1, :argument2)
-    assert_same expectation2, mock.matching_expectation(:my_method, :argument1, :argument2)
-  end
-  
   def test_should_invoke_expectation_and_return_result
     mock = Mock.new
     mock.expects(:my_method).returns(:result)
@@ -133,13 +119,6 @@ class MockTest < Test::Unit::TestCase
       result = mock.unexpected_method
     end
     assert_nil result
-  end
-  
-  def test_should_raise_no_method_error
-    mock = Mock.new
-    assert_raise(NoMethodError) do
-      mock.super_method_missing(nil)
-    end
   end
   
   def test_should_raise_assertion_error_for_unexpected_method_call
@@ -157,19 +136,6 @@ class MockTest < Test::Unit::TestCase
     class << mock
       attr_accessor :symbol, :arguments
       def unexpected_method_called(symbol, *arguments)
-        self.symbol, self.arguments = symbol, arguments
-      end
-    end
-    mock.my_method(:argument1, :argument2)
-    assert_equal :my_method, mock.symbol
-    assert_equal [:argument1, :argument2], mock.arguments
-  end
-  
-  def test_should_call_method_missing_for_parent
-    mock = Mock.new
-    class << mock
-      attr_accessor :symbol, :arguments
-      def super_method_missing(symbol, *arguments, &block)
         self.symbol, self.arguments = symbol, arguments
       end
     end
@@ -347,15 +313,4 @@ class MockTest < Test::Unit::TestCase
       assert_match(/which responds like mocha_inspect/, e.message)
     end
   end
-  
-  def test_should_raise_final_expectation_error_if_message_is_received_after_satisfying_the_final_expectation
-    mock = Mock.new
-    mock.expects(:method1)
-    mock.expects(:method2).last
-    mock.method2
-    assert_raises(ExpectationSequenceError){
-      mock.method1
-    }
-  end
-  
 end

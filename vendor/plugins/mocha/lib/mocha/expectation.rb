@@ -38,12 +38,15 @@ module Mocha # :nodoc:
       else
         return false unless (@parameters == arguments)
       end
-      if @expected_count.is_a?(Range) then
-        return false unless @invoked_count < @expected_count.last
-      else
-        return false unless @invoked_count < @expected_count
-      end
       return true
+    end
+    
+    def invocations_allowed?
+      if @expected_count.is_a?(Range) then
+        @invoked_count < @expected_count.last
+      else
+        @invoked_count < @expected_count
+      end
     end
 
     # :startdoc:
@@ -334,25 +337,7 @@ module Mocha # :nodoc:
       self
     end
     
-    # :call-seq: last() -> expectation
-    #
-    # Flags expectation so that an exception will be raised if any other methods are called after the expected method has been called.
-    #   object = mock()
-    #   object.expects(:method_1)
-    #   object.expects(:method_2).last
-    #   object.method_2
-    #   object.method_1 # => raises ExpectationSequenceError
-    #
-    def last
-      @final_expectation = true
-      self
-    end
-    
     # :stopdoc:
-    
-    def final?
-      @final_expectation
-    end
     
     def invoke
       @invoked_count += 1

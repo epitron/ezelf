@@ -17,7 +17,8 @@ class HelperTest < Test::Unit::TestCase
     if options == :action_view
       @base.render :inline => text, :type => :haml
     else
-      Haml::Engine.new(text, options).to_html
+      scope = options.delete :scope_object
+      Haml::Engine.new(text, options).to_html(scope ? scope : Object.new)
     end
   end
 
@@ -34,7 +35,7 @@ class HelperTest < Test::Unit::TestCase
 
   def test_list_of_should_render_correctly
     assert_equal("<li>1</li>\n<li>2</li>\n", render("= list_of([1, 2]) do |i|\n  = i"))
-    assert_equal("<li>1</li>\n", render("= list_of([[1]]) do |i|\n  = i.first"))
+    assert_equal("<li>[1]</li>\n", render("= list_of([[1]]) do |i|\n  = i.inspect"))
     assert_equal("<li>\n  <h1>Fee</h1>\n  <p>A word!</p>\n</li>\n<li>\n  <h1>Fi</h1>\n  <p>A word!</p>\n</li>\n<li>\n  <h1>Fo</h1>\n  <p>A word!</p>\n</li>\n<li>\n  <h1>Fum</h1>\n  <p>A word!</p>\n</li>\n",
       render("= list_of(['Fee', 'Fi', 'Fo', 'Fum']) do |title|\n  %h1= title\n  %p A word!"))
   end
@@ -45,7 +46,8 @@ class HelperTest < Test::Unit::TestCase
   end
 
   def test_tabs
-    assert_equal(render("foo\n- tab_up\nbar\n- tab_down\nbaz"), "foo\n  bar\nbaz\n")
+    assert_equal("foo\n  bar\nbaz\n", render("foo\n- tab_up\nbar\n- tab_down\nbaz"))
+    assert_equal("          <p>tabbed</p>\n", render("- buffer.tabulation=5\n%p tabbed"))
   end
   
   def test_helpers_dont_leak
@@ -64,7 +66,7 @@ class HelperTest < Test::Unit::TestCase
       ActionView::Base.new.render(:inline => "<%= concat('foo') %>")
     rescue ArgumentError, NameError
       proper_behavior = true
-    end
+    end    
     assert(proper_behavior)
   end
   
@@ -105,6 +107,46 @@ class HelperTest < Test::Unit::TestCase
     assert_equal("true\n", render("= is_haml?", :action_view))
     assert_equal("false", @base.render(:inline => '<%= is_haml? %>'))
     assert_equal("false\n", render("= render :inline => '<%= is_haml? %>'", :action_view))
+  end
+
+  def test_page_class
+    controller = Struct.new(:controller_name, :action_name).new('troller', 'tion')
+    scope = Struct.new(:controller).new(controller)
+    result = render("%div{:class => page_class} MyDiv", :scope_object => scope)
+    expected = "<div class='troller tion'>MyDiv</div>\n"
+    assert_equal expected, result
+  end
+
+  def test_indented_capture
+    assert_equal("  \n  Foo\n  ", @base.render(:inline => "  <% res = capture do %>\n  Foo\n  <% end %><%= res %>"))
+  end
+
+  def test_capture_deals_properly_with_collections
+    Haml::Helpers.module_eval do 
+      def trc(collection, &block)
+        collection.each do |record|
+          puts capture_haml(record, &block)
+        end
+      end
+    end
+
+    assert_equal("1\n\n2\n\n3\n\n", render("- trc([1, 2, 3]) do |i|\n  = i.inspect"))
+  end
+
+  def test_init_haml_helpers
+    context = Object.new
+    class << context
+      include Haml::Helpers
+    end
+    context.init_haml_helpers
+
+    result = context.capture_haml do
+      context.open :p, :attr => "val" do
+        context.puts "Blah"
+      end
+    end
+
+    assert_equal("<p attr='val'>\n  Blah\n</p>\n", result)
   end
 end
 

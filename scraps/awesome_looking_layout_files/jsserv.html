@@ -1,0 +1,450 @@
+
+<!--
+if(typeof(mbl_jsserv_loaded) == 'undefined') {
+var mbl_jsserv_loaded = true;
+
+function m_r_e(obj, w, f) { 
+  if(window.addEventListener){ obj.addEventListener(w, f, false); }else if(window.attachEvent){ obj.attachEvent('on'+w, f); }else{}
+}
+function m_rm_e(obj, w, f) {
+  if(window.addEventListener){ obj.removeEventListener(w, f, false); }else if(window.attachEvent){ obj.detachEvent('on'+w, f); }else{}
+}
+function m_i_eu(url){
+  if(!url){return false;}
+  if(typeof(url)!='string'){return true;}
+  url=url.toLowerCase();
+  if(url.indexOf('https://')==0){url=url.substring(8);}
+  else if(url.indexOf('http://')==0){url=url.substring(7);}
+  else if(url.indexOf('ftp://')==0){url = url.substring(6);}
+  else if(url.indexOf('ssl://')==0){url = url.substring(6);}
+  else if(url.indexOf('mailto:')==0){return true;}
+  else{return false;}
+  if(url.indexOf('www.')==0){url=url.substring(4);}
+  var hn=document.location.hostname.toLowerCase();
+  if(hn.indexOf('www.')==0){hn=hn.substring(4);}
+  if(hn==''){return true;}
+  if(url.indexOf(hn)!=0){return true;}
+  return false;
+}
+
+	var cs_mbl_isAOL_V8 = false;
+	if(navigator.userAgent.indexOf('AOL 8.0') > 0){ cs_mbl_isAOL_V8 = true; }	
+	var cs_mblID='2007013121590834', cs_url_trker='http://track2.mybloglog.com/tr/urltrk.php', mbl_isi='N2007071223423200', mblco_on='', mblco_pu='', mblco_n='', mblco_e='', mblco_u='', mblco_c='';
+	function m_p_c(obj, flag){
+	  for(var j=0;j<=5;j++){if(flag==1){if(obj&&obj.nodeName.toUpperCase()=='A'){return obj;}}if(flag==2){if(obj&&obj.nodeName.toUpperCase()!='BODY'&&obj.onclick){return obj;}}if(!obj.parentNode){return null;}obj=obj.parentNode;}
+	  return null;
+	}
+	function m_is_u(s){
+    if(!s){return false;}
+		var regexp = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/i
+		return regexp.test(s);
+	}
+  function m_trim(str, ch){
+    while(str.substring(0,1)==ch){str=str.substring(1, str.length);}
+    while(str.substring(str.length-1, str.length)==ch){str = str.substring(0, str.length-1);}
+    return str;
+  }
+	function m_ctx_c(e){
+	  var tg = null;if(e){tg=e.target;}else{tg=window.event.srcElement;}m_d_t(tg, false);
+	}
+	function m_oclk(e){var tg=null;if(e){tg=e.target;}else{tg=window.event.srcElement;}m_d_t(tg, true);}
+	function m_d_t(tg, delay){
+	  var url=null, text=null, co_qstr='';
+	  try{
+	    if(tg){
+	      tgP=m_p_c(tg, 1);
+	      if(tgP&&tgP.nodeName.toUpperCase()=='A'){tg=tgP;}
+	      if(tg.nodeName.toUpperCase()=='A'){url=tg.href;if(tg.innerHTML){text=tg.innerHTML;}else if(tg.innerText){text=tg.innerText;}else if(tg.text){text=tg.text;}else{}}
+        else if(tg.nodeName.toUpperCase()=='AREA'){url=tg.href;text=tg.getAttribute('alt') ? tg.getAttribute('alt') : tg.getAttribute('id');if(text==null||text==''){text=url;}}
+        else if(tg.nodeName.toUpperCase()=='INPUT'&&tg.type.toUpperCase()=='SUBMIT'){url=m_trim(tg.form.action,'/');url=m_trim(url,' ');text=tg.value;
+						var co_name='', co_email='', co_url='', co_text='';
+						//if(m_is_u(mblco_pu)&&url.toUpperCase()==mblco_pu.toUpperCase()){
+            if(url.toLowerCase().indexOf('comment') > 0){
+					    //if(mblco_n&&tg.form.elements[mblco_n]){co_name=tg.form.elements[mblco_n].value;}if(mblco_e&&tg.form.elements[mblco_e]){co_email=tg.form.elements[mblco_e].value;}if(mblco_u&&tg.form.elements[mblco_u]){co_url=tg.form.elements[mblco_u].value;}if(mblco_c&&tg.form.elements[mblco_c]){co_text=tg.form.elements[mblco_c].value;}
+					    if(tg.form.elements['author']){co_name=tg.form.elements['author'].value;}if(tg.form.elements['email']){co_email=tg.form.elements['email'].value;}if(tg.form.elements['url']){co_url=tg.form.elements['url'].value;}if(tg.form.elements['comment']){co_text=tg.form.elements['comment'].value;}else if(tg.form.elements['text']){co_text=tg.form.elements['text'].value;}else{}					
+						}					
+						if(co_text != '') {
+						  co_qstr = '&co_n='+escape(co_name)+'&co_e='+escape(co_email)+'&co_u='+escape(co_url)+'&co_c='+escape(co_text) + '&co_pt=' + escape(document.title);
+						}
+	      }else{}
+	      if(url==null||text==null){return true;} 
+	      if(co_qstr!=''||m_i_eu(url)){if(cs_mbl_isAOL_V8 && (tg.target=='_new'||tg.target=='_blank')){return true;}url=escape(url);text=escape(text);m_trk(text, url, co_qstr, delay);}
+	    }
+	  }catch(err){}
+	}
+	function m_trk(text, url, co_qstr, delay){      
+	  try{
+	    var now=new Date();var trackURL=cs_url_trker+'?t=2&u='+url+'&te='+text+'&i='+cs_mblID+'&now='+now.valueOf()+'&d=20070713'+'&db='+'&v='+mbl_isi+co_qstr;var x=document.createElement('IMG');x.src=trackURL;if(delay){m_pse(900);}
+	  }catch(err){}
+	}		
+	function m_t_ol(){
+	  try{
+	    var now = new Date();
+	    var url = escape(document.location.href);
+	    var ext_referrer=document.referrer;
+	    if(ext_referrer!=''&&m_i_eu(ext_referrer)){
+	      var ext_referrer_para='&eref='+escape(ext_referrer);
+	    }else{var ext_referrer_para='';}
+	    var trackURL = cs_url_trker + '?i=' + cs_mblID + '&t=1&u=' + url + '&a=' + escape(navigator.userAgent) + '&d=20070713' + ext_referrer_para + '&db=' + '&now=' + now.valueOf() + '&v=' + mbl_isi;
+	    var x=document.createElement('IMG');x.src=trackURL;	
+	  }catch(err){ }
+	  return true;
+	}
+	function m_pse(numberMillis){var now=new Date();var exitTime=now.getTime()+numberMillis;while(true){now=new Date();if(now.getTime()>exitTime){return;}}}
+
+  //start IFrame ad tracking
+  //from http://www.digitalmediaminute.com/article/1715/adsense-click-pepper
+	var m_px=0,m_py=0,m_as_frms=new Array(),is_ie=document.all?true:false;
+	function m_as_init() {
+		var ad=document.getElementsByTagName('iframe');
+		for(var i=0;i<ad.length;i++) {
+      if(ad[i].src.indexOf('googlesyndication.com')>-1){
+        m_as_frms[m_as_frms.length]=new Array(ad[i], 'http://pagead2.googlesyndication.com', 'Google AdSense');
+        if(is_ie){ad[i].onfocus=m_trk_as;}
+      } else if(ad[i].src.indexOf('ypn-js.overture.com') > -1) {
+        m_as_frms[m_as_frms.length]=new Array(ad[i], 'http://ypn-js.overture.com', 'Yahoo! Publisher Network');
+        if(is_ie){ad[i].onfocus=m_trk_as;}
+      } else {}
+    }
+    if(m_as_frms.length>0&&!is_ie){m_r_e(window, 'beforeunload', m_as_ul);m_r_e(document, 'mousemove', m_gm);}
+	}
+	function m_gm(e) {
+		if(!e){var e=window.event;}
+		if(e.pageX||e.pageY){m_px=e.pageX;m_py=e.pageY;}
+		else if(e.clientX||e.clientY){ m_px=e.clientX+document.body.scrollLeft+document.documentElement.scrollLeft;m_py=e.clientY+document.body.scrollTop+document.documentElement.scrollTop;}
+	}
+	function m_gpos(obj) {
+		var curleft = curtop = 0;
+		if(obj.offsetParent) {
+			curleft=obj.offsetLeft;
+			curtop=obj.offsetTop;
+			while(obj=obj.offsetParent){curleft+=obj.offsetLeft;curtop+=obj.offsetTop;}
+		}
+		return [curleft,curtop];
+	}
+	function m_as_ul(e) {
+    try{
+      var m_as_size='';
+			for(var i=0;i<m_as_frms.length;i++) {
+        var ad_pos=m_gpos(m_as_frms[i][0]);
+				var a_fx=(m_px>(ad_pos[0]-10)&&m_px<(parseInt(ad_pos[0])+parseInt(m_as_frms[i][0].width)+15));
+				var a_fy=(m_py>(ad_pos[1]-10)&&m_py<(parseInt(ad_pos[1])+parseInt(m_as_frms[i][0].height)+10));
+				if(a_fx&&a_fy){m_trk_as(m_as_frms[i][0]);break;}
+			}
+		}catch(err){}
+	}
+	function m_trk_as(f){
+    try{
+	    if(!f&&window.event.srcElement){var f=window.event.srcElement;}
+	    for(var i=0;i<m_as_frms.length;i++) {
+	      if(m_as_frms[i][0]==f) {
+	        var a_si = m_as_frms[i][0].width + 'x' + m_as_frms[i][0].height;
+	        m_trk(escape(m_as_frms[i][2]+' ('+a_si+')'), escape(m_as_frms[i][1]+'#'+a_si), '', true);break;
+	      }
+	    }
+	    if(is_ie){window.focus();}
+		}catch(err){}
+	}
+  //end IFrame ad tracking
+
+	if(document.body){//if the script is inside the body tag - which it should be
+	  document.body.onclick = m_oclk;
+	  document.body.oncontextmenu = m_ctx_c;
+	}else if(document){//script is outside the body tag - works in some browsers
+	  document.onclick = m_oclk;
+	  document.oncontextmenu = m_ctx_c;  
+	}else{}  
+	m_t_ol();
+  m_r_e(window, 'load', m_as_init);
+  
+  if(typeof(mbl_links) == 'undefined'){var mbl_pop_div_node = null;
+var mbl_pop_div_active = false;
+var mbl_mouse_xcoord = 0;
+var mbl_mouse_ycoord = 0;
+var mbl_mouse_ycoord_prev = 0;
+var mbl_mouse_going_up = false;
+var mbl_popup_timeout = null;
+var mbl_active_link_obj = null;
+var mbl_last_popup_bottomY = 0;
+var mbl_link_heights = new Array;
+var mbl_body_border_top = 0;
+var mbl_clicktagging_ord = 'y';
+
+var mbl_links = new Array();
+mbl_links['http://blog.html.it/layoutgala'] = '10';
+mbl_links['http://www.mycelly.com'] = '7';
+mbl_links['http://www.free-css-templates.co.uk'] = '6';
+mbl_links['http://www.72dpiintheshade.com/2007/01/16/top-10-css-tips-from-a-professional-css-architect'] = '5';
+mbl_links['http://home.tampabay.rr.com/bmerkey/cheatsheet.htm'] = '5';
+mbl_links['http://csstinderbox.raykonline.com'] = '5';
+mbl_links['http://www.strictlycss.com/articles/article/40/the-only-css-layout-you-need'] = '5';
+mbl_links['http://www.seomoz.org/blog/css-properties-you-probably-never-use'] = '4';
+mbl_links['http://www.smashingmagazine.com/2007/01/19/53-css-techniques-you-couldnt-live-without'] = '4';
+mbl_links['http://www.alvit.de/css-showcase/css-navigation-techniques-showcase.php'] = '4';
+mbl_links['http://www.templateworld.com/free_templates.html'] = '4';
+mbl_links['http://mikeomatic.net/?p=78'] = '3';
+mbl_links['http://www.smashingmagazine.com/2007/02/14/free-design-templates'] = '3';
+mbl_links['http://www.oswd.org'] = '3';
+mbl_links['http://feeds.feedburner.com/JasonBartholme'] = '3';
+mbl_links['http://cssvault.com'] = '3';
+mbl_links['http://www.bigbaer.com/css_tutorials/css.image.text.wrap.htm'] = '2';
+mbl_links['http://isnoop.net/tools/css.php'] = '2';
+mbl_links['http://www.christianmontoya.com/2007/02/01/css-techniques-i-use-all-the-time'] = '2';
+mbl_links['http://forecastfox.mozdev.org'] = '2';
+mbl_links['http://www.google.com/notebook'] = '2';
+mbl_links['http://www.dynamicdrive.com/style/layouts'] = '2';
+mbl_links['http://www.free-css-templates.com'] = '2';
+mbl_links['http://andreasviklund.com/templates'] = '2';
+mbl_links['http://www.freshtemplates.com'] = '2';
+mbl_links['http://www.google.com/webmasters'] = '2';
+mbl_links['https://addons.mozilla.org/en-US/firefox/addon/1419'] = '2';
+mbl_links['http://maxdesign.com.au/presentation/page_layouts'] = '2';
+mbl_links['http://www.miswebdesign.com/resources/articles/fancy-paragraphs.html'] = '2';
+mbl_links['http://www.webcredible.co.uk/user-friendly-resources/css/css-tricks.shtml'] = '2';
+mbl_links['http://www.webcredible.co.uk/user-friendly-resources/css/more-css-tricks.shtml'] = '2';
+mbl_links['http://www.stumbleupon.com/submit?url=http://www.jasonbartholme.com/2007/07/02/new-free-service-matches-bloggers-for-link-exchange/&title=New, Free Service Matches Bloggers for Link Exchange'] = '1';
+mbl_links['http://www.linkedin.com/in/jasonbartholme'] = '1';
+mbl_links['http://www.adobe.com/products/coldfusion'] = '1';
+mbl_links['http://www.hunlock.com/blogs/Attach_icons_to_anything_with_CSS'] = '1';
+mbl_links['http://www.cameronmoll.com/archives/001211.html'] = '1';
+mbl_links['http://www.javascript-page.com/css'] = '1';
+mbl_links['http://www.cleancss.com'] = '1';
+mbl_links['http://www.houseoffusion.com/groups/cf-jobs'] = '1';
+mbl_links['http://www.tutorialized.com/tutorials/ColdFusion/1'] = '1';
+mbl_links['http://www.iosart.com/firefox/colorzilla'] = '1';
+mbl_links['http://www.subcide.com/tutorials/csslayout'] = '1';
+mbl_links['http://www.adobe.com/cfusion/communityengine/index.cfm?event=homepage&productId=1'] = '1';
+mbl_links['http://nidahas.com/2006/01/12/forms-markup-and-css'] = '1';
+mbl_links['http://centricle.com/ref/css/filters'] = '1';
+mbl_links['http://www.petefreitag.com/item/475.cfm'] = '1';
+mbl_links['http://optimoz.mozdev.org/gestures'] = '1';
+mbl_links['http://scribefire.com'] = '1';
+mbl_links['http://www.google.com/tools/firefox/browsersync'] = '1';
+mbl_links['http://www.greasespot.net'] = '1';
+    var mbl_atag = null;
+    function mbl_number_ordinalize(n){
+      if(isNaN(n)){ return n; }
+      if(n >= 11 && n <= 19){ return n + 'th'; }
+      else if(n % 10 == 1){ return n + 'st'; }
+      else if(n % 10 == 2){ return n + 'nd'; }
+      else if(n % 10 == 3){ return n + 'rd'; }
+      else{ return n + 'th'; }
+    }
+    function mbl_get_assoc_array_rank(arr, ind){
+      var r = 1;
+      for(var i in arr){
+        if(i == ind){ return r; }
+        r++;
+      }
+      return r;
+    }
+    function mbl_getElemTop(e){
+      var top = e.offsetTop;
+      var pe = e.offsetParent;
+      while (pe != null) {
+        if(pe.offsetTop > 0){ top += pe.offsetTop; }
+        pe = pe.offsetParent;
+      }
+      return top;
+    }
+    function mbl_getObjectStyle(obj, styleIE, styleMozilla) {
+      if(obj.currentStyle){
+        return obj.currentStyle[styleIE];
+      }else if (window.getComputedStyle) {
+        var compStyle = window.getComputedStyle(obj, '');
+        return compStyle.getPropertyValue(styleMozilla);
+      }
+      return '0';
+    }
+    function mbl_onmousemove(e){
+      if(!e){ e = window.event; }
+      if(e){ 
+        if(e.pageX || e.pageY){
+          mbl_mouse_xcoord = e.pageX;
+          mbl_mouse_ycoord = e.pageY;
+        }else if(e.clientX){
+          mbl_mouse_xcoord = e.clientX + document.documentElement.scrollLeft;
+          mbl_mouse_ycoord = e.clientY + document.documentElement.scrollTop;
+        }
+      }
+      if(mbl_mouse_ycoord_prev < mbl_mouse_ycoord){
+        mbl_mouse_going_up = false;
+      }else{
+        mbl_mouse_going_up = true;
+      }
+      mbl_mouse_ycoord_prev = mbl_mouse_ycoord;
+      return true;
+    }
+    function mbl_lstats_getParentClickable(obj){
+      for(var j=0; j<=5; j++){
+        if(obj && obj.nodeName.toUpperCase() == 'A'){ return obj; } //look for <A> tag
+        obj = obj.parentNode;
+      }
+      return null;
+    }
+    function mbl_ourlc(href){
+      window.open('http://www.mybloglog.com/links/?url=' + href);
+    }
+    function mbl_recal_ypos(height, top){
+      var cnt = mbl_link_heights.length;
+      var repos = 0;
+      var x = 1;
+      var h = height;
+      for(var i=0; i<cnt; i++){
+        if(height <= mbl_link_heights[i]){ break; }
+        if((height % mbl_link_heights[i]) == 0){
+          x = height / mbl_link_heights[i];
+          h = mbl_link_heights[i];        
+          break;
+        }
+      }
+      var line_pos = 0;
+      for(var i=0; i<x; i++){
+        if(mbl_mouse_ycoord > (top + (i * h) + 2)){
+          line_pos = i;
+        }
+      }
+      return h * line_pos;
+    }
+    function mbl_get_link_stats(atag){
+      var href = m_trim(atag.href.toLowerCase(), '/');
+      href = unescape(m_trim(href, ' '));
+      href = href.replace(/'/gi, '');
+      var mbl_num_clicks = mbl_links[href];
+      if(!mbl_num_clicks){
+        var reg = /\+/gi;
+        var hrefx = href.replace(reg, ' ');
+        mbl_num_clicks = mbl_links[hrefx];
+      }
+      return mbl_num_clicks;
+    }
+    function mbl_onmous(e){
+      if(typeof(mbl_pop_div_node) == 'undefined' || mbl_pop_div_node == null){ return true; }
+    
+      var atag = null
+      if(e && e.target){ atag = e.target; }
+      else{ atag = window.event.srcElement; }
+      atag = mbl_lstats_getParentClickable(atag);
+      if(!atag || !atag.href){ return true; }
+    
+      if(atag == mbl_active_link_obj && mbl_pop_div_active){ return true; }  
+    
+      var href = m_trim(atag.href.toLowerCase(), '/');
+      href = unescape(m_trim(href, ' '));
+
+      var click_text;
+      if(mbl_clicktagging_ord != 'n'){
+        click_text = mbl_number_ordinalize(mbl_get_assoc_array_rank(mbl_links, href));
+        if(click_text == '1st'){
+          click_text = 'Most Popular Outgoing Link';
+        }else{
+          click_text = click_text + ' Most Popular Outgoing Link';
+        }
+      }else{
+        var mbl_num_clicks = mbl_get_link_stats(atag);     
+        if(mbl_num_clicks > 1){ var clickText = ' Clicks '; }
+        else{ var clickText = ' Click '; }
+        click_text = mbl_num_clicks + clickText + 'Today (updated hourly)';
+      }
+
+      mbl_pop_div_node.innerHTML = '<div onclick="mbl_ourlc(\''+escape(href)+'\');" style="width:180px;text-align:center;background-color:#eeeeee;font-size:11px;display:block;border:1px solid #336699;color:#336699;text-decoration:none;font-family:arial,sans-serif;margin:0px;padding:0px;cursor:hand;cursor:pointer;"><div style="border:1px solid #336699;font-weight:bold;background-color:#336699;color:#eeeeee;display:none;text-align:center;width:178px;">MyBlogLog ClickTagging</div><div style="margin:0px;padding:2px 0px;text-decoration:underline;text-align:center;width:178px;">' + click_text + '</div></div>';
+      mbl_pop_div_node.style.display = 'block';
+    
+      var top = parseInt(mbl_getElemTop(atag));
+      var height = parseInt(mbl_pop_div_node.offsetHeight);
+      var width = parseInt(atag.offsetWidth);
+    
+      var repos = 0;
+      repos = mbl_recal_ypos(parseInt(atag.offsetHeight), top);
+    
+      mbl_pop_div_node.style.left = mbl_mouse_xcoord + 'px';
+      mbl_pop_div_node.style.top = top - height + repos + 3 + mbl_body_border_top + 'px';
+    
+      mbl_pop_div_active = true;
+      if(atag && atag.href){ window.status = atag.href; }
+      mbl_active_link_obj = atag;
+    
+      mbl_last_popup_bottomY = top + repos + 3 + mbl_body_border_top;
+    
+      return true;
+    }
+    function mbl_onmousout(e){
+      mbl_pop_div_active = false; 
+      mbl_popup_timeout = window.setTimeout('mbl_onmousout_sub()', 100);
+      return true;
+    }
+    function mbl_onmousout_sub(){
+      if(mbl_pop_div_node && !mbl_pop_div_active){
+        mbl_pop_div_node.style.display = 'none';
+        window.status = '';
+      }
+      return true;
+    }
+    function mbl_onmous2(e){
+      mbl_pop_div_active = true;
+      mbl_pop_div_node.firstChild.firstChild.style.display = 'block';
+      mbl_pop_div_node.style.top = mbl_last_popup_bottomY - parseInt(mbl_pop_div_node.offsetHeight) + 'px';
+    
+      return true;
+    }
+    function mbl_sort_insert(val){
+      if(val < 5){ return true; }
+      var cnt = mbl_link_heights.length;
+      var mbl_temp_idx = -1;
+      if(cnt == 0){ mbl_link_heights[0] = val; return true; }
+      
+      for(var i=0; i<cnt; i++){
+        if(mbl_link_heights[i] == val || (val % mbl_link_heights[i]) == 0){ return true; }
+        if(val < mbl_link_heights[i]){
+          mbl_temp_idx = i;
+          break;
+        }
+      }
+      if(mbl_temp_idx == -1){ mbl_link_heights[cnt] = val; return true; }
+      for(var i=cnt; i>mbl_temp_idx; i--){
+        mbl_link_heights[i] = mbl_link_heights[i-1];
+      }
+      mbl_link_heights[mbl_temp_idx] = val;
+    }
+    function mbl_processlinknodes(){
+      try{
+        if(typeof(mbl_links) == 'undefined'){ return true; }
+        var eventFlag = 0;
+        var body = document.getElementsByTagName('body')[0];
+        if(!body){ return true; }
+      
+        var div = document.createElement('DIV');
+        div.style.display = 'none';
+        div.style.zIndex = '99';
+      
+        div.style.position = 'absolute';
+        div.setAttribute('id', 'mbl_div_id_2s29et301');
+        mbl_pop_div_node = div;
+
+        m_r_e(mbl_pop_div_node, 'mouseover', mbl_onmous2);
+        m_r_e(mbl_pop_div_node, 'mouseout', mbl_onmousout);
+
+        body.appendChild(div);
+        var numTest = parseInt(mbl_getObjectStyle(body, 'borderTopWidth', 'border-top-width'));
+        if(!isNaN(numTest)){ mbl_body_border_top = numTest; }
+    
+        var nodes = document.getElementsByTagName('A');
+        for(var i=0; i<nodes.length; i++){
+          if(nodes[i].href && nodes[i].parentNode && mbl_get_link_stats(nodes[i])){
+
+		        m_r_e(nodes[i], 'mouseover', mbl_onmous);
+		        m_r_e(nodes[i], 'mouseout', mbl_onmousout);
+
+            mbl_sort_insert(parseInt(nodes[i].offsetHeight));      
+          }
+        }
+      }catch(err){ return true; }
+    
+      return true;
+    }
+
+    m_r_e(window, 'load', mbl_processlinknodes);
+    m_r_e(document, 'mousemove', mbl_onmousemove);
+  }  
+}
+// --><!-- g2w1.mbl.sp1.yahoo.com compressed/chunked Thu Jul 12 23:42:31 PDT 2007 -->

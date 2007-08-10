@@ -66,31 +66,31 @@ class ExpectationTest < Test::Unit::TestCase
     assert !expectation.match?(:expected_method, 1, 0, 3)
   end
   
-  def test_should_match_until_expected_invocation_count_is_one_and_actual_invocation_count_would_be_two
+  def test_should_allow_invocations_until_expected_invocation_count_is_one_and_actual_invocation_count_would_be_two
     expectation = new_expectation.times(1)
-    assert expectation.match?(:expected_method)
+    assert expectation.invocations_allowed?
     expectation.invoke
-    assert !expectation.match?(:expected_method)
+    assert !expectation.invocations_allowed?
   end
   
-  def test_should_match_until_expected_invocation_count_is_two_and_actual_invocation_count_would_be_three
+  def test_should_allow_invocations_until_expected_invocation_count_is_two_and_actual_invocation_count_would_be_three
     expectation = new_expectation.times(2)
-    assert expectation.match?(:expected_method)
+    assert expectation.invocations_allowed?
     expectation.invoke
-    assert expectation.match?(:expected_method)
+    assert expectation.invocations_allowed?
     expectation.invoke
-    assert !expectation.match?(:expected_method)
+    assert !expectation.invocations_allowed?
   end
-  
-  def test_should_match_until_expected_invocation_count_is_a_range_from_two_to_three_and_actual_invocation_count_would_be_four
+
+  def test_should_allow_invocations_until_expected_invocation_count_is_a_range_from_two_to_three_and_actual_invocation_count_would_be_four
     expectation = new_expectation.times(2..3)
-    assert expectation.match?(:expected_method)
+    assert expectation.invocations_allowed?
     expectation.invoke
-    assert expectation.match?(:expected_method)
+    assert expectation.invocations_allowed?
     expectation.invoke
-    assert expectation.match?(:expected_method)
+    assert expectation.invocations_allowed?
     expectation.invoke
-    assert !expectation.match?(:expected_method)
+    assert !expectation.invocations_allowed?
   end
   
   def test_should_store_provided_backtrace
@@ -395,17 +395,5 @@ class ExpectationTest < Test::Unit::TestCase
     expectation = new_expectation()
     assert_match Regexp.new("/lib/$"), expectation.mocha_lib_directory
   end
-  
-  def test_should_be_final_after_calling_last
-    expectation = new_expectation
-    expectation.last
-    assert expectation.final?
-  end
-  
-  def test_should_not_be_final_by_default
-    expectation = new_expectation
-    assert !expectation.final?
-  end
-  
-  
+
 end

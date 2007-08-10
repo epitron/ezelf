@@ -1,4 +1,5 @@
 require 'haml/helpers/action_view_mods'
+require 'haml/helpers/action_view_extensions'
 
 module Haml
   # This module contains various helpful methods to make it easier to do
@@ -7,13 +8,38 @@ module Haml
   # disposal from within the template.
   module Helpers
     self.extend self
-    
+
     @@action_view_defined = defined?(ActionView)
     @@force_no_action_view = false
 
     # Returns whether or not ActionView is installed on the system.
     def self.action_view?
       @@action_view_defined
+    end
+
+    # Note: this does *not* need to be called
+    # when using Haml helpers normally
+    # in Rails.
+    #
+    # Initializes the current object
+    # as though it were in the same context
+    # as a normal ActionView rendering
+    # using Haml.
+    # This is useful if you want to use the helpers in a context
+    # other than the normal setup with ActionView.
+    # For example:
+    #
+    #   context = Object.new
+    #   class << context
+    #     include Haml::Helpers
+    #   end
+    #   context.init_haml_helpers
+    #   context.open :p, "Stuff"
+    # 
+    def init_haml_helpers
+      @haml_is_haml = true
+      @haml_stack = [Haml::Buffer.new]
+      nil
     end
 
     # Isolates the whitespace-sensitive tags in the string and uses preserve
@@ -81,6 +107,22 @@ module Haml
         "<li>#{result}</li>"
       end
       to_return.join("\n")
+    end
+
+    # Returns a hash containing default assignments for the xmlns and xml:lang
+    # attributes of the <tt>html</tt> HTML element.
+    # It also takes an optional argument for the value of xml:lang and lang,
+    # which defaults to 'en-US'.
+    # For example,
+    #
+    #   %html{html_attrs}
+    #
+    # becomes
+    #
+    #   <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en-US' lang='en-US'>
+    #
+    def html_attrs(lang = 'en-US')
+      {:xmlns => "http://www.w3.org/1999/xhtml", 'xml:lang' => lang, :lang => lang}
     end
 
     # Increments the number of tabs the buffer automatically adds
@@ -184,6 +226,80 @@ module Haml
     def capture_haml(*args, &block)
       capture_haml_with_buffer(buffer.buffer, *args, &block)
     end
+
+    # Outputs text directly to the Haml buffer, with the proper tabulation
+    def puts(text = "")
+      buffer.buffer << ('  ' * buffer.tabulation) << text.to_s << "\n"
+      nil
+    end
+
+    #
+    # call-seq:
+    #   open(name, attributes = {}) {...}
+    #   open(name, text, attributes = {}) {...}
+    #
+    # Creates an HTML tag with the given name and optionally text and attributes.
+    # Can take a block that will be executed
+    # between when the opening and closing tags are output.
+    # If the block is a Haml block or outputs text using puts,
+    # the text will be properly indented.
+    # 
+    # For example,
+    #
+    #   open :table do
+    #     open :tr do
+    #       open :td, {:class => 'cell'} do
+    #         open :strong, "strong!"
+    #         puts "data"
+    #       end
+    #       open :td do
+    #         puts "more_data"
+    #       end
+    #     end
+    #   end
+    #
+    # outputs
+    #
+    #   <table>
+    #     <tr>
+    #       <td class='cell'>
+    #         <strong>
+    #           strong!
+    #         </strong>
+    #         data
+    #       </td>
+    #       <td>
+    #         more_data
+    #       </td>
+    #     </tr>
+    #   </table>
+    #
+    def open(name, attributes = {}, alt_atts = {}, &block)
+      text = nil
+      if attributes.is_a? String
+        text = attributes
+        attributes = alt_atts
+      end
+
+      if text.nil? && block.nil?
+        puts "<#{name}#{buffer.build_attributes(attributes)} />"
+        return nil
+      end
+
+      puts "<#{name}#{buffer.build_attributes(attributes)}>"
+      unless text && text.empty?
+        tab_up
+        # Print out either the text (using push_text) or call the block and add an endline
+        if text
+          puts(text)
+        elsif block
+          block.call
+        end
+        tab_down
+      end
+      puts "</#{name}>"
+      nil
+    end
     
     private
 
@@ -205,7 +321,7 @@ module Haml
     def capture_haml_with_buffer(local_buffer, *args, &block)
       position = local_buffer.length
       
-      block.call(*args)
+      block.call *args
       
       captured = local_buffer.slice!(position..-1)
       
@@ -221,7 +337,6 @@ module Haml
       end
       result.to_s
     end
-    alias_method :capture_erb_with_buffer, :capture_haml_with_buffer
 
     # Returns whether or not the current template is a Haml template.
     # 
@@ -231,6 +346,8 @@ module Haml
     def is_haml?
       @haml_is_haml
     end
+
+    include ActionViewExtensions if self.const_defined? "ActionViewExtensions"
   end
 end
 

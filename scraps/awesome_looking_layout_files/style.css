@@ -1,0 +1,183 @@
+/*  
+Theme Name: TypoXP
+Theme URI: http://www.sunaryohadi.info/
+Description: A Typo eXPerimental. Clean, three columns, fixed width. With icons and almost no graphics. Great for 'text-heavy' theme lover.
+Version: 1.0.3
+Author: Sunaryo Hadi
+Author URI: http://www.sunaryohadi.info/
+
+	TypoXP v1.0.3
+	http://www.sunaryohadi.com/themes/
+
+	The CSS, XHTML and design is released under GPL:
+	http://www.opensource.org/licenses/gpl-license.php
+	
+*/
+/**********************************/
+/* General                        */
+/**********************************/
+body {font: 0.71em/1.5em Verdana, Arial, Helvetica, sans-serif; color: #333; background: #666; width: 980px; margin:0; padding:0;}
+a	{ color: #0D6AA6; text-decoration: none; }
+a:hover	{ text-decoration: underline; color: #f60;}
+form {margin:0;padding:0;}
+input, textarea {font: 1.0em Verdana, Arial, Helvetica, sans-serif; color: #333;}
+p {margin: 10px 0;}
+img {border:1px solid #FFF; 
+padding-bottom: 5px;
+padding-left: 5px; margin:0;}
+/* Some peoples sometime using this class for aligning the image */
+img.alignleft, img.left {float:left; margin-right: 5px; margin-left: 0px;}
+img.alignright, img.right {float:right; margin-left: 5px; margin-right: 0px;}
+.clear {clear:both; overflow:hidden;}
+
+/**********************************/
+/* Layout                         */
+/**********************************/
+#container,#left,#header,#content,#sidebar,#footer { overflow:hidden; display:block;}
+#container {width:960px; padding:0; margin: 0px 0px 0px 20px; 
+border-top: 5px solid #191970; border-bottom: 3px solid #708090;  background: #fff url(img/verdana-bg.gif) repeat-y top right;}
+#left {width: 560px; float:left;margin:0;padding:0; text-align: justify;}
+.middle {width:180px;margin:0;padding: 0 10px; float:left;}
+.right {width:180px;margin:0;padding: 0 10px; float:left}
+#content {padding: 28px;}
+#header {background: #708090; padding: 10px 15px; margin-bottom: 10px;border-bottom: 2px solid #191970;}
+#sidebar {width: 400px; float:left;margin:0;padding:0;}
+#footer {width:960px; padding: 3px 0px 0 20px; margin:0; font-size: 0.86em; height: 30px; text-align:right; color:#999;}
+
+/**********************************/
+/* Content                        */
+/**********************************/
+#content h1,h2,h3,h4 {line-height:1.2em;text-align:-left;}
+#content h1 {color:#0D6AA6; text-transform:uppercase; letter-spacing:0.05em;display:inline;
+font:normal 1.8em "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif; text-align:left;}
+#content h2 {font: 1.5em "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;color:#0D6AA6; 
+margin:0px; padding-top: 20px; text-align:left;}
+#content h2.pagetitle {font-size: 1.2em; color: #f90; padding: 5px 0;}
+#content h3{font:normal 1.2em "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;color:#0D6AA6; text-align:left;}
+#content h4{font: 1.2em "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;color:#0D6AA6; text-align:left; padding:0; margin:0; line-height:auto; font-weight:bold;}
+#content blockquote {padding:0 0 0 10px;margin:5px 0px 5px 20px; color:#000; 
+font-size: 1.0em; border-left: 5px solid #b0c4de; line-height: 1.2em;}
+#content p.postmetadata {clear:both; overflow:hidden;background: #f7f7f7; padding:5px 10px; line-height: 1.0em;}
+code {font-size:1.2em; text-align:left; margin:0;padding:0; color: #008;}
+#content li {padding-bottom: 5px;}
+
+.related {color: #595949; font-size:  margin: 0;padding: 3px 15px 3px 15px; line-height:15px;
+     background: #FAFAF5;	border: 1px solid #f0f0e0; list-style:none;}
+
+#content dl {
+	padding-left: 10px;
+	list-style-type: none;
+	list-style:none; }
+
+#content dd {padding:2px 0 0 20px;
+margin: 0;
+clear: left; }
+
+
+#content .post-date {font-size:1.0em; padding-left:20px;background: transparent url(img/calendar.png) no-repeat top left;padding-top: 5px;
+background-position:0% 5px;}
+
+/**********************************/
+/* Header                         */
+/**********************************/
+#header h1 {color:#FFF; text-transform:uppercase; letter-spacing:1px;display:inline; 
+font:bold 2.0em "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;margin:0;padding:0;}
+#header h1 a {color: #eee;}
+#header h1 a:hover {color: #fc0; text-decoration:none;}
+#header h2{font: 1.0em "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;color:#DDD;text-transform:uppercase;
+letter-spacing:0.05em; margin:0;padding:0;}
+
+/**********************************/
+/* Sidebar                        */
+/**********************************/
+#sidebar a:hover {text-decoration:none; color: #f60;}
+#sidebar ul {margin: 0 0 10px 0; padding:0; list-style-type: none;border-top: 1px solid #eee;}
+#sidebar h2 {font: bold 1.1em "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;color:#333;; margin:0; padding:0; 
+padding-left: 0px; border-bottom: 1px solid #eee; text-transform:uppercase;}
+#sidebar #header h2 {padding-left: 0; border:0; color: #CCC}
+#sidebar h2.about { no-repeat top left;}
+#sidebar h2.cats { no-repeat top left;}
+#sidebar h2.cal { no-repeat top left;}
+#sidebar h2.search { no-repeat top left;}
+#sidebar h2.file { no-repeat top left;}
+#sidebar h2.meta { no-repeat top left;}
+#sidebar h2.blogroll { no-repeat top left;}
+#sidebar h2.comment { no-repeat top left;}
+#sidebar ul {margin-top: 5px;}
+#sidebar ul li {background: transparent url(img/none) no-repeat top left; padding-left: 0px; border-bottom: 0px solid #f0f0f0;}
+#sidebar ul li ul {border-top: 0px solid #f0f0f0; margin:0;}
+#sidebar ul li ul li {padding-left:20px; border:none; border-top: 1px solid #f0f0f0;}
+
+/*#sidebar ul.links li {float:left; overflow:hidden;border:none; padding-left:0px;}*/
+#sidebar ul.links li h2 {color: #666;}
+#sidebar ul.links li ul li {padding-left:1px;}
+#sidebar img {margin:2px 0 0 0; padding:2px 0 0 0; border: none;}
+
+/**********************************/
+/* Footer                         */
+/**********************************/
+#footer .copyright a {color:#999;}
+#footer .copyright a:hover {color:#FF0;text-decoration:none;border-bottom:1px dashed #900;}
+
+/**********************************/
+/* Calendar                       */
+/**********************************/
+#wp-calendar { width: 150px; color: #999; line-height:1.0em;}
+#wp-calendar caption {font-weight:bold; color: #666; line-height: 16px; text-transform: uppercase; letter-spacing: 1px;}
+#wp-calendar .today {background:#FBFCF4;}
+
+/* *********************************** */
+/* Comments Div                        */
+/* *********************************** */
+h3#comments, h3#respond {border-top:1px solid #CCC; padding-top: 10px; padding-left: 20px;color:#0D6AA6; font-size: 1.2em; font-weight: bold;}
+h3#comments {background: transparent url(img/comment.png) no-repeat top left;background-position:0% 12px;}
+h3#respond {background: transparent url(img/edit.png) no-repeat top left;background-position:0% 12px;}
+cite {position:relative;color: #999;padding:0;margin:0;font-weight:bold;}
+.alt {background: #f7f7f7;}
+.commentbody {color: #595949; font-size: 1.0em; margin: 0 0 5px 0;padding: 10px 15px 10px 15px;	
+     background: #FAFAF5;	border: 1px solid #f0f0e0; list-style:none;}
+.commentbody p {line-height: 1.2em; margin:0; padding:0;}
+.commentbody img {padding:0;}
+.commentlink {	font-size: 1.0em;}
+.commentlist {	list-style: none; margin:0; padding:0px;}
+.commentcount {font:bold 2.2em Georgia,sans-serif;	color: #e0e0d0; width: 520px; 
+text-align: right; position:absolute;	left:0;}
+.gravatar {float:left; padding: 1px; margin: 5px 5px 5px 0; background: #fff; width: 40px; height: 40px;}
+#recentcomments ul {border: none;}
+
+/* Tabs */
+#tabs6 {
+      float:left;
+      width:980px;
+	  background: transparent url(img/typoxp-reloadedX-bg.gif) repeat-x fixed;
+      font-size:93%;
+      line-height:normal;
+      border-bottom:1px solid #000;
+}
+#tabs6 ul {
+      margin:0;
+      padding:10px 10px 0 30px;
+      list-style:none;
+}
+#tabs6 li {
+     display:inline;
+     margin:0;
+     padding:0;
+}
+#tabs6 a {
+    float:left;
+    background:url(img/tableft6.gif) no-repeat left top;
+    margin:0;
+    padding:0 0 0 4px;
+    text-decoration:none;
+}
+#tabs6 a span {
+   float:left;
+   display:block;
+   background:url(img/tabright6.gif) no-repeat right top;
+   padding:5px 15px 4px 6px;
+   color:#FFF;
+} 
+#tabs6 a.subscribe {
+color:#FF0000;
+}
