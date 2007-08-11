@@ -1,7 +1,7 @@
 $: << File.join( File.dirname(__FILE__), "lib" )
 
 require 'pp'
-require 'mp3info'
+require 'mp3info_with_extensions'
 
 # http://id3lib-ruby.rubyforge.org/doc/index.html
 
@@ -19,7 +19,7 @@ def show_in_table(pairs, title=nil)
   
   for a,b in pairs
     fmtstr = "%#{maxa}.#{maxa}s | %s"
-    puts fmtstr % [a,b]
+    puts fmtstr % [a,b.inspect]
   end
   
   puts

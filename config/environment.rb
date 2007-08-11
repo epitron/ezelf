@@ -7,6 +7,7 @@ require 'sha1'
 #############################################################################
 
 
+
 #############################################################################
 ## Rails Init Crap
 RAILS_GEM_VERSION = '1.2.3' unless defined? RAILS_GEM_VERSION
@@ -73,3 +74,5 @@ require 'monkeypatches.rb'
 ## MP3 Info
 require 'mp3info_with_extensions'
 #############################################################################
+
+#require 'ruby-debug'; debugger

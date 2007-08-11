@@ -107,7 +107,7 @@ class StreamController < ApplicationController
 		output = []
 		output << "#EXTM3U"
 		for track in @tracks
-			output << "#EXTINF: #{track.length},#{track.artist.name} - #{track.album.name} - #{track.number}. #{track.title}"
+			output << "#EXTINF:#{track.length.to_i},#{track.artist.name} - #{track.album.name} - #{track.number}. #{track.title}"
 			output << "#{url_for :action=>"track", :id=>track.id}.mp3"
 		end
 		

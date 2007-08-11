@@ -20,7 +20,6 @@ require 'iconv'
         def original_artist=(v) set_frame_text(:TOPE, v) end
 =end 
       
-
 class ID3v2 
 	
   ### Read a tag from file and perform UNICODE translation if needed
@@ -32,7 +31,7 @@ class ID3v2
         out = value.split(0.chr).last
       else
         encoding = value[0]     # language encoding bit 0 for iso_8859_1, 1 for unicode
-        out = value[1..-1] 
+        out = value[1..-1]
     end
 
     if encoding == 1 #and name[0] == ?T
@@ -44,7 +43,30 @@ class ID3v2
       rescue Iconv::IllegalSequence, Iconv::InvalidCharacter
       end
     end
+
     out
+  end
+  
+end
+
+
+class Mp3Info
+
+  alias_method :real_initialize, :initialize
+
+  def initialize(*args)
+    real_initialize(*args)
+    
+    # strip nulls from strings
+    things_to_fix = %w{@tag @tag_orig @tag1_orig @tag2 @tag1}
+    
+    for thingname in things_to_fix
+      thing = instance_variable_get(thingname)
+      for k in thing.keys
+        thing[k].chomp!("\000") if thing[k].is_a? String
+      end
+    end
+    
   end
   
 end
