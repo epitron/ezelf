@@ -10,8 +10,8 @@
 
 class Artist < ActiveRecord::Base
 	has_many :albums
-	has_many :album_tracks, :through=>:albums, :source=>:tracks
-	has_many :compilation_tracks, :class_name=>"Track"
+	has_many :album_tracks, :through => :albums, :source => :tracks, :order => :number
+	has_many :compilation_tracks, :class_name => "Track", :order => :number
 	
 	def tracks
 		album_tracks + compilation_tracks

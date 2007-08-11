@@ -9,7 +9,7 @@
       .artist_title
         = link_to image_tag("play24.png", :class=>"playbutton"), :controller=>"stream", :action=>"artist", :id=>artist.id
         %span.artistname= link_to_remote artist.name, :url => { :action => 'expand_artist', :id => artist.id }
-        %span.albumcount= "(#{pluralize(artist.albums.count, "album")})"
+        %span.albumcount= "(#{pluralize(artist.albums.size, "album")})"
               
       %div{ :id=>artist.html_id, :class=>"expandable" }
       
