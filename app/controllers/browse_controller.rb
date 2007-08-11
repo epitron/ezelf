@@ -40,14 +40,14 @@ class BrowseController < ApplicationController
 
     def expand_artist
       #html_id = params[:id]
-      @artist = Artist.find params[:id] #fetch_from_html_id( :artist, html_id )
+      @artist = Artist.find params[:id], :include=>{:albums=>:tracks} #fetch_from_html_id( :artist, html_id )
       render :update do |page|
         html_id = @artist.html_id
         #page.visual_effect :fade, html_id
         page.replace_html @artist.html_id, :partial => 'albums'
         #page.visual_effect :appear
-      end    
-    end 
+      end
+    end
 
 
     def index
