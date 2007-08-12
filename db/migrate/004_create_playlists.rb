@@ -1,12 +1,12 @@
 class CreatePlaylists < ActiveRecord::Migration
   def self.up
-    create_table :playlists, :options=>'ENGINE=MyISAM' do |t|
+    create_table :playlists do |t|
 		t.column :name, :string
 		t.column :user_id, :integer
     end
 	add_index :playlists, :user_id
     
-    create_table :playlists_tracks, :options=>'ENGINE=MyISAM', :id=>false do |t|
+    create_table :playlists_tracks, :id=>false do |t|
 		t.column :playlist_id, :integer
 		t.column :track_id, :integer
     end

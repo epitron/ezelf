@@ -58,9 +58,15 @@ end
 
 
 #############################################################################
-## Magic Session Store
-ActionController::CgiRequest::DEFAULT_SESSION_OPTIONS.update(:database_manager => SqlSessionStore)
-SqlSessionStore.session_class = MysqlSession
+## Fast SQL Session Store
+
+case ActiveRecord::Base.connection.adapter_name
+  when "SQLite"
+  when "MySQL"
+    ActionController::CgiRequest::DEFAULT_SESSION_OPTIONS.update(:database_manager => SqlSessionStore)
+    SqlSessionStore.session_class = MysqlSession
+end
+
 #############################################################################
 
 

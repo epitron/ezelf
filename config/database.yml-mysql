@@ -3,7 +3,7 @@ development:
   database: ezelf
   encoding: utf8
   username: root
-  password: crinkle
+  password: 
   host: localhost
 
 test:
@@ -11,7 +11,7 @@ test:
   database: ezelf_test
   encoding: utf8
   username: root
-  password: crinkle
+  password: 
   host: localhost
 
 production:
@@ -19,5 +19,5 @@ production:
   database: ezelf
   encoding: utf8
   username: root
-  password: crinkle
+  password: 
   host: localhost

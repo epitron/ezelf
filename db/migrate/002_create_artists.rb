@@ -1,6 +1,6 @@
 class CreateArtists < ActiveRecord::Migration
   def self.up
-    create_table :artists, :options=>'ENGINE=MyISAM' do |t|
+    create_table :artists do |t|
 		t.column :name, :string
 		t.column :albums_count, :integer, :default=>0
     end

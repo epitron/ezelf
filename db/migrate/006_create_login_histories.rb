@@ -1,6 +1,6 @@
 class CreateLoginHistories < ActiveRecord::Migration
   def self.up
-    create_table :login_histories, :options=>'ENGINE=MyISAM' do |t|
+    create_table :login_histories do |t|
     	t.column :user_id, :integer
     	t.column :date, :datetime
     	t.column :ip, :string

@@ -1,10 +1,10 @@
 require 'pp'
 
 ### ActiveRecord
-puts "loading dbcon..."
-require 'dbcon'
-#puts "loading rails environment..."
-#require 'config/environment'
+#puts "loading dbcon..."
+#require 'dbcon'
+puts "loading rails environment..."
+require 'config/environment'
 
 ### Mp3Info
 puts "loading mp3info_with_extensions..."
