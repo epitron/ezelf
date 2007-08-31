@@ -4,7 +4,7 @@ class PolymorphTest < Test::Unit::TestCase
   
   fixtures :cats, :bow_wows, :frogs, :wild_boars, :eaters_foodstuffs, :petfoods,
               :"aquatic/fish", :"aquatic/whales", :"aquatic/little_whale_pupils",
-              :keep_your_enemies_close
+              :keep_your_enemies_close, :people
   require 'beautiful_fight_relationship'  
         
   def setup
@@ -588,10 +588,33 @@ class PolymorphTest < Test::Unit::TestCase
     assert_equal EatersFoodstuff.name, Petfood.reflect_on_association(:eaters).class_name
   end
   
-  def test_parent_order_orders_parents
+  def test_parent_order
     @alice.foodstuffs_of_eaters << Petfood.find(:all, :order => "the_petfood_primary_key ASC")
     @alice.reload #not necessary
     assert_equal [2,1], @alice.foodstuffs_of_eaters.map(&:id)  
+  end
+
+  def test_parent_conditions
+    @kibbles.eaters << @alice
+    assert_equal [@alice], @kibbles.eaters
+
+    @snausages = Petfood.create(:name => 'Snausages')
+    @snausages.eaters << @alice    
+    assert_equal [@alice], @snausages.eaters
+    
+    assert_equal [@kibbles], @alice.foodstuffs_of_eaters
+  end        
+  
+  def test_self_referential_hmp_with_conditions
+    p = Person.find(:first)
+    kid = Person.create(:name => "Tim", :age => 3)
+    p.kids << kid
+
+    kid.reload; p.reload
+
+    assert_equal [p], kid.parents
+    assert_equal [kid], p.kids
+    assert_equal [kid], p.people
   end
 
 #  def test_polymorphic_include

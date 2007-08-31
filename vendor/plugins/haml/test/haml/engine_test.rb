@@ -70,6 +70,19 @@ class EngineTest < Test::Unit::TestCase
     assert_equal("<p>\n  Hello World\n</p>\n", render("%p\n  == Hello \#{who}", :locals => {:who => 'World'}))
   end
 
+  def test_double_equals_in_the_middle_of_a_string
+    assert_equal("\"title 'Title'. \"\n",
+                 render("== \"title '\#{\"Title\"}'. \""))
+  end
+
+  def test_nil_tag_value_should_render_as_empty
+    assert_equal("<p></p>\n", render("%p= nil"))
+  end
+
+  def test_tag_with_failed_if_should_render_as_empty
+    assert_equal("<p></p>\n", render("%p= 'Hello' if false"))
+  end
+
   # Options tests
 
   def test_stop_eval
@@ -127,6 +140,11 @@ class EngineTest < Test::Unit::TestCase
 
     assert_equal("NOT RECOMPILED\n", render(template, :locals => { :text => "first time" }))
     assert_equal("<p>first time</p>\n", render(template, :locals => { :text => "first time", :foo => 'bar' }))
+  end
+
+  def test_dynamic_attrs_shouldnt_register_as_literal_values
+    assert_equal("<p a='b2c'>\n</p>\n", render('%p{:a => "b#{1 + 1}c"}'))
+    assert_equal("<p a='b2c'>\n</p>\n", render("%p{:a => 'b' + (1 + 1).to_s + 'c'}"))
   end
     
   def test_comps
@@ -189,59 +207,40 @@ class EngineTest < Test::Unit::TestCase
   end
 
   def test_no_bluecloth
-    old_markdown = false
-    if defined?(Haml::Filters::Markdown)
-      old_markdown = Haml::Filters::Markdown
-    end
-
     Kernel.module_eval do
-      alias_method :haml_old_require, :gem_original_require
-
-      def gem_original_require(file)
+      def gem_original_require_with_bluecloth(file)
         raise LoadError if file == 'bluecloth'
-        haml_old_require(file)
+        gem_original_require_without_bluecloth(file)
+      end
+      alias_method :gem_original_require_without_bluecloth, :gem_original_require
+      alias_method :gem_original_require, :gem_original_require_with_bluecloth
+    end
+
+    begin
+      assert_equal("<h1>Foo</h1>\t<p>- a\n- b</p>\n",
+                   Haml::Engine.new(":markdown\n  Foo\n  ===\n  - a\n  - b").to_html)
+    rescue Haml::HamlError => e
+      if e.message == "Can't run Markdown filter; required 'bluecloth' or 'redcloth', but none were found"
+        puts "\nCouldn't require 'bluecloth' or 'redcloth'; skipping a test."
+      else
+        raise e
       end
     end
-    
-    if old_markdown
-      Haml::Filters.instance_eval do
-        remove_const 'Markdown'
-      end
-    end
-
-    # This is purposefully redundant, so it doesn't stop
-    # haml/filters from being required later on.
-    require 'haml/../haml/filters'
-
-    assert_equal("<h1>Foo</h1>\t<p>- a\n- b</p>\n",
-                 Haml::Engine.new(":markdown\n  Foo\n  ===\n  - a\n  - b").to_html)
-
-    Haml::Filters.instance_eval do
-      remove_const 'Markdown'
-    end
-
-    Haml::Filters.const_set('Markdown', old_markdown) if old_markdown
 
     Kernel.module_eval do
-      alias_method :gem_original_require, :haml_old_require
+      alias_method :gem_original_require, :gem_original_require_without_bluecloth
     end
-
-    NOT_LOADED.delete 'bluecloth'
   end
 
   def test_no_redcloth
     Kernel.module_eval do
-      alias_method :haml_old_require2, :gem_original_require
-
-      def gem_original_require(file)
+      def gem_original_require_with_redcloth(file)
         raise LoadError if file == 'redcloth'
-        haml_old_require2(file)
+        gem_original_require_without_redcloth(file)
       end
+      alias_method :gem_original_require_without_redcloth, :gem_original_require
+      alias_method :gem_original_require, :gem_original_require_with_redcloth
     end
-
-    # This is purposefully redundant, so it doesn't stop
-    # haml/filters from being required later on.
-    require 'haml/../haml/../haml/filters'
 
     begin
       Haml::Engine.new(":redcloth\n  _foo_").to_html
@@ -251,10 +250,30 @@ class EngineTest < Test::Unit::TestCase
     end
 
     Kernel.module_eval do
-      alias_method :gem_original_require2, :haml_old_require
+      alias_method :gem_original_require, :gem_original_require_without_redcloth
+    end
+  end
+
+  def test_no_redcloth_or_bluecloth
+    Kernel.module_eval do
+      def gem_original_require_with_redcloth_and_bluecloth(file)
+        raise LoadError if file == 'redcloth' || file == 'bluecloth'
+        gem_original_require_without_redcloth_and_bluecloth(file)
+      end
+      alias_method :gem_original_require_without_redcloth_and_bluecloth, :gem_original_require
+      alias_method :gem_original_require, :gem_original_require_with_redcloth_and_bluecloth
     end
 
-    NOT_LOADED.delete 'redcloth'
+    begin
+      Haml::Engine.new(":markdown\n  _foo_").to_html
+    rescue Haml::HamlError
+    else
+      assert(false, "No exception raised!")
+    end
+
+    Kernel.module_eval do
+      alias_method :gem_original_require, :gem_original_require_without_redcloth_and_bluecloth
+    end    
   end
 
   def test_local_assigns_dont_modify_class

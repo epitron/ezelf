@@ -12,7 +12,9 @@ STI association targets must enumerated and named. For example, if Dog and Cat b
 
 Namespaced models follow the Rails <tt>underscore</tt> convention. ZooAnimal::Lion becomes <tt>:'zoo_animal/lion'</tt>.
 
-You do not need to set up any other associations other than for either the regular method or the double. The join associations and all individual and reverse associations are generated for you. However, a join class and table is required. There are tentative reports that it works without it if you make the parent class join to the targets <tt>:through</tt> itself, but this is untested.
+You do not need to set up any other associations other than for either the regular method or the double. The join associations and all individual and reverse associations are generated for you. However, a join model and table are required. 
+
+There is a tentative report that you can make the parent model be its own join model, but this is untested.
 
 =end
 
@@ -80,7 +82,7 @@ These options are passed through to targets on both sides of the association. If
                 options[collection_key] = (collection_value ? "#{collection_value}, #{value}" : value)
               when :extend, :join_extend
                 options[collection_key] = Array(collection_value) + Array(value)
-              when :limit, :offset, :dependent, :rename_individual_collections
+              when :limit, :offset, :dependent, :rename_individual_collections, :skip_duplicates
                 options[collection_key] ||= value
               else
                 raise PolymorphicError, "Unknown option key #{key.inspect}."
@@ -157,31 +159,39 @@ This method createds a single-sided polymorphic relationship.
 
 The only required parameter, aside from the association name, is <tt>:from</tt>. 
 
-The method generates a number of associations aside from the polymorphic one. In this example Petfood also gets <tt>dogs</tt>, <tt>cats</tt>, and <tt>birds</tt>, and Dog, Cat, and Bird get <tt>petfoods</tt>. (The reverse association to the parent is always plural.)
+The method generates a number of associations aside from the polymorphic one. In this example Petfood also gets <tt>dogs</tt>, <tt>cats</tt>, and <tt>birds</tt>, and Dog, Cat, and Bird get <tt>petfoods</tt>. (The reverse association to the parents is always plural.)
 
 == Available options
 
-<tt>:from</tt>:: An array of symbols representing the target classes. Required.
+<tt>:from</tt>:: An array of symbols representing the target models. Required.
 <tt>:as</tt>:: A symbol for the parent's interface in the join--what the parent 'acts as'.
 <tt>:through</tt>:: A symbol representing the class of the join model. Follows Rails defaults if not supplied (the parent and the association names, alphabetized, concatenated with an underscore, and singularized).
 <tt>:foreign_key</tt>:: The column name for the parent's id in the join. 
-<tt>:foreign_type_key</tt>:: The column name for the parent's class in the join, if the parent itself is polymorphic. Rarely needed.
+<tt>:foreign_type_key</tt>:: The column name for the parent's class name in the join, if the parent itself is polymorphic. Rarely needed.
 <tt>:polymorphic_key</tt>:: The column name for the child's id in the join.
-<tt>:polymorphic_type_key</tt>:: The column name for the child's class in the join.
+<tt>:polymorphic_type_key</tt>:: The column name for the child's class name in the join.
 <tt>:dependent</tt>:: Accepts <tt>:destroy</tt>, <tt>:nullify</tt>, <tt>:delete_all</tt>. Controls how the join record gets treated on any associate delete (whether from the polymorph or from an individual collection); defaults to <tt>:destroy</tt>.
 <tt>:skip_duplicates</tt>:: If <tt>true</tt>, will check to avoid pushing already associated records (but also triggering a database load). Defaults to <tt>true</tt>.
 <tt>:rename_individual_collections</tt>:: If <tt>true</tt>, all individual collections are prepended with the polymorph name, and the children's parent collection is appended with "_of_#{association_name}"</tt>. For example, <tt>zoos</tt> becomes <tt>zoos_of_animals</tt>. This is to help avoid method name collisions in crowded classes.
 <tt>:extend</tt>:: One or an array of mixed modules and procs, which are applied to the polymorphic association (usually to define custom methods).
 <tt>:join_extend</tt>:: One or an array of mixed modules and procs, which are applied to the join association.
-<tt>:parent_extend</tt>:: One or an array of mixed modules and procs, which are applied to the target classes' association to the parent.
+<tt>:parent_extend</tt>:: One or an array of mixed modules and procs, which are applied to the target models' association to the parents.
 <tt>:conditions</tt>:: An array or string of conditions for the SQL <tt>WHERE</tt> clause. 
+<tt>:parent_conditions</tt>:: An array or string of conditions which are applied to the target models' association to the parents.
 <tt>:order</tt>:: A string for the SQL <tt>ORDER BY</tt> clause.
+<tt>:parent_order</tt>:: A string for the SQL <tt>ORDER BY</tt> which is applied to the target models' association to the parents.
 <tt>:group</tt>:: An array or string of conditions for the SQL <tt>GROUP BY</tt> clause. Affects the polymorphic and individual associations.
 <tt>:limit</tt>:: An integer. Affects the polymorphic and individual associations.
 <tt>:offset</tt>:: An integer. Only affects the polymorphic association.
 <tt>:uniq</tt>:: If <tt>true</tt>, the records returned are passed through a pure-Ruby <tt>uniq</tt> before they are returned. Rarely needed.
 
 If you pass a block, it gets converted to a Proc and added to <tt>:extend</tt>. 
+
+== On condition nullification
+
+When you request an individual association, non-applicable but fully-qualified fields in the polymorphic association's <tt>:conditions</tt>, <tt>:order</tt>, and <tt>:group</tt> options get changed to <tt>NULL</tt>. For example, if you set <tt>:conditions => "dogs.name != 'Spot'"</tt>, when you request <tt>.cats</tt>, the conditions string is changed to <tt>NULL != 'Spot'</tt>. 
+
+Be aware, however, that <tt>NULL != 'Spot'</tt> returns <tt>false</tt> due to SQL's 3-value logic. Instead, you need to use the <tt>:conditions</tt> string <tt>"dogs.name IS NULL OR dogs.name != 'Spot'"</tt> to get the behavior you probably expect for negative matches.
 
 =end
 
@@ -219,6 +229,8 @@ If you pass a block, it gets converted to a Proc and added to <tt>:extend</tt>.
           :select, # applies to the polymorphic relationship
           :conditions, # applies to the polymorphic relationship, the children, and the join
   #        :include,
+          :parent_conditions,
+          :parent_order,
           :order, # applies to the polymorphic relationship, the children, and the join
           :group, # only applies to the polymorphic relationship and the children
           :limit, # only applies to the polymorphic relationship and the children
@@ -242,7 +254,7 @@ If you pass a block, it gets converted to a Proc and added to <tt>:extend</tt>.
         raise PolymorphicError, ":from option must be an array" unless options[:from].is_a? Array            
         options[:from].each{|plural| verify_pluralization_of(plural)}
   
-        options[:as] ||= self.name.demodulize.downcase.to_sym
+        options[:as] ||= self.name.demodulize.underscore.to_sym
         options[:conflicts] = Array(options[:conflicts])      
         options[:foreign_key] ||= "#{options[:as]}_id"
         
@@ -327,11 +339,11 @@ If you pass a block, it gets converted to a Proc and added to <tt>:extend</tt>.
         options = {:foreign_key => reflection.options[:foreign_key], 
           :dependent => reflection.options[:dependent], 
           :class_name => reflection.klass.name, 
-          :extend => reflection.options[:join_extend],
-  #        :limit => reflection.options[:limit],
-  #        :offset => reflection.options[:offset],
-          :order => devolve(association_id, reflection, reflection.options[:order], reflection.klass),
-          :conditions => devolve(association_id, reflection, reflection.options[:conditions], reflection.klass)
+          :extend => reflection.options[:join_extend]
+          # :limit => reflection.options[:limit],
+          # :offset => reflection.options[:offset],
+          # :order => devolve(association_id, reflection, reflection.options[:order], reflection.klass, true),
+          # :conditions => devolve(association_id, reflection, reflection.options[:conditions], reflection.klass, true)
           }        
           
         if reflection.options[:foreign_type_key]         
@@ -392,11 +404,11 @@ If you pass a block, it gets converted to a Proc and added to <tt>:extend</tt>.
                 :extend => reflection.options[:join_extend],
   #              :limit => reflection.options[:limit],
   #              :offset => reflection.options[:offset],
-                :order => devolve(association_id, reflection, reflection.options[:order], reflection.klass),
-                :conditions => devolve(association_id, reflection, reflection.options[:conditions], reflection.klass)
+                :order => devolve(association_id, reflection, reflection.options[:parent_order], reflection.klass),
+                :conditions => devolve(association_id, reflection, reflection.options[:parent_conditions], reflection.klass)
                 )
   
-              # the association to the collection parents
+              # the association to the target's parents
               association = "#{reflection.options[:as]._pluralize}#{"_of_#{association_id}" if reflection.options[:rename_individual_collections]}".to_sym                        
               has_many(association, 
                 :through => through, 
@@ -404,6 +416,7 @@ If you pass a block, it gets converted to a Proc and added to <tt>:extend</tt>.
                 :source => reflection.options[:as], 
                 :foreign_key => reflection.options[:foreign_key] ,
                 :extend => reflection.options[:parent_extend],
+                :conditions => reflection.options[:parent_conditions],
                 :order => reflection.options[:parent_order],
                 :offset => reflection.options[:parent_offset],
                 :limit => reflection.options[:parent_limit],
@@ -480,18 +493,25 @@ If you pass a block, it gets converted to a Proc and added to <tt>:extend</tt>.
         klasses.uniq
       end
       
-      def devolve(association_id, reflection, string, klass)
+      def devolve(association_id, reflection, string, klass, remove_inappropriate_clauses = false) 
+        # XXX remove_inappropriate_clauses is not implemented; we'll wait until someone actually needs it
         return unless string
-        (all_classes_for(association_id, reflection) - # the join class must always be preserved
-          [klass, klass.base_class, reflection.klass, reflection.klass.base_class]).map do |klass|
+        string = string.dup
+        # _logger_debug "has_many_polymorphs: devolving #{string} for #{klass}"
+        inappropriate_classes = (all_classes_for(association_id, reflection) - # the join class must always be preserved
+          [klass, klass.base_class, reflection.klass, reflection.klass.base_class])
+        inappropriate_classes.map do |klass|
           klass.columns.map do |column| 
             [klass.table_name, column.name]
           end.map do |table, column|
             ["#{table}.#{column}", "`#{table}`.#{column}", "#{table}.`#{column}`", "`#{table}`.`#{column}`"]
           end
         end.flatten.sort_by(&:size).reverse.each do |quoted_reference|        
+          # _logger_debug "devolved #{quoted_reference} to NULL"
+          # XXX clause removal would go here 
           string.gsub!(quoted_reference, "NULL")
         end
+        # _logger_debug "has_many_polymorphs: altered to #{string}"
         string
       end
       

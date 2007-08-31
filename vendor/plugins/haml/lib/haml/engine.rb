@@ -100,7 +100,7 @@ module Haml
     TAG_REGEX = /[%]([-:\w]+)([-\w\.\#]*)(\{.*\})?(\[.*\])?([=\/\~]?)?(.*)?/
 
     # The Regex that matches a literal string or symbol value
-    LITERAL_VALUE_REGEX = /^\s*(:(\w*)|(('|")([^\\\#]*?)\4))\s*$/
+    LITERAL_VALUE_REGEX = /^\s*(:(\w*)|(('|")([^\\\#'"]*?)\4))\s*$/
 
     # Creates a new instace of Haml::Engine that will compile the given
     # template string when <tt>render</tt> is called.
@@ -120,19 +120,11 @@ module Haml
         :filters => {
           'sass' => Sass::Engine,
           'plain' => Haml::Filters::Plain,
-          'preserve' => Haml::Filters::Preserve }
-      }
-
-      if !NOT_LOADED.include? 'redcloth'
-        @options[:filters].merge!({
-          'redcloth' => RedCloth,
+          'preserve' => Haml::Filters::Preserve,
+          'redcloth' => Haml::Filters::RedCloth,
           'textile' => Haml::Filters::Textile,
-          'markdown' => Haml::Filters::Markdown
-        })
-      end
-      if !NOT_LOADED.include? 'bluecloth'
-        @options[:filters]['markdown'] = Haml::Filters::Markdown
-      end
+          'markdown' => Haml::Filters::Markdown }
+      }
 
       @options.rec_merge! l_options
 
@@ -211,7 +203,7 @@ END
       @@supported_local_assigns[@template] = supported_local_assigns
       @options[:locals].each do |k,v|
         supported_local_assigns[k] = true
-        push_silent "#{k} = local_assigns[:#{k}]"
+        push_silent "#{k} = local_assigns[#{k.inspect}]"
       end
       
       old_line = nil
@@ -887,12 +879,12 @@ END
       if first.nil?
         return str.dump
       elsif first != 0
-        first -= 1
+        first += 1
       end
 
       last = str.rindex '}'
 
-      interpolation = str.slice!(first, last + 1)
+      interpolation = str.slice!(first, last - first)
       str.insert(first, "_haml_interpolation")
 
       str = str.dump
