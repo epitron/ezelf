@@ -1,0 +1,92 @@
+---
+title: Home
+--- 
+
+h2. Overview
+
+RSpec is a framework which provides programmers with a Domain Specific
+Language to describe the behaviour of Ruby code with readable,
+executable examples that guide you in the design process and
+serve well as both documentation and tests.
+
+h2. Here is how you do it
+
+<notextile>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr>
+    <td width="50%">
+<p>
+  Start with a very simple example that expresses
+  some basic desired behaviour.
+</p>
+<ruby>
+# bowling_spec.rb
+require 'bowling'
+
+describe Bowling do
+  before(:each) do
+    @bowling = Bowling.new
+  end
+
+  it "should score 0 for gutter game" do
+    20.times { @bowling.hit(0) }
+    @bowling.score.should == 0
+  end
+end
+</ruby>
+<p>
+  Run the example and watch it fail.
+</p>
+<pre style="color:red;">$ spec bowling_spec.rb 
+./bowling_spec.rb:4:
+  uninitialized constant Bowling
+</pre>
+    </td>
+    <td width="50%">
+<p>
+  Now write
+  just enough code to make it pass.
+</p>
+<ruby>
+# bowling.rb
+class Bowling
+  def hit(pins)
+  end
+
+  def score
+    0
+  end
+end
+</ruby>
+<p>
+Run the example and bask in the joy that is green.
+</p>
+
+<pre style="color:green;">$ spec bowling_spec.rb --format specdoc
+
+Bowling
+- should score 0 for gutter game
+
+Finished in 0.007534 seconds
+
+1 example, 0 failures
+</pre>
+    </td>
+  </tr>
+</table>
+</notextile>
+
+h2. Take very small steps
+
+Don't rush ahead with more code. Instead, add another
+example and let it guide you to what you have
+to do next. And don't forget to take time
+to refactor your code before it gets messy. You should keep
+your code clean at every step of the way.
+
+h2. Take the first step now!
+
+<pre>$ gem install rspec</pre>
+
+(See special installation instructions for "Spec::Rails":documentation/rails/install.html)
+

@@ -22,6 +22,9 @@
 
 === Design "Inspiration" =========================
 
+* archeo.graphr.net LastFM Charts
+        http://archeo.graphr.net/themes/lastfm-charts.png
+
 * Vimeo
     the stats area:
         http://www.vimeo.com/242618
@@ -38,7 +41,15 @@
     nice clean top part, and nice tabs:
         http://toronto.ourfaves.com/people/smcleod
 
+* Hong Family Homepage
+    good tabs, really sweet CSS layout
+        http://archeo.graphr.net/web/2003/hong2/
+        
 
+* Reality Prime
+    dark colours rock!
+        http://www.realityprime.com/articles/how-google-earth-really-works
+        
 === libid3-ruby Extensions ==============
 
 Reference: http://www.id3.org/id3v2.4.0-frames
@@ -51,6 +62,13 @@ Reference: http://www.id3.org/id3v2.4.0-frames
 
 
 === ezElf ============================
+
+* Integration with MusicBrainz.org and Audioscrobbler.net
+  |_ add "mbid" to all tracks/artists/albums in the database (and id3v2 tags?)
+  |_ [AS] "tags" for each track/album/artist
+  |_ [MB/AS] cover art
+  |_ [AS] related artists
+  |_ [AS] submit tracks
 
 * browse/artists => display albums in main list (expand only expands tracks)
   
@@ -130,10 +148,9 @@ Reference: http://www.id3.org/id3v2.4.0-frames
 
 
 
-  === Programming Language Improvements ==============
+=== Programming Language Improvements ==============
 
 * changes in DB should automatically modify code (and prompt if the change causes conflicting or ambiguous code updates)
-
 * database and
 
 
