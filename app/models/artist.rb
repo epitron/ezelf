@@ -8,14 +8,30 @@
 #  albums_count :integer(11)   
 #
 
+require 'scrobbler'
+
 class Artist < ActiveRecord::Base
-	has_many :albums
-	has_many :album_tracks, :through => :albums, :source => :tracks, :order => :number
-	has_many :compilation_tracks, :class_name => "Track", :order => :number
-	
-	def tracks
-		album_tracks + compilation_tracks
-	end
+  
+  has_many :albums
+  
+  has_many :album_tracks, 
+           :through => :albums, 
+           :source => :tracks, 
+           :order => :number
+           
+  has_many :compilation_tracks, 
+           :class_name => "Track", 
+           :order => :number
+
+  def tracks
+    album_tracks + compilation_tracks
+  end
+
+  def similar
+    similar_artists = SimilarArtists.find_or_create_by_artist_id(self.id)          
+    similar_artists.similar
+  end
+           
 end
 
 =begin
@@ -32,3 +48,4 @@ end
       'WHERE ps.post_id = #{id} AND ps.person_id = p.id ' +
       'ORDER BY p.first_name'
 =end
+

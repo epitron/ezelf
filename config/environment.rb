@@ -82,3 +82,6 @@ require 'mp3info_with_extensions'
 #############################################################################
 
 #require 'ruby-debug'; debugger
+require 'scrobbler'
+require 'rbrainz'
+

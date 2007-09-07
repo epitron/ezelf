@@ -10,15 +10,12 @@ require 'config/environment'
 puts "loading mp3info_with_extensions..."
 require 'mp3info_with_extensions'
 
-
 # http://id3lib-ruby.rubyforge.org/doc/index.html
-
 
 puts "deleting all Tracks, Albums and Artists..."
 Track.delete_all
 Album.delete_all
 Artist.delete_all
-
 
 sources = Source.find(:all)
 

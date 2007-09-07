@@ -14,4 +14,10 @@
 class Album < ActiveRecord::Base
     has_many :tracks, :order => :number
     belongs_to :artist, :counter_cache => true
+
+    def cover
+      a = Scrobbler::Album.new(artist.name, name, :include_info => true)
+      pp a      
+    end
 end
+

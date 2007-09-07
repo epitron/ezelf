@@ -63,6 +63,8 @@ Reference: http://www.id3.org/id3v2.4.0-frames
 
 === ezElf ============================
 
+* Better tag reader (fast too!): http://ruby-gnome2.sourceforge.jp/hiki.cgi?Gst%3A%3ATag
+
 * Integration with MusicBrainz.org and Audioscrobbler.net
   |_ add "mbid" to all tracks/artists/albums in the database (and id3v2 tags?)
   |_ [AS] "tags" for each track/album/artist
