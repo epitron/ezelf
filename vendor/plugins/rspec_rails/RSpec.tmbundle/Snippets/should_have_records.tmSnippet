@@ -8,9 +8,9 @@ $0</string>
 	<key>name</key>
 	<string>should have_records</string>
 	<key>scope</key>
-	<string>source.ruby</string>
+	<string>source.ruby.rspec</string>
 	<key>tabTrigger</key>
-	<string>shrecords</string>
+	<string>shhr</string>
 	<key>uuid</key>
 	<string>9605BD4A-93E5-4D57-99FB-D8844D40F183</string>
 </dict>

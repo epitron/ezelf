@@ -24,6 +24,9 @@ class PolymorphTest < Test::Unit::TestCase
    @join_count = EatersFoodstuff.count    
    @l = @kibbles.eaters.size
    @m = @bits.eaters.size
+
+   @double_join_count = BeautifulFightRelationship.count
+   @n = @alice.enemies.size
   end
   
   def d
@@ -40,14 +43,24 @@ class PolymorphTest < Test::Unit::TestCase
     Tabby.reflect_on_all_associations.map &:check_validity! 
     Kitten.reflect_on_all_associations.map &:check_validity! 
     Dog.reflect_on_all_associations.map &:check_validity! 
+    Canine.reflect_on_all_associations.map &:check_validity! 
     Aquatic::Fish.reflect_on_all_associations.map &:check_validity! 
     EatersFoodstuff.reflect_on_all_associations.map &:check_validity! 
     WildBoar.reflect_on_all_associations.map &:check_validity! 
     Frog.reflect_on_all_associations.map &:check_validity! 
-    Aquatic::Whale.reflect_on_all_associations.map &:check_validity! 
     Cat.reflect_on_all_associations.map &:check_validity! 
-    Aquatic::PupilsWhale.reflect_on_all_associations.map &:check_validity! 
+    Right.reflect_on_all_associations.map &:check_validity! 
+    Left.reflect_on_all_associations.map &:check_validity! 
+    DoubleJoin.reflect_on_all_associations.map &:check_validity! 
     BeautifulFightRelationship.reflect_on_all_associations.map &:check_validity! 
+    Person.reflect_on_all_associations.map &:check_validity! 
+    Parentship.reflect_on_all_associations.map &:check_validity! 
+    Aquatic::Whale.reflect_on_all_associations.map &:check_validity! 
+    Aquatic::PupilsWhale.reflect_on_all_associations.map &:check_validity! 
+    Tagging.reflect_on_all_associations.map &:check_validity! 
+    Recipe.reflect_on_all_associations.map &:check_validity! 
+    Category.reflect_on_all_associations.map &:check_validity! 
+    Tag.reflect_on_all_associations.map &:check_validity! 
   end
   
   def test_assignment     
@@ -90,16 +103,27 @@ class PolymorphTest < Test::Unit::TestCase
  
   def test_add_join_record
     assert_equal Kitten, @chloe.class
-    assert @join_record = EatersFoodstuff.new(:foodstuff_id => @bits.id, :eater_id => @chloe.id, :eater_type => @chloe.class.name ) 
-    assert @join_record.save!
-    assert @join_record.id
+    assert join = EatersFoodstuff.new(:foodstuff_id => @bits.id, :eater_id => @chloe.id, :eater_type => @chloe.class.name ) 
+    assert join.save!
+    assert join.id
     assert_equal @join_count + 1, EatersFoodstuff.count
 
-    # not reloaded
     #assert_equal @m, @bits.eaters.size # Doesn't behave this way on latest edge anymore
     assert_equal @m + 1, @bits.eaters.count # SQL
 
     # reload; is the new association there?
+    assert @bits.eaters.reload
+    assert @bits.eaters.include?(@chloe)
+  end
+
+  def test_build_join_record_on_association
+    assert_equal Kitten, @chloe.class
+    assert join = @chloe.eaters_foodstuffs.build(:foodstuff => @bits)
+    # assert_equal join.eater_type, @chloe.class.name # will be STI parent type
+    assert join.save!
+    assert join.id
+    assert_equal @join_count + 1, EatersFoodstuff.count
+
     assert @bits.eaters.reload
     assert @bits.eaters.include?(@chloe)
   end
@@ -258,8 +282,9 @@ class PolymorphTest < Test::Unit::TestCase
   end
 
   def test_attributes_come_through_when_child_has_underscore_in_table_name
-    @join_record = EatersFoodstuff.new(:foodstuff_id => @bits.id, :eater_id =>  @puma.id, :eater_type => @puma.class.name) 
-    @join_record.save!
+    join = EatersFoodstuff.new(:foodstuff_id => @bits.id, :eater_id =>  @puma.id, :eater_type => @puma.class.name) 
+    join.save!
+    
     @bits.eaters.reload
 
     assert_equal "Puma", @puma.name
@@ -347,6 +372,20 @@ class PolymorphTest < Test::Unit::TestCase
     assert_equal 2, @alice.beautiful_fight_relationships_as_protector.size
     assert_equal 1, @alice.beautiful_fight_relationships_as_enemy.size
     assert_equal 3, @alice.beautiful_fight_relationships.size
+  end
+  
+  def test_double_collection_build_join_record_on_association
+    
+    join = @alice.beautiful_fight_relationships_as_protector.build(:enemy => @spot)
+    
+    assert_equal @alice.class.base_class.name, join.protector_type
+    assert_nothing_raised { join.save! }
+
+    assert join.id
+    assert_equal @double_join_count + 1, BeautifulFightRelationship.count
+
+    assert @alice.enemies.reload
+    assert @alice.enemies.include?(@spot)
   end
   
   def test_double_dependency_injection
@@ -521,8 +560,15 @@ class PolymorphTest < Test::Unit::TestCase
       end" }
     assert_raises(@association_error) {
       eval "class SomeModel < ActiveRecord::Base
-       acts_as_double_polymorphic_join :polymorph => [:dogs, :cats], :unimorphs => [:dogs, :cats]
+        acts_as_double_polymorphic_join :polymorph => [:dogs, :cats], :unimorphs => [:dogs, :cats]
       end" }    
+  end
+  
+  def test_error_message_on_namespaced_targets
+    assert_raises(@association_error) {
+      eval "class SomeModel < ActiveRecord::Base
+        has_many_polymorphs :polymorphs, :from => [:fish]
+      end" }
   end
 
   def test_single_custom_finders
@@ -612,7 +658,10 @@ class PolymorphTest < Test::Unit::TestCase
 
     kid.reload; p.reload
 
-    assert_equal [p], kid.parents
+  # assert_equal [p], kid.parents 
+  # assert Rails.has_one? Bug
+  # non-standard foreign_type key is not set properly when you are the polymorphic interface of a has_many going to a :through
+
     assert_equal [kid], p.kids
     assert_equal [kid], p.people
   end

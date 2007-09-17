@@ -8,9 +8,9 @@ $0</string>
 	<key>name</key>
 	<string>should_not throw</string>
 	<key>scope</key>
-	<string>source.ruby</string>
+	<string>source.ruby.rspec</string>
 	<key>tabTrigger</key>
-	<string>shthr</string>
+	<string>shnt</string>
 	<key>uuid</key>
 	<string>EF7CD2D2-68BC-425B-9C49-7E3597EFE804</string>
 </dict>

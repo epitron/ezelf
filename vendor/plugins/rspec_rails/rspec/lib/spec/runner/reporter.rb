@@ -1,40 +1,40 @@
 module Spec
   module Runner
     class Reporter
+      attr_reader :options
       
-      def initialize(formatters, backtrace_tweaker)
-        @formatters = formatters
-        @backtrace_tweaker = backtrace_tweaker
+      def initialize(options)
+        @options = options
         clear
       end
       
       def add_behaviour(name)
-        @formatters.each{|f| f.add_behaviour(name)}
+        formatters.each{|f| f.add_behaviour(name)}
         @behaviour_names << name
       end
       
-      def example_started(name)
-        @formatters.each{|f| f.example_started(name)}
+      def example_started(example_definition)
+        formatters.each{|f| f.example_started(example_definition)}
       end
       
-      def example_finished(name, error=nil, failure_location=nil, not_implemented = false)
-        @example_names << name
+      def example_finished(example_definition, error=nil, failure_location=nil, not_implemented = false)
+        @example_names << example_definition
         
         if not_implemented
-          example_pending(@behaviour_names.last, name)
+          example_pending(@behaviour_names.last, example_definition)
         elsif error.nil?
-          example_passed(name)
+          example_passed(example_definition)
         elsif Spec::DSL::ExamplePendingError === error
-          example_pending(@behaviour_names.last, name, error.message)
+          example_pending(@behaviour_names.last, example_definition, error.message)
         else
-          example_failed(name, error, failure_location)
+          example_failed(example_definition, error, failure_location)
         end
       end
 
       def start(number_of_examples)
         clear
         @start_time = Time.new
-        @formatters.each{|f| f.start(number_of_examples)}
+        formatters.each{|f| f.start(number_of_examples)}
       end
   
       def end
@@ -43,9 +43,9 @@ module Spec
   
       # Dumps the summary and returns the total number of failures
       def dump
-        @formatters.each{|f| f.start_dump}
+        formatters.each{|f| f.start_dump}
         dump_failures
-        @formatters.each do |f| 
+        formatters.each do |f|
           f.dump_summary(duration, @example_names.length, @failures.length, @pending_count)
           f.close
         end
@@ -53,6 +53,14 @@ module Spec
       end
 
     private
+
+      def formatters
+        @options.formatters
+      end
+
+      def backtrace_tweaker
+        @options.backtrace_tweaker
+      end
   
       def clear
         @behaviour_names = []
@@ -66,7 +74,7 @@ module Spec
       def dump_failures
         return if @failures.empty?
         @failures.inject(1) do |index, failure|
-          @formatters.each{|f| f.dump_failure(index, failure)}
+          formatters.each{|f| f.dump_failure(index, failure)}
           index + 1
         end
       end
@@ -77,20 +85,20 @@ module Spec
       end
       
       def example_passed(name)
-        @formatters.each{|f| f.example_passed(name)}
+        formatters.each{|f| f.example_passed(name)}
       end
 
       def example_failed(name, error, failure_location)
-        @backtrace_tweaker.tweak_backtrace(error, failure_location)
+        backtrace_tweaker.tweak_backtrace(error, failure_location)
         example_name = "#{@behaviour_names.last} #{name}"
         failure = Failure.new(example_name, error)
         @failures << failure
-        @formatters.each{|f| f.example_failed(name, @failures.length, failure)}
+        formatters.each{|f| f.example_failed(name, @failures.length, failure)}
       end
       
       def example_pending(behaviour_name, example_name, message="Not Yet Implemented")
         @pending_count += 1
-        @formatters.each{|f| f.example_pending(behaviour_name, example_name, message)}
+        formatters.each{|f| f.example_pending(behaviour_name, example_name, message)}
       end
       
       class Failure

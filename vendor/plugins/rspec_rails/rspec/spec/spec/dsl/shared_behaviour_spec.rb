@@ -2,10 +2,16 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 
 module Spec
   module DSL
-    describe Behaviour, ", with :shared => true" do
+    describe Example, ", with :shared => true" do
       before(:each) do
+        @options = ::Spec::Runner::Options.new(StringIO.new, StringIO.new)
         @formatter = Spec::Mocks::Mock.new("formatter", :null_object => true)
-        @behaviour = Class.new(Behaviour).describe("behaviour")
+        @options.formatters << @formatter
+        @behaviour = Class.new(Example).describe("behaviour")
+        @behaviour.rspec_options = @options
+        class << @behaviour
+          public :include
+        end
       end
 
       after(:each) do
@@ -21,12 +27,12 @@ module Spec
       end
 
       def non_shared_behaviour()
-        @non_shared_behaviour ||= Class.new(Behaviour).describe("behaviour")
+        @non_shared_behaviour ||= Class.new(Example).describe("behaviour")
       end
 
       it "should accept an optional options hash" do
-        lambda { Class.new(Behaviour).describe("context") }.should_not raise_error(Exception)
-        lambda { Class.new(Behaviour).describe("context", :shared => true) }.should_not raise_error(Exception)
+        lambda { Class.new(Example).describe("context") }.should_not raise_error(Exception)
+        lambda { Class.new(Example).describe("context", :shared => true) }.should_not raise_error(Exception)
       end
 
       it "should return all shared behaviours" do
@@ -73,7 +79,7 @@ module Spec
       end
 
       it "should NOT complain when adding the same shared behaviour instance again" do
-        shared_behaviour = Class.new(Behaviour).describe("shared behaviour", :shared => true)
+        shared_behaviour = Class.new(Example).describe("shared behaviour", :shared => true)
         SharedBehaviour.add_shared_behaviour(shared_behaviour)
         SharedBehaviour.add_shared_behaviour(shared_behaviour)
       end
@@ -88,8 +94,8 @@ module Spec
       end
 
       it "should NOT complain when adding the same shared behaviour in same file with different absolute path" do
-        shared_behaviour_1 = Class.new(Behaviour).describe("shared behaviour", :shared => true)
-        shared_behaviour_2 = Class.new(Behaviour).describe("shared behaviour", :shared => true)
+        shared_behaviour_1 = Class.new(Example).describe("shared behaviour", :shared => true)
+        shared_behaviour_2 = Class.new(Example).describe("shared behaviour", :shared => true)
 
         shared_behaviour_1.description[:spec_path] = "/my/spec/a/../shared.rb"
         shared_behaviour_2.description[:spec_path] = "/my/spec/b/../shared.rb"
@@ -99,8 +105,8 @@ module Spec
       end
 
       it "should complain when adding a different shared behaviour with the same name in a different file with the same basename" do
-        shared_behaviour_1 = Class.new(Behaviour).describe("shared behaviour", :shared => true)
-        shared_behaviour_2 = Class.new(Behaviour).describe("shared behaviour", :shared => true)
+        shared_behaviour_1 = Class.new(Example).describe("shared behaviour", :shared => true)
+        shared_behaviour_2 = Class.new(Example).describe("shared behaviour", :shared => true)
 
         shared_behaviour_1.description[:spec_path] = "/my/spec/a/shared.rb"
         shared_behaviour_2.description[:spec_path] = "/my/spec/b/shared.rb"
@@ -131,7 +137,8 @@ module Spec
 
         @behaviour.it_should_behave_like("shared behaviour")
         @behaviour.it("example") {example_ran = true}
-        @behaviour.run(@formatter)
+        suite = @behaviour.suite
+        suite.run(@result) {}
         example_ran.should be_true
         shared_example_ran.should be_true
       end
@@ -148,7 +155,8 @@ module Spec
 
         @behaviour.it_should_behave_like("shared behaviour")
         @behaviour.it("example") {example_ran = true}
-        @behaviour.run(@formatter)
+        suite = @behaviour.suite
+        suite.run(@result) {}
         example_ran.should be_true
         shared_setup_ran.should be_true
         shared_teardown_ran.should be_true
@@ -166,7 +174,8 @@ module Spec
 
         @behaviour.it_should_behave_like("shared behaviour")
         @behaviour.it("example") {example_ran = true}
-        @behaviour.run(@formatter)
+        suite = @behaviour.suite
+        suite.run(@result) {}
         example_ran.should be_true
         shared_before_all_run_count.should == 1
         shared_after_all_run_count.should == 1
@@ -202,7 +211,8 @@ module Spec
           mod1_method
           mod2_method
         end
-        @behaviour.run(@formatter)
+        suite = @behaviour.suite
+        suite.run(@result) {}
         mod1_method_called.should be_true
         mod2_method_called.should be_true
       end
@@ -219,7 +229,8 @@ module Spec
           a_shared_helper_method
           success = true
         end
-        @behaviour.run(@formatter)
+        suite = @behaviour.suite
+        suite.run(@result) {}
         success.should be_true
       end
 
@@ -228,7 +239,7 @@ module Spec
           @behaviour.it_should_behave_like("non-existent shared behaviour")
           violated
         rescue => e
-          e.message.should == "Shared Behaviour 'non-existent shared behaviour' can not be found"
+          e.message.should == "Shared Example 'non-existent shared behaviour' can not be found"
         end
       end
     end

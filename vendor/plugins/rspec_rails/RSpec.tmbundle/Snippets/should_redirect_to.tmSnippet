@@ -8,9 +8,9 @@ $0</string>
 	<key>name</key>
 	<string>should redirect_to</string>
 	<key>scope</key>
-	<string>source.ruby</string>
+	<string>source.ruby.rspec</string>
 	<key>tabTrigger</key>
-	<string>shred</string>
+	<string>shrt</string>
 	<key>uuid</key>
 	<string>96F0A193-32F1-4A75-9093-5D20E36593EC</string>
 </dict>

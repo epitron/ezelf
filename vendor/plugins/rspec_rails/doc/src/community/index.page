@@ -53,6 +53,7 @@ In alphabetical order (by last name)
 * Ola Bini
 ** Paired with Aslak to iron out minor JRuby issues.
 * Wincent Colaiuta
+** Patch [#11254] RSpec syntax coloring and function pop-up integration in TextMate
 ** Patch [#11252] Should be able to re-load file containing shared behaviours without raising an exception
 ** Patch [#12010] Nicer failure message formatting
 * Bob Cotton
@@ -85,6 +86,8 @@ In alphabetical order (by last name)
 * David Goodlad
 ** Patch for allowing non-Strings as partial_paths in view/specs
 ** Patch for file mappings for rspec/autotest integration
+James Edward Gray II
+** Patch to improve syntax highlighting in TextMate
 * Kyle Hargraves
 ** Patch [#10951] Odd instance variable name in rspec_model template
 ** Patch [#11608] Exclude rspec_on_rails from plugin spec runs
@@ -97,11 +100,14 @@ In alphabetical order (by last name)
 ** Patch [#10920] Added support for not implemented examples
 * Jake Howerton
 ** Port of Kevin Clark's ARTS to RSpec
-* Shintaro KAKUTANI
+* Shintaro Kakutani
+** Patch [#13814] RSpec on Rails w/ fixture-scenarios
 ** Patches for coloured progress<br>
 ** Assorted Rails patches
 * Erik Kastner
 ** Patch to rename file_list to spec_file_list in spectask.rake (to avoid conflicts w/ other tools)
+* Brandon Keepers
+** Patch [#13881] Dynamically include Helpers that are included on ActionView::Base
 * Rich Kilmer
 ** Underscore syntactic sugar
 * Ryan Kinderman
@@ -121,7 +127,9 @@ In alphabetical order (by last name)
 * Ian Leitch
 ** Patch [#11888] rspec_on_rails spews out warnings when assert_select is used with an XML response
 ** Patch [#12817] Cannot include same shared behaviour when required with absolute paths.
+** Patch [#13952] Fix for performance regression introduced in r2096
 * Jay Levitt
+** Patch [#13143] ActionView::Helpers::RecordIdentificationHelper should be included if present
 ** Patch [#13016] [DOC] Point out that view specs render, well, a view
 * Tim Lucas
 ** Patch [#10631] redirect_to matcher doesn't respect request.host
@@ -130,6 +138,7 @@ In alphabetical order (by last name)
 * Dan Manges
 ** Fixed visibility problem for ActionController::Base#render in Spec::Rails
 * Mike Mangino
+** Patch for  [#13370] Weird mock expectation error
 ** Patch for [#13065] Named routes throw a NoMethodError in Helper specs
 * Pat Maddox
 ** Spec'ing routes (Rails)
@@ -155,6 +164,7 @@ In alphabetical order (by last name)
 ** Patch [#11615] Partial mock methods give ambiguous failures when given a method name as a String
 ** Patch [#13274] ThrowSymbol recognized a NameError triggered by Kernel#method_missing as a thrown Symbol
 * Yurii Rashkovskii
+** Patch [#13833] ActionView::Helpers::JavaScriptMacrosHelper removed after 1.2.3
 ** Patch to improve generated descriptions for the "be" matcher
 ** Patch [#12611] should_not redirect_to implementation
 * Luke Redpath
@@ -189,6 +199,9 @@ In alphabetical order (by last name)
 * Jonathan Tron
 ** Patch for Spec::Rails resource_generator
 ** Patch for RSpec.tmbundle to make it work with RSpec installed as a plugin
+* Rupert Voelcker
+** Patch [#13567] patch to allow stubs to yield consecutive values
+** Patch [#13559] reverse version of route_for
 * Florian Weber
 ** RSpec.tmbundle and the spec_server that comes with Spec::Rails are based on Florian's TDDMate
 * Nikolai Weibull

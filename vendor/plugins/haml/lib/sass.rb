@@ -561,6 +561,16 @@ $LOAD_PATH << dir unless $LOAD_PATH.include?(dir)
 #
 #   .huge { font-size: 10em; font-weight: bold; text-decoration: underline; } 
 #
+# === <tt>:compressed</tt>
+#
+# Compressed style takes up the minimum amount of space possible,
+# having no whitespace except that necessary to separate selectors
+# and a newline at the end of the file.
+# It's not meant to be human-readable.
+# For example:
+#
+#   #main{color:#fff;background-color:#000}#main p{width:10em}.huge{font-size:10em;font-weight:bold;text-decoration:underline} 
+#
 # == Sass Options
 #
 # Options can be set by setting the hash <tt>Sass::Plugin.options</tt>
@@ -582,6 +592,12 @@ $LOAD_PATH << dir unless $LOAD_PATH.include?(dir)
 #                               For example: <tt>color: #0f3</tt>
 #                               or <tt>width = !main_width</tt>.
 #                               By default, either syntax is valid.
+#                               
+# [<tt>:never_update</tt>]      Whether the CSS files should never be updated,
+#                               even if the template file changes.
+#                               Setting this to true may give small performance gains.
+#                               It's never true by default,
+#                               even in production mode.
 #
 # [<tt>:always_update</tt>]     Whether the CSS files should be updated every
 #                               time a controller is accessed,

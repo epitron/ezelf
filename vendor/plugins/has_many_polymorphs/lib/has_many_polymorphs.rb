@@ -1,6 +1,8 @@
 
 require 'active_record'
 
+RAILS_DEFAULT_LOGGER = nil unless defined? RAILS_DEFAULT_LOGGER
+
 require 'has_many_polymorphs/reflection'
 require 'has_many_polymorphs/association'
 require 'has_many_polymorphs/class_methods'
@@ -19,6 +21,7 @@ end
 
 if defined? Rails and RAILS_ENV and RAILS_ROOT
   _logger_warn "has_many_polymorphs: Rails environment detected"
+  require 'has_many_polymorphs/configuration'
   require 'has_many_polymorphs/dependencies'
   require 'has_many_polymorphs/autoload'
 end

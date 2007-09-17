@@ -8,9 +8,9 @@ $0</string>
 	<key>name</key>
 	<string>should render_template</string>
 	<key>scope</key>
-	<string>source.ruby</string>
+	<string>source.ruby.rspec</string>
 	<key>tabTrigger</key>
-	<string>shrend</string>
+	<string>shrt</string>
 	<key>uuid</key>
 	<string>647C94D6-42FE-40F0-8618-73F7725BF59E</string>
 </dict>

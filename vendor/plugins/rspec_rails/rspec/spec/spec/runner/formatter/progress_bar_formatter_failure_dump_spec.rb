@@ -6,7 +6,10 @@ module Spec
       describe "ProgressBarFormatter failure dump with NoisyBacktraceTweaker" do
         before(:each) do
           @io = StringIO.new
-          @reporter = Reporter.new([ProgressBarFormatter.new(@io)], NoisyBacktraceTweaker.new)
+          @options = Options.new(StringIO.new, @io)
+          @options.create_formatter(ProgressBarFormatter)
+          @options.backtrace_tweaker = NoisyBacktraceTweaker.new
+          @reporter = Reporter.new(@options)
           @reporter.add_behaviour(Spec::DSL::BehaviourDescription.new("context"))
         end
 

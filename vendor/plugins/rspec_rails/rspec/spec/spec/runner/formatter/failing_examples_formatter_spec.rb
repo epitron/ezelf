@@ -6,8 +6,9 @@ module Spec
       describe "FailingExamplesFormatter" do
         before(:each) do
           @io = StringIO.new
-          @formatter = FailingExamplesFormatter.new(@io)
-          @behaviour = Class.new(::Spec::DSL::Behaviour).describe("My Behaviour")
+          @options = Options.new(StringIO.new, @io)
+          @formatter = @options.create_formatter(FailingExamplesFormatter)
+          @behaviour = Class.new(::Spec::DSL::Example).describe("My Behaviour")
         end
 
         it "should add example name for each failure" do
