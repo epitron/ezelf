@@ -22,6 +22,14 @@
 
 === Design "Inspiration" =========================
 
+* filehippo
+    i like the boxes
+        http://filehippo.com/
+
+* bittorrent.am
+    nice curved corners, kinda kidlike feel
+        http://www.bittorrent.am/torrents.php?cat=2
+
 * archeo.graphr.net LastFM Charts
         http://archeo.graphr.net/themes/lastfm-charts.png
 
