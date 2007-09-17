@@ -86,7 +86,7 @@ class StreamController < ApplicationController
     def xsendfile(path, options)
         headers["Content-Transfer-Encoding"] = "binary"
         headers["Content-Type"] = "application/force-download"
-        #headers["Content-Type"] = options[:type] if options[:type]
+        headers["Content-Type"] = options[:type] if options[:type]
 
         headers["X-Sendfile"] = path
         headers["Content-Disposition"] = "attachment; file=\"#{File.basename path}\""
@@ -101,9 +101,9 @@ class StreamController < ApplicationController
         track = Track.find(params[:id])
         #pp request.env
         #"HTTP_RANGE"=>"bytes=878672-",
-        send_file track.fullpath, :type => 'audio/mpeg', :stream => true, :buffer_size => 4096, :disposition => 'inline'
+        #send_file track.fullpath, :type => 'audio/mpeg', :stream => true, :buffer_size => 4096, :disposition => 'inline'
         #stream_file track.fullpath, :type => 'audio/mpeg', :stream => true, :buffer_size => 4096, :disposition => 'inline'
-        #xsendfile track.file, :type => 'audio/mpeg'
+        xsendfile track.fullpath, :type => 'audio/mpeg'
     end
 
 
