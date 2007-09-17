@@ -52,7 +52,10 @@ class StreamController < ApplicationController
         @performed_render = false
         #pp request.env
 
+	print "opening #{path.inspect}..."
         file = File.open(path, 'rb')
+        puts "done!"
+
         if request.env["HTTP_RANGE"] =~ /bytes=(\d+)-(.*)$/ || request.env["HTTP_CONTENT_RANGE"] =~ /bytes (\d+)-(.*)$/
             file.seek($1.to_i)
             headers["Content-Range"] = "bytes #{file.pos}-#{options[:length] - 1}/#{options[:length]}"
@@ -61,10 +64,15 @@ class StreamController < ApplicationController
 
         if options[:stream]
             render :status => options[:status], :text => Proc.new { |response, output|
+                sent = 0; last_size = 0
                 logger.info "Streaming file #{path}" unless logger.nil?
                 len = options[:buffer_size] || 4096
                 while buf = file.read(len)
                     output.write(buf)
+                    sent += len
+                    output.flush
+                    print ("\b"*last_size)+"#{sent}"
+                    last_size = sent.to_s.size
                 end
             }
         else
@@ -93,8 +101,8 @@ class StreamController < ApplicationController
         track = Track.find(params[:id])
         #pp request.env
         #"HTTP_RANGE"=>"bytes=878672-",
-        #send_file track.file, :type => 'audio/mpeg', :stream => true, :buffer_size => 4096, :disposition => 'inline'
-        stream_file track.fullpath, :type => 'audio/mpeg', :stream => true, :buffer_size => 4096, :disposition => 'inline'
+        send_file track.fullpath, :type => 'audio/mpeg', :stream => true, :buffer_size => 4096, :disposition => 'inline'
+        #stream_file track.fullpath, :type => 'audio/mpeg', :stream => true, :buffer_size => 4096, :disposition => 'inline'
         #xsendfile track.file, :type => 'audio/mpeg'
     end
 
