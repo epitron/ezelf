@@ -1,8 +1,16 @@
-%title= "ezELF :: #{request.env["PATH_INFO"]}"
+%head
 
-= javascript_include_tag 'prototype', 'application', 'effects'#, 'controls'
-= stylesheet_link_tag "common"
+  %title= "ezELF :: #{request.env["PATH_INFO"]}"
 
-= render :partial=>"layouts/tabbar"
+  = javascript_include_tag 'prototype', 'application', 'effects'#, 'controls'
+  = stylesheet_link_tag "beast"
+  = stylesheet_link_tag "extra"
 
-= @content_for_layout
+  %link{:rel=>"SHORTCUT ICON", :href=>"/favicon.ico"}
+
+%body
+  #header= render :partial=>"layouts/header"
+
+  #container= @content_for_layout
+
+  #footer= render :partial=>"layouts/footer"

@@ -1,17 +1,20 @@
 # == Schema Information
-# Schema version: 10
+# Schema version: 12
 #
 # Table name: tracks
 #
 #  id            :integer(11)   not null, primary key
 #  title         :string(255)   
 #  album_id      :integer(11)   
-#  number        :integer(11)   
+#  number        :string(10)    
 #  disc          :integer(11)   
 #  artist_id     :integer(11)   
 #  relative_path :string(255)   
 #  filename      :string(255)   
 #  source_id     :integer(11)   
+#  length        :float         
+#  bitrate       :integer(11)   
+#  vbr           :boolean(1)    
 #
 
 # http://id3lib-ruby.rubyforge.org/doc/index.html
@@ -37,6 +40,10 @@ class Track < ActiveRecord::Base
 
   def fullpath
     File.join( source.uri, relative_path, filename )
+  end
+
+  def title
+    attributes['title'] || 'Untitled'
   end
 
   def self.all

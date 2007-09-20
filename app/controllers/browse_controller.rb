@@ -2,7 +2,11 @@ class BrowseController < ApplicationController
     layout "default"
 
     def index
-        redirect_to :action=>"artists"
+        @random_albums = Album.find :all, :limit=>10, :order=>"RAND()"
+        elf = random_elf
+        @elf_image = "/elves/#{elf}"
+        @elf_title = elf.gsub /\.[^\.]+$/, ''
+        #redirect_to :action=>"artists"
     end
 
     def artists
@@ -14,11 +18,19 @@ class BrowseController < ApplicationController
     end
 
     def files
-        alltracks = Track.find :all, :order=>"relative_path, filename"
-        @tree = alltracks.group_by{|o| o.relative_path}.to_a.sort_by{|k,v| k}
+        @alltracks = Track.find :all, :order=>"relative_path, filename"
+        @tree = @alltracks.group_by{|o| o.relative_path}.to_a.sort_by{|k,v| k}
     end
 
-    def index
+    def search
+        @query = params[:query]
+        @alltracks = Track.find(
+          :all, 
+          :conditions=>(["relative_path like ? or filename like ?"] + ["%#{@query}%"]*2), 
+          :order=>"relative_path, filename"
+        )
+        @tree = @alltracks.group_by{|o| o.relative_path}.to_a.sort_by{|k,v| k}
+        render :action=>"files"
     end
 
     def session_key
@@ -40,17 +52,19 @@ class BrowseController < ApplicationController
 
     def expand_artist
       #html_id = params[:id]
-      @artist = Artist.find params[:id], :include=>{:albums=>:tracks} #fetch_from_html_id( :artist, html_id )
+      @artist = Artist.find params[:id], :include=>{:albums=>:tracks}
+      #fetch_from_html_id( :artist, html_id )
       render :update do |page|
         html_id = @artist.html_id
         #page.visual_effect :fade, html_id
-        page.replace_html @artist.html_id, :partial => 'albums'
-        #page.visual_effect :appear
+        page.replace_html html_id, :partial => 'albums'
+        #page.visual_effect :appear, html_id
       end
     end
 
-
-    def index
+    def random_elf
+        elves = Dir["public/elves/*"]
+        File.basename elves[rand(elves.size)]
     end
 
 end

@@ -1,4 +1,14 @@
 # == Schema Information
+# Schema version: 12
+#
+# Table name: playlists
+#
+#  id      :integer(11)   not null, primary key
+#  name    :string(255)   
+#  user_id :integer(11)   
+#
+
+# == Schema Information
 # Schema version: 10
 #
 # Table name: playlists

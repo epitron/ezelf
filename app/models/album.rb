@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 10
+# Schema version: 12
 #
 # Table name: albums
 #
@@ -18,6 +18,10 @@ class Album < ActiveRecord::Base
     def cover
       a = Scrobbler::Album.new(artist.name, name, :include_info => true)
       pp a      
+    end
+
+    def sorted_tracks
+      tracks.sort_by{|track| track.number.to_i}
     end
 end
 

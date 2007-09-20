@@ -1,0 +1,18 @@
+strong.highlight
+  :background #ffff00
+
+ul.tracks
+  :margin-left 20px
+  :padding-left 0
+  :font-size 0.75em
+  :list-style-type none
+  :padding-bottom 1em
+
+ul.random_albums
+  :margin-left 0px
+  :padding-left 0
+  :font-size 0.75em
+  :padding-bottom 1em
+
+ul.random_albums li
+  :list-style-image url(/images/play16.png)

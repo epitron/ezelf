@@ -12,10 +12,12 @@ require 'mp3info_with_extensions'
 
 # http://id3lib-ruby.rubyforge.org/doc/index.html
 
-puts "deleting all Tracks, Albums and Artists..."
-Track.delete_all
-Album.delete_all
-Artist.delete_all
+if ARGV.size == 1 and ARGV[0] == '-n'
+  puts "Nuking all Tracks, Albums and Artists..."
+  Track.delete_all
+  Album.delete_all
+  Artist.delete_all
+end
 
 sources = Source.find(:all)
 

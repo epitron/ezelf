@@ -1,18 +1,47 @@
-%center
-  %h1 ... Files ...
+#content
 
-%div
-  %a{:href=>'#', :onclick=>"$$('.foldable').each(function(el){el.hide()})"}= "<< Collapse All"
-  %a{:href=>'#', :onclick=>"$$('.foldable').each(function(el){el.show()})"}= "Expand All >>"
-
-#browser{ :style => "font-family: Tahoma" }
-  - @tree.each do |relative_path,tracks|
-    - the_id = SHA1::new(relative_path).to_s
+  - if @query
+    %h1 Search Collection
     %h3
-      = link_to image_tag("play24.png"), :controller=>"stream", :action=>"folder", :relative_path=>relative_path
-      %a{:href=>'#', :onclick=>"Element.toggle('#{the_id}')"}= relative_path + "/"
-    %div{:id=>the_id, :class=>"foldable", :style=>"display:none;"}
-      %ul
-        - tracks.each do |track|
-          %li= link_to_track(track.filename, track)
+      Query:
+      %span{:style=>"background:#005500; color: #00ff00;"}= @query
+      %span{:style=>"color: #999;"}
+        = " (#{@alltracks.size} results)"
+
+    %br
+  - else
+    %h1 Browse (grouped by Directories)
+
+
+
+
+  #browser{ :style => "font-family: Tahoma;" }
+    - @tree.each do |relative_path,tracks|
+      - the_id = SHA1::new(relative_path).to_s
+      %p.subtitle
+        = link_to "<img src='/images/play16.png' width=16 height=16>", :controller=>"stream", :action=>"folder", :relative_path=>relative_path
+        %a{:href=>'#', :onclick=>"Element.toggle('#{the_id}')"}= highlight(relative_path,@query) + "/"
+      %div{:id=>the_id, :class=>"foldable", :style=>"display:none;"}
+        %ul.tracks
+          - tracks.each do |track|
+            %li= link_to_track(highlight(track.filename,@query), track)
+
+
+#right
+  %h3 Help?
+  %p.help
+    - if @query
+      %p Search results! Sweet!
+    - else
+      %p MP3s in folders! Sweet!
+   
+    %p Click a folder's title to see all the meaty files inside.
+
+    %p To play all the songs in a folder, click <img src="/images/play16.png">.
+
+    %p
+      %a{:href=>'#', :onclick=>"$$('.foldable').each(function(el){el.hide()})"}= "<< Collapse All"
+      %br
+      %a{:href=>'#', :onclick=>"$$('.foldable').each(function(el){el.show()})"}= "Expand All >>"
+
 

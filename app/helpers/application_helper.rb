@@ -10,12 +10,12 @@ module ApplicationHelper
     
     
     class Tab
-      attr_accessor :selected, :name, :params
+      attr_accessor :selected, :name, :parameters
       
-      def initialize name, params
+      def initialize name, parameters
         @selected = false
         @name = name
-        @params = params
+        @parameters = parameters
       end
     end
     
@@ -37,11 +37,11 @@ module ApplicationHelper
     end
       
     def link_to_tab(tab, selected=false)
-      link_to tab.name, tab.params
+      link_to tab.name, tab.parameters
     end
 
     def tab_selected? tab
-      params_equal? tab.params, request.parameters
+      params_equal? tab.parameters, request.parameters
     end
 
     def render_main_tabs

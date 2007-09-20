@@ -1,0 +1,16 @@
+%ul#nav
+  %li#search
+    %form{:action=>"/browse/search", :method => "get"}
+      Find:
+      %input#search_box{:type=>"text", :name=>"query", :value=>@query}
+
+  - for tab in main_tabs
+    %li{:class=>tab_selected?(tab) ? "selected" : "unselected"}= link_to tab.name, tab.parameters
+
+
+%h1
+  %a{:href=>"/"}
+    ezElf!
+    %span
+      v12.41.3555 build 72413 alpha4
+  

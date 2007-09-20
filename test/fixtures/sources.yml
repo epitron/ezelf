@@ -1,4 +1,16 @@
 # == Schema Information
+# Schema version: 12
+#
+# Table name: sources
+#
+#  id          :integer(11)   not null, primary key
+#  name        :string(255)   
+#  description :string(255)   
+#  uri         :string(255)   
+#  encoding    :string(255)   
+#
+
+# == Schema Information
 # Schema version: 10
 #
 # Table name: sources

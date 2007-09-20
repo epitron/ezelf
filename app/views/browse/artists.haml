@@ -1,17 +1,29 @@
 
-%center
-  %h1 ... Everything! (by Artist) ...
+#content
+  %h1 Browse (grouped by Artist)
 
-#browser{ :style => "font-family: Tahoma" }
+  #browser{ :style => "font-family: Tahoma" }
 
-  - @artists.each do |artist|
-    .artist_box
-      .artist_title
-        = link_to image_tag("play24.png", :class=>"playbutton"), :controller=>"stream", :action=>"artist", :id=>artist.id
-        %span.artistname= link_to_remote artist.name, :url => { :action => 'expand_artist', :id => artist.id }
-        %span.albumcount= "(#{pluralize(artist.albums.size, "album")})"
+    - @artists.each do |artist|
+      .artist_box
+        %p.subtitle
+          = link_to image_tag("play16.png", :class=>"playbutton"), :controller=>"stream", :action=>"artist", :id=>artist.id
+          %span
+            = link_to_remote artist.name, :url => { :action => 'expand_artist', :id => artist.id }
+          - for i in 1..artist.albums.size
+            %img{:src=>"/images/cd.gif", :width=>16, :height=>16}
               
-      %div{ :id=>artist.html_id, :class=>"expandable" }
+        %div{ :id=>artist.html_id, :class=>"expandable" }
       
+
+#right
+  %h3 Help?
+  %p.help
+    %p All the artists! Sweet!
+
+    %p Click the titles to expand the artist and show their albums.
   
+    %p You can tell how many albums each artist has by counting the <img src="/images/cd.gif">'s.
+
+    %p <img src="/images/play16.png"> will play everything from that artist or album.
 

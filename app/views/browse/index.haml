@@ -1,14 +1,67 @@
-%h1 EZ Elf Pro v10.eleven
 
-%h3 Things you can do (some can't be done):
+#content
+  %h1 All aboard the Elf Train!
 
-%ul
-  %li= link_to "Browse Artists", :controller=>"browse", :action=>"artists"
-  %li= link_to "Browse Files", :controller=>"browse", :action=>"files"
-  %li
-    Shuffle: [
-    - links = [50, 100, 400].map{|n| link_to "#{n} songs", :controller=>"stream", :action=>"shuffle", :id=>n }
-    = links.join ' | '
-    ]
-  %li Browse Albums
-  %li Listening History / Stats
+  %p
+    The Elf is <b>back on the air!</b>
+
+  %p
+    What took so long? Well, like most stories of woe,
+    it starts with man's insatiable need for more hard drive space. 
+    The ELF was suffering from a serious case of being too big for its britches,
+    and the only cure was bigger "pants".
+
+  %p
+    After a round of donation-asking, and many donations
+    from kindly ELF users,
+    the ELF had what it needed -- 300 gigs of hot hard drive action.
+    Soon, the ELF would be bursting at the seams with delicious music.
+
+  %p
+    Unfortunately, dame fate interceded. The monkeys 
+    who I entrusted to install the hard drive managed to destroy everything
+    on the server, leaving the ELF a braindead vegetable.
+
+  %p
+    Being disheartened, dataless, ELFless, and seriously questioning the
+    stability of this monkey-ridden ISP, I set out on a quest to find
+    some smarter monkeys to host the ELF.
+    Plus, I needed to muster the strength to create an entirely new
+    ELF from the ground up using fancy new Web2.7b technology.
+  %p
+    Well, 9 months later, thanks to the tireless efforts of <b>me</b>,
+    <i>the ELF is back!</i>
+
+  %p
+    Welcome to <b>The Elf of the Future</b>.
+    Drop your jetpack by the door and browse around.
+
+  %p Any comments? <a href="mailto:chris@ill-logic.com">Tell me about it!</a>
+
+  %h3 Things you can do (some can't be done):
+
+  %ul
+    %li= link_to "Browse Artists", :controller=>"browse", :action=>"artists"
+    %li= link_to "Browse Files", :controller=>"browse", :action=>"files"
+    %li
+      Shuffle: [
+      - links = [50, 100, 400].map{|n| link_to "#{n} songs", :controller=>"stream", :action=>"shuffle", :id=>n }
+      = links.join ' | '
+      ]
+    %li Browse Albums
+    %li Listening History / Stats
+    %li Upload Music
+
+
+//  %center
+//   %h1= "#{@elf_title} MP3 Streaming System"
+//   %img{:src=>@elf_image}
+
+
+
+#right
+  %h3 Random albums:
+  %ul.randomalbums
+    - for album in @random_albums
+      %li
+        = link_to_album "<b>#{album.artist.name}</b> - #{album.name}", album

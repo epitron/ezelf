@@ -1,7 +1,11 @@
 body {
   margin: 0px 0px 0px 0px;
-  font-family: "Lucida Grande",Verdana,Arial; }
+  font-family: "Lucida Grande",Verdana,Arial;
+  background: #333333;
+  color: #00ee00; }
 
+strong.highlight {
+  background: #ffff00; }
 
 #tabbar {
   background: #000033; }
@@ -20,15 +24,12 @@ body {
   #tabbar a {
     text-decoration: none; }
 
-
 span.artistname {
   font-weight: bold;
   font-size: 14pt; }
 
-
 br.clear {
   clear: both; }
-
 
 img.playbutton {
   valign: baseline; }
@@ -40,7 +41,6 @@ img.playbutton {
   padding: 3px 5px 3px 5px;
   display: table; }
 
-
 #tabbar-graphical {
   left: 0px;
   top: 0px;
@@ -49,19 +49,14 @@ img.playbutton {
   font-size: 12px;
   padding-top: 10px;
   padding-left: 10px; }
-
-   {
+  #tabbar-graphical img {
     vertical-align: bottom; }
-
-   {
+  #tabbar-graphical span {
     height: 17px; }
-
-   {
+  #tabbar-graphical a {
     text-decoration: none;
     height: 17px; }
-
-   {
+  #tabbar-graphical .unselected {
     background: #3399ff; }
-
-   {
+  #tabbar-graphical .selected {
     background: #ffffff; }
