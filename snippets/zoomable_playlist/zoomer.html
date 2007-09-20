@@ -1,0 +1,150 @@
+<style>
+
+#browser, #playlist {
+  position: absolute;
+  overflow: scroll;
+}
+
+lh {
+  margin-left: -2em;
+  font-size: 2em;
+}
+
+/***** Browser *******/
+
+.browser_unfocus ol, .playlist_unfocus ol {
+  margin: none;
+  padding: none;
+}
+
+.browser_focus h1, .playlist_focus h1 {
+  font: 24px arial;
+}
+.browser_unfocus h1, .playlist_unfocus h1 {
+  font: 6px arial;
+}
+
+.browser_focus h3, .playlist_focus h3 {
+  font: 16px arial;
+}
+.browser_unfocus h3, .playlist_unfocus h3 {
+  font: 5px arial;
+}
+
+
+.browser_focus {
+  background: #00ff00;
+
+  width: 84%;
+  height: 95%;
+
+  top: 5px;
+  left: 5px;
+
+  font: 12px arial;
+}
+
+.browser_unfocus {
+  background: #00cc00;
+
+  width: 15%;  
+  height: 20%;
+
+  top: 5px;
+  left: 5px;
+
+  font: 4px arial;
+
+  cursor: pointer;
+}
+
+div.browser_unfocus:hover {
+  outline: 1px solid #0000ff;
+}
+
+
+/***** Playlist *******/
+
+.playlist_focus {
+  background: #ffff00;
+
+  width: 84%;
+  height: 95%;
+
+  bottom: 5px;
+  right: 5px;  
+
+  font: 12px arial;
+}
+
+.playlist_unfocus {
+  background: #cccc00;
+
+  width: 15%;
+  height: 20%;
+
+  bottom: 5px;
+  right: 5px;  
+
+  font: 4px arial;
+  cursor: pointer;
+}
+
+div.playlist_unfocus:hover {
+  outline: 1px solid #0000ff;
+}
+
+
+
+</style>
+
+
+<script src="prototype.js"></script>
+<script>
+	
+	function focus_browser() {
+	   $('browser').className = 'browser_focus';
+	   $('playlist').className = 'playlist_unfocus';
+	}
+	
+	function focus_playlist() {
+	   $('playlist').className = 'playlist_focus';
+	   $('browser').className = 'browser_unfocus';
+	}
+	
+	function printlotsofsongs(num) {
+		document.writeln('<ul>');
+		for (var i = 0; i < num; i+=1) {
+		  document.writeln('  <li>Random Album #' + i + '</li>');
+		}
+		document.writeln('</ul>');
+	}
+
+	function printlotsofalbums(num) {
+		for (var i = 0; i < num; i+=1) {
+                  document.writeln('<h3>Random Album #'+i+'</h3> <ol>');
+                  var num_songs = 5 + Math.floor(Math.random()*5);
+		  for (var j = 0; j < num_songs; j+=1) {
+                     var mins = 2 + Math.floor(Math.random()*6);
+                     var secs = Math.floor(Math.random()*59);
+                     if (secs < 10) secs = '0'+secs;
+                     document.writeln('  <li>Some song... '+mins+':'+secs+'</li>');
+                  }
+                  document.writeln('</ol>');
+		}
+		document.writeln('</ul>');
+	}
+
+</script>
+
+
+<div id="browser" class="browser_focus" onclick="focus_browser();">
+	<h1>Browser</h1>
+	<script>printlotsofsongs(200);</script>
+</div>
+
+<div id="playlist" class="playlist_unfocus"  onclick="focus_playlist();">
+	<h1>Playlist</h1>
+	<script>printlotsofalbums(15);</script>
+</div>
+
