@@ -28,7 +28,7 @@
   * Importer Improved (treat DIRs as albums)
   * Forums (beast integration?) or Comments
   * Covers
-  * Bittorrent (cheap web client... Azureus?)
+  * Bittorrent (Azureus, rTorrent -> http://libtorrent.rakshasa.no/wiki/RTorrentXMLRPCGuide)
 
 === ezElf ============================
 
@@ -163,3 +163,11 @@ Reference: http://www.id3.org/id3v2.4.0-frames
         original_artist (:TOPE)
 
 
+=== Tangential things ==========================
+
+Python Paste is an awesome way of composing applications. Ruby currently
+doesn't have anything like that. How difficult would it be to create
+something like that for Rails?
+
+Issues:
+  * Shared things (authentication) => natively supported by framework?
