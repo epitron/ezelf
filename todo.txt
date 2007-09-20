@@ -20,56 +20,27 @@
     
 * Playlists have blank lines between entries!
 
-=== Design "Inspiration" =========================
+=== Major Features ============================
 
-* filehippo
-    i like the boxes
-        http://filehippo.com/
-
-* bittorrent.am
-    nice curved corners, kinda kidlike feel
-        http://www.bittorrent.am/torrents.php?cat=2
-
-* archeo.graphr.net LastFM Charts
-        http://archeo.graphr.net/themes/lastfm-charts.png
-
-* Vimeo
-    the stats area:
-        http://www.vimeo.com/242618
-    
-* Digg
-    the hierarchical tabs:
-        http://digg.com
-    
-* Facebook
-    intuitive navigation, with the sidebar that's handy!
-        http://facebook.com
-        
-* ourfaves toronto
-    nice clean top part, and nice tabs:
-        http://toronto.ourfaves.com/people/smcleod
-
-* Hong Family Homepage
-    good tabs, really sweet CSS layout
-        http://archeo.graphr.net/web/2003/hong2/
-        
-
-* Reality Prime
-    dark colours rock!
-        http://www.realityprime.com/articles/how-google-earth-really-works
-        
-=== libid3-ruby Extensions ==============
-
-Reference: http://www.id3.org/id3v2.4.0-frames
-           http://id3lib-ruby.rubyforge.org/doc/index.html
-
-* New attributes:
-        album_artist (:TPE2)
-        composer (:TCOM)
-        original_artist (:TOPE)
-
+  * Upload/Mass Import wizard
+  * Listening History
+  * Tag Editor (with Metadata Revisions? eg. dump ID3 blob to a table somewhere)
+  * Importer Improved (treat DIRs as albums)
+  * Forums (beast integration?) or Comments
+  * Covers
+  * Bittorrent (cheap web client... Azureus?)
 
 === ezElf ============================
+
+* UI improvements:
+  - [list view], [cover view]
+  - hovering over CD icons shows album name
+  - icon for "5-disc" chunks
+  - "music" section, with tabs for albums/artists/dirs
+  - re-collapse Artists
+
+* Search improvements:
+  - "party ben" should find "partyben"
 
 * Better tag reader (fast too!): http://ruby-gnome2.sourceforge.jp/hiki.cgi?Gst%3A%3ATag
 
@@ -142,29 +113,53 @@ Reference: http://www.id3.org/id3v2.4.0-frames
     |_ peraps add: "dir", "dirs[]", "root", and "filename", and make "path" == dir+root+filename
 
 
-=== E improvements ============
 
-* Suggest to the "e" guy how he can improve the Undo panel by making it wrap the undos (up to a maximum of 3 lines or something)
+=== Design "Inspiration" =========================
 
-* "Windows Explorer Menu Editor" included or something. god, I hate those menus.
-  |_ has knowledge of all the entries that come stock when windows is installed so that it can
+* filehippo
+    i like the boxes
+        http://filehippo.com/
 
-* hide .svn dirs
+* bittorrent.am
+    nice curved corners, kinda kidlike feel
+        http://www.bittorrent.am/torrents.php?cat=2
 
-* tab bar tweaks
-  |_ mouse wheel should scroll it
-  |_ scroll arrows should indicate where highlighted tab is
-  |_ ctrl-tab should bring up a tab-stack
+* archeo.graphr.net LastFM Charts
+        http://archeo.graphr.net/themes/lastfm-charts.png
 
+* Vimeo
+    the stats area:
+        http://www.vimeo.com/242618
+    
+* Digg
+    the hierarchical tabs:
+        http://digg.com
+    
+* Facebook
+    intuitive navigation, with the sidebar that's handy!
+        http://facebook.com
+        
+* ourfaves toronto
+    nice clean top part, and nice tabs:
+        http://toronto.ourfaves.com/people/smcleod
 
+* Hong Family Homepage
+    good tabs, really sweet CSS layout
+        http://archeo.graphr.net/web/2003/hong2/
+        
+* Reality Prime
+    dark colours rock!
+        http://www.realityprime.com/articles/how-google-earth-really-works
+        
 
-=== Programming Language Improvements ==============
+=== libid3-ruby Extensions ==============
 
-* changes in DB should automatically modify code (and prompt if the change causes conflicting or ambiguous code updates)
-* database and
+Reference: http://www.id3.org/id3v2.4.0-frames
+           http://id3lib-ruby.rubyforge.org/doc/index.html
 
-
-
-
+* New attributes:
+        album_artist (:TPE2)
+        composer (:TCOM)
+        original_artist (:TOPE)
 
 
