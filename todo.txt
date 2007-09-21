@@ -129,7 +129,8 @@ Q) Help! Does vsftpd support different settings for different users?
 A) Yes - in a very powerful way. Look at the setting "user_config_dir" in the
 manual page.
 
-
+  * Setting up PAM:
+      http://lists.centos.org/pipermail/centos/2005-August/050031.html
 
 === Design "Inspiration" =========================
 
