@@ -113,6 +113,23 @@
     |_ peraps add: "dir", "dirs[]", "root", and "filename", and make "path" == dir+root+filename
 
 
+=== vsftpd Config ===========================
+
+Q) Help! Does vsftpd support virtual users?
+A) Yes, via PAM integration. Set "guest_enable=YES" in /etc/vsftpd.conf. This
+has the effect of mapping every non-anonymous successful login to the local
+username specified in "guest_username". Then, use PAM and (e.g.) its pam_userdb
+module to provide authentication against an external (i.e. non-/etc/passwd)
+repository of users.
+Note - currently there is a restriction that with guest_enable enabled, local
+users also get mapped to guest_username.
+There is an example of virtual users setup in the "EXAMPLE" directory.
+
+Q) Help! Does vsftpd support different settings for different users?
+A) Yes - in a very powerful way. Look at the setting "user_config_dir" in the
+manual page.
+
+
 
 === Design "Inspiration" =========================
 
