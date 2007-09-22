@@ -6,11 +6,10 @@ class BrowseController < ApplicationController
         elf = random_elf
         @elf_image = "/elves/#{elf}"
         @elf_title = elf.gsub /\.[^\.]+$/, ''
-        #redirect_to :action=>"artists"
     end
 
     def artists
-        @artists = Artist.find(:all, :include=>:albums, :order=>"artists.name").select{|artist| artist.albums.any?}
+        @artists = Artist.find(:all, :order=>"artists.name").select{|artist| artist.albums.count > 0}
     end
 
     def tracks

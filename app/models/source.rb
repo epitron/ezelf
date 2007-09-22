@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 12
+# Schema version: 14
 #
 # Table name: sources
 #
@@ -32,25 +32,28 @@ class Source < ActiveRecord::Base
     #has_many :artists, :through=>:albums
 
     def properly_encode_path(path)
-    	# http://www.gnu.org/software/libiconv/
-    	# Windows => "ISO-8859-1"
-    	if encoding
-    		Iconv.iconv("UTF-8", encoding, path)[0]
-		else
-			path
-		end
-	end
+        # http://www.gnu.org/software/libiconv/
+        # Windows => "ISO-8859-1"
+        from = encoding
+        to = "UTF-8"
 
-	def parse_uri
-		uri = URI::parse(self.uri)
-		uri.scheme # => "http"
-		uri.host   # => "www.ruby-lang.org"
+        if from and from != to
+            Iconv.iconv(to, from, path)[0]
+        else
+            path
+        end
+    end
 
-		# TODO: extend URI class for elf:// urls.
-		#for URIHandler in HANDLERS
-		#	return URIHandler.new(uri) if URIHandler.accepts(uri)
-		#end
-	end
+    def parse_uri
+        uri = URI::parse(self.uri)
+        uri.scheme # => "http"
+        uri.host   # => "www.ruby-lang.org"
+
+        # TODO: extend URI class for elf:// urls.
+        #for URIHandler in HANDLERS
+        #    return URIHandler.new(uri) if URIHandler.accepts(uri)
+        #end
+    end
 
     def uri?
         if uri =~ URI_RECOGNIZER

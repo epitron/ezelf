@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 12
+# Schema version: 14
 #
 # Table name: tracks
 #
@@ -15,6 +15,9 @@
 #  length        :float         
 #  bitrate       :integer(11)   
 #  vbr           :boolean(1)    
+#  updated_at    :datetime      
+#  created_at    :datetime      
+#  bytes         :integer(11)   
 #
 
 # http://id3lib-ruby.rubyforge.org/doc/index.html
@@ -64,6 +67,15 @@ class Track < ActiveRecord::Base
     root = source.uri
     fullpath = File.join( root, path_and_filename )
     relative_path, filename = File.split(path_and_filename)
+    bytes = File.size fullpath
+
+    if track = Track.find(:first, :conditions => {:source_id=>source.id, :relative_path=>relative_path, :filename=>filename})
+      #puts "- #{track.filename} already in db..."
+      if track.bytes != bytes
+        puts " - sizes different!"
+      end
+      return 
+    end
 
     mp3 = Mp3Info::new(fullpath)
     tag = mp3.tag
@@ -105,6 +117,7 @@ class Track < ActiveRecord::Base
     end
 
     track.title         = tag.title
+    track.bytes         = bytes
     track.number        = format_tracknum(tag.tracknum)
     track.relative_path = source.properly_encode_path(relative_path)
     track.filename      = source.properly_encode_path(filename)

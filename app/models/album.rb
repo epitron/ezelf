@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 12
+# Schema version: 14
 #
 # Table name: albums
 #
@@ -9,10 +9,12 @@
 #  year         :integer(11)   
 #  tracks_count :integer(11)   
 #  compilation  :boolean(1)    
+#  updated_at   :datetime      
+#  created_at   :datetime      
 #
 
 class Album < ActiveRecord::Base
-    has_many :tracks, :order => :number
+    has_many :tracks #, :order => :number
     belongs_to :artist, :counter_cache => true
 
     def cover

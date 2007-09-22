@@ -1,7 +1,10 @@
+!!! XML
+!!!
 %head
 
   %title= "ezELF :: #{request.env["PATH_INFO"]}"
 
+  = %{<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">}
   = javascript_include_tag 'prototype', 'application', 'effects'#, 'controls'
   = stylesheet_link_tag "beast"
   = stylesheet_link_tag "extra"

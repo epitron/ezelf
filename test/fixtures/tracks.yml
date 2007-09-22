@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 12
+# Schema version: 14
 #
 # Table name: tracks
 #
@@ -15,6 +15,9 @@
 #  length        :float         
 #  bitrate       :integer(11)   
 #  vbr           :boolean(1)    
+#  updated_at    :datetime      
+#  created_at    :datetime      
+#  bytes         :integer(11)   
 #
 
 # == Schema Information

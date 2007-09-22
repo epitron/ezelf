@@ -1,11 +1,14 @@
 # == Schema Information
-# Schema version: 12
+# Schema version: 14
 #
 # Table name: artists
 #
 #  id           :integer(11)   not null, primary key
 #  name         :string(255)   
 #  albums_count :integer(11)   
+#  tracks_count :integer(11)   
+#  updated_at   :datetime      
+#  created_at   :datetime      
 #
 
 require 'scrobbler'
@@ -16,12 +19,10 @@ class Artist < ActiveRecord::Base
   
   has_many :album_tracks, 
            :through => :albums, 
-           :source => :tracks, 
-           :order => :number
+           :source => :tracks #, :order => :number
            
   has_many :compilation_tracks, 
-           :class_name => "Track", 
-           :order => :number
+           :class_name => "Track" #, :order => :number
 
   def tracks
     album_tracks + compilation_tracks
