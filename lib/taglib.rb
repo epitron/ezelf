@@ -40,7 +40,7 @@ module TagLib
 extend DL::Importable
 
 begin
-	dlload 'libtag_c.so'
+	dlload '/usr/lib64/libtag_c.so.0'
 rescue
 	begin
 		dlload 'libtag_c.dylib'
@@ -138,6 +138,13 @@ class File
 		@tag = nil
 		@audio = nil
 	end
+
+        def to_h
+            fields = %w(title artist album comment genre year track length bitrate samplerate channels)
+            h = {}
+            fields.map{|f| f=f.to_sym; h[f] = self.send(f) }
+            return h
+        end
 
 	def title
 		return TagLib.taglib_tag_title(tag)

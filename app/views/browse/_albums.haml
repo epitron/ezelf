@@ -7,4 +7,4 @@
       - album.sorted_tracks.each do |track|
         %li
           = "#{track.number}." unless track.number.blank?
-          = link_to_track(track.title, track)
+          = link_to_track(track.title_with_artist_if_needed, track)

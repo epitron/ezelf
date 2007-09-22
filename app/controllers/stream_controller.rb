@@ -126,13 +126,13 @@ class StreamController < ApplicationController
 
     def album
         @album = Album.find(params[:id])
-        @tracks = @album.tracks
+        @tracks = @album.sorted_tracks
         render_playlist
     end
 
     def artist
         @artist = Artist.find(params[:id])
-        @tracks = @artist.albums.map(&:tracks).flatten
+        @tracks = @artist.albums.map(&:sorted_tracks).flatten
         render_playlist
     end
 

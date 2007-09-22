@@ -81,7 +81,7 @@ if $0 == __FILE__
 	    puts
   	    
 	    root = source.uri
-	    for mp3path in Dir["#{root}/**/*.mp3"]
+	    for mp3path in Dir["#{root}/**/*.mp3"].sort
         # remove the root, and the leading slash
         mp3path = mp3path.gsub(root, '').gsub(%r{^/}, '')
         puts " - #{mp3path}"

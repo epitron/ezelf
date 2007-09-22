@@ -33,6 +33,8 @@ class Track < ActiveRecord::Base
   
   belongs_to :folder
 
+  alias_method :track_artist, :artist
+
   def artist
     @attributes[:artist] || (album && album.artist)
   end
@@ -48,6 +50,15 @@ class Track < ActiveRecord::Base
   def title
     attributes['title'] || 'Untitled'
   end
+
+  def title_with_artist_if_needed
+    if track_artist
+      "#{track_artist.name} - #{title}"
+    else
+      title
+    end
+  end
+
 
   def self.all
     Track.find_by_sql("SELECT * FROM artists,albums,tracks WHERE tracks.album_id = albums.id AND albums.artist_id = artists.id ORDER BY artists.name,albums.name,tracks.number")
@@ -82,8 +93,10 @@ class Track < ActiveRecord::Base
       #puts "- #{track.filename} already in db..."
       if track.bytes != bytes
         puts " - sizes different!"
+        track.destroy
+      else
+        return 
       end
-      return 
     end
 
     mp3 = Mp3Info::new(fullpath)
