@@ -57,6 +57,15 @@ class Track < ActiveRecord::Base
     num.to_s.gsub(/\d+/) {|m| "%0.2d" % m }
   end
   
+  def self.my_findorcreate(model, fields)
+    if obj = model.find( :first, :conditions=>fields )
+      obj
+    else
+      model.create fields
+    end
+  end
+  
+  
   def self.add_file( source, path_and_filename )
   
     # BUG: Albums with > 1 artist get associated with the last artist.
@@ -80,13 +89,32 @@ class Track < ActiveRecord::Base
     mp3 = Mp3Info::new(fullpath)
     tag = mp3.tag
     #pp tag
+    
+    pp tag.artist
+    unless Artist.find :first, :conditions=>{:name=>tag.artist}
+      puts "  *** NEW artist ***"
+    end
 
     # find/create track, album, and artist
 
-    track   = Track.find_or_create_by_source_id_and_relative_path_and_filename(source.id, relative_path, filename)
+    track   = Track.find_or_create_by_source_id_and_relative_path_and_filename(
+                source.id, 
+                relative_path, 
+                filename
+              )
     album   = Album.find_or_create_by_name(tag.album)
     artist  = Artist.find_or_create_by_name(tag.artist)
-    
+
+=begin
+    track = my_findorcreate(
+      Track,
+      :source_id=>source.id, 
+      :relative_path=>relative_path, 
+      :filename=>filename
+    )
+    album   = my_findorcreate Album, :name=>tag.album
+    artist  = my_findorcreate Artist, :name=>tag.artist
+=end
 
     # use tag.album_artist to figure out if this is a compilation
     album_has_a_different_artist_already = (album.artist and album.artist != artist)

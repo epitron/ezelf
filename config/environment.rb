@@ -1,6 +1,6 @@
 #############################################################################
 ## Unicode!
-#$KCODE = 'u'
+$KCODE = 'u'
 #require 'jcode'
 require 'iconv'
 require 'sha1'
@@ -87,3 +87,13 @@ require 'mp3info_with_extensions'
 require 'scrobbler'
 require 'rbrainz'
 #############################################################################
+
+
+#############################################################################
+## Memory Profiler
+if $DEBUG
+  require 'memprof'
+  MemoryProfiler.start
+end
+#############################################################################
+
