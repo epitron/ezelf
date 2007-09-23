@@ -9,7 +9,7 @@ class BrowseController < ApplicationController
     end
 
     def artists
-        @artists = Artist.find(:all, :order=>"artists.name", :conditions=>"albums_count > 0")
+        @artists = Artist.find(:all, :order=>"artists.name", :include=>:albums).select{|a| a.albums.size > 0}
     end
 
     def tracks
