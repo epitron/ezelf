@@ -1,3 +1,9 @@
+
+/*
+taken from:
+http://lixlpixel.org/javascript-tooltips/
+*/
+
 // position of the tooltip relative to the mouse in pixel //
 var offsetx = 12;
 var offsety =  8;
