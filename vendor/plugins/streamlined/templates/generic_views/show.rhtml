@@ -1,0 +1,19 @@
+<div id="content">
+  <table class="sl_show_form">
+<% for column in model_ui.show_columns %>
+<tr>
+  <td class="sl_show_label"><span><%= column.human_name %>:</span></td>
+  <td class="sl_show_value"><%= !column.render_td(self, @streamlined_item).blank? ? column.render_td(self, @streamlined_item) : '&nbsp;' %></td>
+</tr>
+<% end %>
+</table>
+<script>
+if (top.Streamlined.PageOptions.form()) {
+  top.Streamlined.PageOptions.poke();
+}
+</script>
+</div>
+<% unless model_ui.read_only %>
+<%= link_to 'Edit', {:action => 'edit', :id => @streamlined_item}, 
+                    {:onclick => "Streamlined.Link.submit(this); return false;"} %> 
+<% end %>
