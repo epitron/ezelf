@@ -17,11 +17,17 @@
     - UTF-8
     - ISO-8859-1 (DOS/NTFS)
 
+* ELO - Greatest Hits & Ventures - Greatest Hits have the same album name, so they get
+  grouped together as Various artists. This is a problem...
+  |_ Pure file-system is looking pretty good right about now!
     
 * Playlists have blank lines between entries!
 
 === Major Features ============================
 
+  * Some kind of "Unique ID" tag in each MP3 to identify it if the DB gets corrupted
+    |_ MBID
+    |_ ELFID
   * Upload/Mass Import wizard
   * Listening History
   * Tag Editor (with Metadata Revisions? eg. dump ID3 blob to a table somewhere)
@@ -53,7 +59,6 @@
 
 * browse/artists => display albums in main list (expand only expands tracks)
   
-
 * RESTify!
         browse/albums/ => albums/
         browse/artists/ => artists/
