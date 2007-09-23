@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 14
+# Schema version: 15
 #
 # Table name: sources
 #
@@ -131,7 +131,7 @@ class Source < ActiveRecord::Base
     
     def extract_compilations
       # separate out directories that contain many random artists -- title it by folder name.
-      albums, compilations
+      return albums, compilations
     end
     
 end

@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 14
+# Schema version: 15
 #
 # Table name: tracks
 #
@@ -18,6 +18,8 @@
 #  updated_at    :datetime      
 #  created_at    :datetime      
 #  bytes         :integer(11)   
+#  ctime         :datetime      
+#  mtime         :datetime      
 #
 
 # http://id3lib-ruby.rubyforge.org/doc/index.html
@@ -32,6 +34,14 @@ class Track < ActiveRecord::Base
   belongs_to :source
   
   belongs_to :folder
+ 
+  before_save :set_defaults
+
+  def set_defaults
+    self.mtime = path.mtime unless mtime
+    self.ctime = path.mtime unless ctime
+    self.bytes = path.size unless bytes
+  end
 
   alias_method :track_artist, :artist
 
@@ -43,22 +53,21 @@ class Track < ActiveRecord::Base
     @cached_dirs ||= relative_path.split '/'
   end
 
+  def path
+    Pathname.new( fullpath )
+  end
+
   def fullpath
     File.join( source.uri, relative_path, filename )
   end
 
   def title
-    attributes['title'] || 'Untitled'
+    attributes['title'] || 'Unknown'
   end
 
-  def title_with_artist_if_needed
-    if track_artist
-      "#{track_artist.name} - #{title}"
-    else
-      title
-    end
+  def modified?
+    (mtime && path.mtime > mtime) || path.size != bytes
   end
-
 
   def self.all
     Track.find_by_sql("SELECT * FROM artists,albums,tracks WHERE tracks.album_id = albums.id AND albums.artist_id = artists.id ORDER BY artists.name,albums.name,tracks.number")
@@ -91,8 +100,8 @@ class Track < ActiveRecord::Base
 
     if track = Track.find(:first, :conditions => {:source_id=>source.id, :relative_path=>relative_path, :filename=>filename})
       #puts "- #{track.filename} already in db..."
-      if track.bytes != bytes
-        puts " - sizes different!"
+      if track.modified?
+        puts " *** track modified! ***"
         track.destroy
       else
         return 
@@ -101,9 +110,7 @@ class Track < ActiveRecord::Base
 
     mp3 = Mp3Info::new(fullpath)
     tag = mp3.tag
-    #pp tag
-    
-    pp tag.artist
+
     unless Artist.find :first, :conditions=>{:name=>tag.artist}
       puts "  *** NEW artist ***"
     end

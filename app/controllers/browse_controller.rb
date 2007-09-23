@@ -9,7 +9,7 @@ class BrowseController < ApplicationController
     end
 
     def artists
-        @artists = Artist.find(:all, :order=>"artists.name").select{|artist| artist.albums.count > 0}
+        @artists = Artist.find(:all, :order=>"artists.name", :conditions=>"albums_count > 0")
     end
 
     def tracks
@@ -51,7 +51,7 @@ class BrowseController < ApplicationController
 
     def expand_artist
       #html_id = params[:id]
-      @artist = Artist.find params[:id], :include=>{:albums=>:tracks}
+      @artist = Artist.find( params[:id], :include=>{:albums=>:tracks} )
       #fetch_from_html_id( :artist, html_id )
       render :update do |page|
         html_id = @artist.html_id

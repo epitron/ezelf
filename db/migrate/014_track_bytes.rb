@@ -6,7 +6,7 @@ class TrackBytes < ActiveRecord::Migration
 
         for track in Track.find(:all)
           begin
-            track.bytes = File.size track.fullpath
+            track.bytes = track.path.size
             track.save
           rescue Exception => e
             puts "Exception: #{e}"
