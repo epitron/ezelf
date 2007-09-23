@@ -19,6 +19,59 @@ ul.randomalbums {
 
 ul.randomalbums li {
   padding-left: 20px;
-  background:url(/images/play16.png) no-repeat 0px 0px;
+  background: url(/images/play16.png) no-repeat 0px 0px;
   padding-bottom: 4px;
+}
+
+span.cd-icon {
+  position: relative;
+  background: url(/images/cd.gif) no-repeat 0px 0px;
+  width: 16px;
+  height: 16px;
+  display: block;
+  float: right;
+}
+
+span.cd-icon:hover {
+  background: url(/images/cd-hover.gif) no-repeat 0px 0px;
+}
+
+
+
+/*
+span.cd-icon span {
+        display: none;
+	position: absolute;
+	top: 20px;
+	left: -10px;
+	width: 125px;
+	padding: 5px;
+	z-index: 100;
+	background: #000;
+	color: #fff;
+	-moz-border-radius: 5px; 
+	-webkit-border-radius: 5px; 
+}
+
+
+span.cd-icon:hover span {
+  display: block;
+}
+*/
+
+#tooltip {
+    padding: 3px;
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    text-align: center;
+    font-size: smaller;
+}
+
+.alternating0 {
+  clear: both;
+  background: #f3f3f3;
+}
+
+.alternating1 {
+  clear: both;
 }
