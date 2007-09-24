@@ -4,6 +4,11 @@ strong.highlight {
   background: #ffff00;
 }
 
+img.playbutton {
+  width: 16px;
+  height: 16px;
+}
+
 /** Home Page **/
 
 ul.randomalbums {
