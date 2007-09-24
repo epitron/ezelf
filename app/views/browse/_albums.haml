@@ -2,7 +2,7 @@
   %ul
     %h3
       = link_to image_tag("play16.png"), :controller=>"stream", :action=>"album", :id=>album.id
-      = album.name
+      = album.nice_name
     %ul.tracks
       - album.sorted_tracks.each do |track|
         %li

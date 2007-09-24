@@ -29,5 +29,12 @@ class Album < ActiveRecord::Base
     def sorted_tracks
       tracks.sort_by{|track| track.number.to_i}
     end
+
+    def nice_name
+      title = name.blank? ? "Unkonwn" : name
+      title += " (#{year})" if year
+      title
+    end
+      
 end
 
