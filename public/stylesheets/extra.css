@@ -1,13 +1,10 @@
-strong.highlight {
-  background: #ffff00; }
+/** General Purpose **/
 
-ul.tracks {
-  margin-left: 20px;
-  padding-left: 0;
-  font-size: 0.75em;
-  list-style-type: none;
-  padding-bottom: 1em; 
+strong.highlight {
+  background: #ffff00;
 }
+
+/** Home Page **/
 
 ul.randomalbums {
   margin-left: 0px;
@@ -23,6 +20,22 @@ ul.randomalbums li {
   padding-bottom: 4px;
 }
 
+
+/** Browse#Artists **/
+
+.expandable {
+  /*border: 1px dashed #000;*/
+}
+
+ul.tracks {
+  margin-left: 20px;
+  margin-top: 1em;
+  padding-left: 0;
+  font-size: 0.75em;
+  list-style-type: none;
+  padding-bottom: 1em; 
+}
+
 span.cd-icon {
   position: relative;
   background: url(/images/cd.gif) no-repeat 0px 0px;
@@ -36,28 +49,11 @@ span.cd-icon:hover {
   background: url(/images/cd-hover.gif) no-repeat 0px 0px;
 }
 
-
-
-/*
-span.cd-icon span {
-        display: none;
-	position: absolute;
-	top: 20px;
-	left: -10px;
-	width: 125px;
-	padding: 5px;
-	z-index: 100;
-	background: #000;
-	color: #fff;
-	-moz-border-radius: 5px; 
-	-webkit-border-radius: 5px; 
+.artist-name {
+  float:left;
+	color:#999;
+	font-size:0.7em;
 }
-
-
-span.cd-icon:hover span {
-  display: block;
-}
-*/
 
 #tooltip {
     padding: 3px;
@@ -74,4 +70,40 @@ span.cd-icon:hover span {
 
 .alternating1 {
   clear: right;
+}
+
+
+/*
+span.cd-icon span {
+  display: none;
+  position: absolute;
+  top: 20px;
+  left: -10px;
+  width: 125px;
+  padding: 5px;
+  z-index: 100;
+  background: #000;
+  color: #fff;
+  -moz-border-radius: 5px; 
+  -webkit-border-radius: 5px; 
+}
+
+
+span.cd-icon:hover span {
+  display: block;
+}
+*/
+
+
+/** Ajax Throbber **/
+
+#ajax_throbber {
+    padding: 20px 20px 20px 20px;
+    background: #fff;
+    border: 3px solid #aaa;
+    position: absolute;
+	  /*margin-left: 286px;*/
+    left: 30%;
+    top: 40%;
+    vertical-align: middle;
 }

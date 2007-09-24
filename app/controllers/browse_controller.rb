@@ -53,11 +53,15 @@ class BrowseController < ApplicationController
       #html_id = params[:id]
       @artist = Artist.find( params[:id], :include=>{:albums=>:tracks} )
       #fetch_from_html_id( :artist, html_id )
+      html_id = @artist.html_id
+      expand_id = "#{html_id}_albums"
       render :update do |page|
-        html_id = @artist.html_id
-        #page.visual_effect :fade, html_id
-        page.replace_html html_id, :partial => 'albums'
-        #page.visual_effect :appear, html_id
+        page.replace_html expand_id, :partial => 'albums'
+        page[expand_id].loaded = 1
+        page.show expand_id
+        #visual_effect :slide_down, expand_id
+        #visual_effect :toggle_slide, expand_id
+        page.visual_effect :highlight, html_id
       end
     end
 

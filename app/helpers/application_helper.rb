@@ -88,5 +88,22 @@ module ApplicationHelper
       tabbar.join ""
     end
       
+    def ajax_throbber
+      %{
+        <script> set_ajax_throbber('ajax_throbber');</script>
+
+        <!-- "Loading..." throbber -->
+        <div id="ajax_throbber" style="display: none;">
+            <center>
+                <img src="/images/throbber-medium.gif" width=45 height=45>
+                <h1>Loading...</h1>
+            </center>
+        </div>
+    
+        
+      }
+    end
+
+
 
 end

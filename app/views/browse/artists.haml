@@ -1,3 +1,7 @@
+- content_for :head do
+  = javascript_include_tag 'lixel-tooltips'
+  
+// = ajax_throbber
 
 #content
   %h1 Browse (grouped by Artist)
@@ -5,17 +9,19 @@
   #browser{ :style => "font-family: Tahoma" }
 
     - @artists.each_with_index do |artist,i|
-      %div{:class=>"alternating#{i%2}"}
-        - for album in artist.albums
-          %span.cd-icon{:onmouseover=>"tooltip('#{album.name && album.name.escape_single_quotes}');", :onmouseout=>"exit();"}
-            //%span= album.name
-              
-        %p.subtitle
+      %div{:class=>"alternating#{i%2}", :id=>"#{artist.html_id}"}
+        .artist-name
+          // subtitle?
           = link_to image_tag("play16.png", :class=>"playbutton"), :controller=>"stream", :action=>"artist", :id=>artist.id
-          %span
-            = link_to_remote artist.name, :url => { :action => 'expand_artist', :id => artist.id }
+          //= link_to_remote artist.name, :url => { :action => 'expand_artist', :id => artist.id }
+          = link_to_function artist.name, "expand_artist(#{artist.id});"
+          
+        - for album in artist.albums
+          %span.cd-icon{:onmouseover=>"tooltip('#{album.name && album.name.escape_single_quotes}');", :onmouseout=>"exit();", :onclick=>"play_album(#{album.id});"}
 
-        %div{ :id=>artist.html_id, :class=>"expandable" }
+          %div{:style=>"clear:both;"}
+                
+          %div{ :id=>"#{artist.html_id}_albums", :class=>"expandable", :style=>"display:none;" }
       
 
 #right
