@@ -1,24 +1,23 @@
-!!! XML
-!!!
-%head
-
-  %title= "ezELF :: #{request.env["PATH_INFO"]}"
-
-  = %{<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">}
-  = javascript_include_tag 'prototype', 'effects', 'application' #, 'controls'
-  = stylesheet_link_tag "beast"
-  = stylesheet_link_tag "extra"
-
-  %link{:rel=>"SHORTCUT ICON", :href=>"/favicon.ico"}
-
-  = @content_for_head
-
-%body
-  #header= render :partial=>"layouts/header"
-
-  #container
-    = @content_for_layout
-    %br{:style=>"clear: both;"}
-
-  #footer= render :partial=>"layouts/footer"
-
+!!! 1.1
+%html
+  
+  %head
+  
+    %title= "ezELF :: #{request.env["PATH_INFO"]}"
+  
+    = %{<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">}
+    = javascript_include_tag 'prototype', 'effects', 'application' #, 'controls'
+    = stylesheet_link_tag "beast"
+    = stylesheet_link_tag "extra"
+  
+    %link{:rel=>"SHORTCUT ICON", :href=>"/favicon.ico"}
+  
+    = @content_for_head
+  
+  %body
+    #header= render :partial=>"layouts/header"
+  
+    #container= @content_for_layout
+  
+    #footer= render :partial=>"layouts/footer"
+  
