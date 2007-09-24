@@ -16,10 +16,12 @@ function do_ajax_request( uri ) {
     uri, 
     {
       asynchronous: true, 
-      evalScripts: true, 
-      //onComplete: function(request){Element.hide('loading');},
-      //onLoading: function(request){Element.show('loading');}
+      evalScripts: true
     }
+    /*
+      onComplete: function(request){Element.hide('loading');},
+      onLoading: function(request){Element.show('loading');}
+      */
   );
   
   return false;

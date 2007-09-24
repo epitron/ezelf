@@ -69,7 +69,15 @@ if $0 == __FILE__
     if ARGV.first == '-n'
       nuke_everything
     end
+    
+    def get_mp3s(path)
+      if PLATFORM =~ /win32$/
+        path = path.gsub("[","\\[")
+      end
       
+      Dir["#{path}/**/*.mp3"].sort
+    end
+    
   	for source in sources
   		puts "checking dir: #{source.uri}"
   		puts File.directory?(source.uri) ? "...exists!" : "...NOT exists?!?!"
@@ -81,7 +89,7 @@ if $0 == __FILE__
 	    puts
   	    
 	    root = source.uri
-	    for mp3path in Dir["#{root}/**/*.mp3"].sort
+	    for mp3path in get_mp3s(root)
         # remove the root, and the leading slash
         mp3path = mp3path.gsub(root, '').gsub(%r{^/}, '')
         puts " - #{mp3path}"

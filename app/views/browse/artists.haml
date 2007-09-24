@@ -19,9 +19,9 @@
         - for album in artist.albums
           %span.cd-icon{:onmouseover=>"tooltip('#{album.name && album.name.escape_single_quotes}');", :onmouseout=>"exit();", :onclick=>"play_album(#{album.id});"}
 
-          %div{:style=>"clear:both;"}
-                
-          %div{ :id=>"#{artist.html_id}_albums", :class=>"expandable", :style=>"display:none;" }
+        %div{:style=>"clear:both;"}
+              
+        %div{ :id=>"#{artist.html_id}_albums", :class=>"expandable", :style=>"display:none;" }
       
 
 #right
