@@ -16,7 +16,9 @@
 %body
   #header= render :partial=>"layouts/header"
 
-  #container= @content_for_layout
+  #container
+    = @content_for_layout
+    %br{:style=>"clear: both;"}
 
   #footer= render :partial=>"layouts/footer"
 

@@ -25,6 +25,7 @@
 
 === Major Features ============================
 
+  * News  
   * Some kind of "Unique ID" tag in each MP3 to identify it if the DB gets corrupted
     |_ MBID
     |_ ELFID
