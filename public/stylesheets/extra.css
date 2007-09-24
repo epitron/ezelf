@@ -56,16 +56,21 @@ span.cd-icon:hover {
 
 .artist-name {
   float:left;
-	color:#999;
-	font-size:0.8em;
+  color:#999;
+  font-size:0.8em;
+  font-weight: bold;
 }
 
 #tooltip {
     padding: 3px;
+/*
     background: #f9f9f9;
     border: 1px solid #eee;
+*/
+    background: #003300;
+    color:#00ff00;
     text-align: center;
-    font-size: smaller;
+    font-size: 1.2em;
 }
 
 .alternating0 {

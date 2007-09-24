@@ -173,7 +173,7 @@ class Track < ActiveRecord::Base
     track.length        = mp3.length
     track.vbr           = mp3.vbr
 
-    album.year		= tag.year if tag.year
+    album.year		= tag.year if tag.year && tag.year.to_i > 0
 
     track.save
     album.save

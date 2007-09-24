@@ -8,21 +8,14 @@
 
 === BUGS ===
 
-* Automatically handle 
- - Se?or Coconut - Fiesta Songs/Senor Coconut - 01 - Smoke on the Water.mp3
-./app/models/source.rb:26:in `iconv': "\361or Coconut - Fi"... (Iconv::IllegalSequence)
-        from ./app/models/source.rb:26:in `properly_encode_path'
-
-* For sources.encoding, give the user a dropdown of common encodings (w/ explanation):
-    - UTF-8
-    - ISO-8859-1 (DOS/NTFS)
-
 * ELO - Greatest Hits & Ventures - Greatest Hits have the same album name, so they get
   grouped together as Various artists. This is a problem...
   |_ Pure file-system is looking pretty good right about now!
-    
-* Playlists have blank lines between entries!
 
+* UTF-8 isn't coming out of the database properly.
+    https://fngtps.com/projects/multibyte_for_rails/wiki/UnicodePrimer
+    http://www.ruby.org.ee/wiki/Unicode_in_Ruby/Rails
+    
 === Major Features ============================
 
   * News  
@@ -32,7 +25,7 @@
   * Upload/Mass Import wizard
   * Listening History
   * Tag Editor (with Metadata Revisions? eg. dump ID3 blob to a table somewhere)
-  * Importer Improved (treat DIRs as albums)
+  * Better Importer (treat DIRs as albums, inconsistent dirs are inserted into the DB, but marked as "dirty")
   * Forums (beast integration?) or Comments
   * Covers
   * Bittorrent (Azureus, rTorrent -> http://libtorrent.rakshasa.no/wiki/RTorrentXMLRPCGuide)

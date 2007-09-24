@@ -13,7 +13,7 @@
           = link_to_function artist.name, "expand_artist(#{artist.id});"
           
         - for album in artist.albums
-          %span.cd-icon{:onmouseover=>"tooltip('#{album.nice_name}');", :onmouseout=>"exit();", :onclick=>"play_album(#{album.id});"}
+          %span.cd-icon{:onmouseover=>"tooltip('#{album.nice_name.escape_single_quotes}');", :onmouseout=>"exit();", :onclick=>"play_album(#{album.id});"}
 
         %div{:style=>"clear:both;"}
               
@@ -25,9 +25,9 @@
   %p.help
     %p All the artists! Sweet!
 
-    %p Click the titles to expand the artist and show their albums.
+    %p Click artist names to show/hide their albums.
   
-    %p The <img src="/images/cd.gif">'s are a quick way to play albums. Click them to play!
+    %p Click the <img src="/images/cd.gif">'s to Quick-Play(tm) albums.
 
-    %p <img src="/images/play16.png"> will play everything from that artist or album.
+    %p Click <img src="/images/play16.png"> to play whatever is to the right of it.
 
