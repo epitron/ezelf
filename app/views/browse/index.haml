@@ -60,8 +60,10 @@
 
 
 #right
-  %h3 Random albums:
-  %ul.randomalbums
-    - for album in @random_albums
-      %li
-        = link_to_album "<b>#{album.artist.name}</b> - #{album.name}", album
+  %h3
+    Random albums:
+    %br
+    = link_to_remote "(get more)", :url => { :action => 'more_random_albums' }
+  #randomalbums
+    = render :partial=>"random_albums"
+

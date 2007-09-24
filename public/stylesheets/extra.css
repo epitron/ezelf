@@ -68,10 +68,10 @@ span.cd-icon:hover span {
 }
 
 .alternating0 {
-  clear: both;
+  clear: right;
   background: #f3f3f3;
 }
 
 .alternating1 {
-  clear: both;
+  clear: right;
 }

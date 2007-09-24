@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 14
+# Schema version: 15
 #
 # Table name: tracks
 #
@@ -18,6 +18,8 @@
 #  updated_at    :datetime      
 #  created_at    :datetime      
 #  bytes         :integer(11)   
+#  ctime         :datetime      
+#  mtime         :datetime      
 #
 
 # == Schema Information

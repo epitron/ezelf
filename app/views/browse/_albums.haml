@@ -1,12 +1,10 @@
 - @artist.albums.each do |album|
-  - @logger.debug "displaying album: #{album.id}"
   %ul
     %h3
       = link_to image_tag("play16.png"), :controller=>"stream", :action=>"album", :id=>album.id
       = album.name
     %ul.tracks
       - album.sorted_tracks.each do |track|
-        - @logger.debug "displaying sorted_tracks track: #{track.id}"
         %li
           = "#{track.number}." unless track.number.blank?
           = link_to_track(track.title, track)

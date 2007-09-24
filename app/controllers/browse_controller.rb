@@ -2,7 +2,7 @@ class BrowseController < ApplicationController
     layout "default"
 
     def index
-        @random_albums = Album.find :all, :limit=>10, :order=>"RAND()"
+        @random_albums = Album.random(10)
         elf = random_elf
         @elf_image = "/elves/#{elf}"
         @elf_title = elf.gsub /\.[^\.]+$/, ''
@@ -58,6 +58,13 @@ class BrowseController < ApplicationController
         #page.visual_effect :fade, html_id
         page.replace_html html_id, :partial => 'albums'
         #page.visual_effect :appear, html_id
+      end
+    end
+
+    def more_random_albums
+      @random_albums = Album.random(10)
+      render :update do |page|
+        page.replace_html "randomalbums", :partial => 'random_albums'
       end
     end
 

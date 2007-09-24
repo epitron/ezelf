@@ -17,6 +17,10 @@ class Album < ActiveRecord::Base
     has_many :tracks #, :order => :number
     belongs_to :artist, :counter_cache => true
 
+    def self.random(n)
+      self.find :all, :limit=>n, :order=>"RAND()"
+    end
+
     def cover
       a = Scrobbler::Album.new(artist.name, name, :include_info => true)
       pp a      

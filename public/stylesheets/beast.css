@@ -193,6 +193,10 @@ h3
   font-family: 'Lucida Grande', Tahoma, Arial, Helvetica, sans-serif;
 }
 
+h3 a {
+  color: yellow;
+}
+
 h6 { margin-bottom:0; }
 
 pre.explain

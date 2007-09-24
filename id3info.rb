@@ -1,4 +1,7 @@
-$: << File.join( File.dirname(__FILE__), "lib" )
+#!/usr/bin/ruby
+require 'pathname'
+
+$: << File.join( Pathname.new(__FILE__).realpath.dirname, "lib" )
 
 require 'pp'
 require 'mp3info_with_extensions'
