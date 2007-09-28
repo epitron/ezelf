@@ -21,6 +21,13 @@ How to Install:
   3) run "script/server"
   4) go to "http://localhost:3000/sources"
   5) add a source that points to your mp3 collection
-  6) run "ruby import.rb"
+  6) run "ruby update" to import all your songs (or check for
+     modified or newly updated songs)
   7) go nuts!
+
+
+Extra stuff:
+
+  To nuke your database and re-import all the mp3's, run "ruby update -n".
+
 
