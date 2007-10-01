@@ -28,7 +28,7 @@ function do_ajax_request( uri ) {
 }
 
 function play_album(album_id) {
-  location = "/stream/album/" + album_id;
+  location = "/stream/album/" + album_id + ".m3u";
 }
 
 function loading(div_id) {

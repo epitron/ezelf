@@ -17,7 +17,6 @@
 
   #browser{ :style => "font-family: Tahoma;" }
     - @tree.each do |relative_path,tracks|
-      - the_id = SHA1::new(relative_path).to_s
       %p.subtitle
         = link_to "<img src='/images/play16.png' width=16 height=16>", :controller=>"stream", :action=>"folder", :relative_path=>relative_path
         = link_to_function highlight(relative_path,@query) + "/", "Element.toggle('#{the_id}')"
