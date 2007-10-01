@@ -8,6 +8,9 @@
 
 === BUGS ===
 
+* Make sure all playlists have .m3u after them, for stupid browsers.
+  |_ using redirects? the content-type filename header?
+
 * ELO - Greatest Hits & Ventures - Greatest Hits have the same album name, so they get
   grouped together as Various artists. This is a problem...
   |_ Pure file-system is looking pretty good right about now!
