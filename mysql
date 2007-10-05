@@ -1,0 +1,4 @@
+cd config
+rm database.yml
+ln -s database.yml-mysql database.yml
+cd ..
