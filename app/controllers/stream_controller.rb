@@ -167,7 +167,8 @@ class StreamController < ApplicationController
       #for path in Dir["#{base}/#{relative_path}/**/*.mp3"].sort
       for filename in tree[relative_path].sort
         output << "#EXTINF:-1,#{relative_path}/#{filename}"
-        output << url_for(:action=>"uploaded_file", :user=>user.id, :relative_path=>relative_path, :filename=>filename)
+        #output << url_for(:action=>"uploaded_file", :user=>user.id, :relative_path=>relative_path, :filename=>filename)
+        output << url_for(:action=>"uploaded_file", :username=>user.name, :relative_filepath=>File.join(relative_path, filename))
       end
       
       headers["Content-Type"] = "audio/x-mpegurl; charset=utf-8"
@@ -175,10 +176,8 @@ class StreamController < ApplicationController
     end
     
     def uploaded_file
-      user              = User.find params[:user]
-      relative_path     = params[:relative_path]
-      filename          = params[:filename]
-      relative_filepath = File.join(relative_path, filename)
+      user              = User.find_by_name params[:username]
+      relative_filepath = params[:relative_filepath] #File.join(relative_path, filename)
       base              = user.upload_dir
       raise "Bad mojo!" unless safe_subdir?(base, relative_filepath)
       

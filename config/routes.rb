@@ -18,6 +18,10 @@ ActionController::Routing::Routes.draw do |map|
   # instead of a file named 'wsdl'
   map.connect ':controller/service.wsdl', :action => 'wsdl'
 
+  map.connect 'stream/uploaded_file/:username', #/:relative_filepath',
+              :controller=>"stream",
+              :action=>"uploaded_file"
+
   # Install the default route as the lowest priority.
   map.connect ':controller/:action/:id.:format'
   map.connect ':controller/:action/:id'
