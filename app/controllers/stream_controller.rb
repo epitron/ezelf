@@ -159,15 +159,15 @@ class StreamController < ApplicationController
       user = User.find params[:user]
       relative_path = params[:relative_path]
       base = user.upload_dir
-      raise "Bad mojo!" unless safe_subdir?(base, path)
+      raise "Bad mojo!" unless safe_subdir?(base, relative_path)
       
       headers["Content-Type"] = "audio/x-mpegurl; charset=utf-8"
       output = []
       output << "#EXTM3U"
-      for path in Dir["#{base}/#{relative_path}/**/*.mp3"]
-        relative_filepath = path.gsub("base", '')
+      for path in Dir["#{base}/#{relative_path}/**/*.mp3"].sort
+        relative_filepath = path.gsub("#{base}/", '')
         output << "#EXTINF:-1,#{relative_filepath}"
-        output << "#{url_for :action=>"uploaded_file", :user=>user.id, :relative_filepath=>relative_filepath}.mp3"
+        output << "#{url_for :action=>"uploaded_file", :user=>user.id, :relative_filepath=>relative_filepath}"
       end
       
       render :text => output.join("\n")

@@ -8,7 +8,7 @@
       - tree.each do |relative_path, filenames|
         - the_id = SHA1::new("#{user.name}/#{relative_path}").to_s
         %p.subtitle
-          = link_to "<img src='/images/play16.png' width=16 height=16>", :controller=>"stream", :action=>"upload", :relative_path=>relative_path, :user=>user.id
+          = link_to "<img src='/images/play16.png' width=16 height=16>", :controller=>"stream", :action=>"uploaded_dir", :relative_path=>relative_path, :user=>user.id
           = link_to_function "#{relative_path}/", "Element.toggle('#{the_id}')"
         %div{:id=>the_id, :class=>"foldable", :style=>"display:none;"}
           %ul.tracks
