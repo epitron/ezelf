@@ -158,28 +158,34 @@ class StreamController < ApplicationController
     def uploaded_dir
       user = User.find params[:user]
       relative_path = params[:relative_path]
-      base = user.upload_dir
-      raise "Bad mojo!" unless safe_subdir?(base, relative_path)
-      
-      headers["Content-Type"] = "audio/x-mpegurl; charset=utf-8"
+      #base = user.upload_dir
+      #raise "Bad mojo!" unless safe_subdir?(base, relative_path)
+      tree = user.tree_of_uploaded_files
+      raise "Bad mojo!" unless tree[relative_path]
+
       output = []
       output << "#EXTM3U"
-      for path in Dir["#{base}/#{relative_path}/**/*.mp3"].sort
-        relative_filepath = path.gsub("#{base}/", '')
-        output << "#EXTINF:-1,#{relative_filepath}"
-        output << "#{url_for :action=>"uploaded_file", :user=>user.id, :relative_filepath=>relative_filepath}"
+      #for path in Dir["#{base}/#{relative_path}/**/*.mp3"].sort
+      for filename in tree[relative_path]
+        output << "#EXTINF:-1,#{relative_path}/#{filename}"
+        output << url_for :action=>"uploaded_file", :user=>user.id, :relative_path=>relative_path, :filename=>filename
       end
       
+      headers["Content-Type"] = "audio/x-mpegurl; charset=utf-8"
       render :text => output.join("\n")
     end
     
     def uploaded_file
-      user = User.find params[:user]
-      relative_filepath = params[:relative_filepath]
-      base = user.upload_dir
+      user              = User.find params[:user]
+      relative_path     = params[:relative_path]
+      filename          = params[:filename]
+      relative_filepath = File.join(relative_path, filename)
+      base              = user.upload_dir
       raise "Bad mojo!" unless safe_subdir?(base, relative_filepath)
       
-      xsendfile File.join(base, relative_filepath), :type => 'audio/mpeg'
+      fullpath = File.join(base, relative_filepath)
+      puts "sending uploaded_file: #{fullpath.inspect}"
+      xsendfile fullpath, :type => 'audio/mpeg'
     end
 
 end
