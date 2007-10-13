@@ -1,17 +1,15 @@
 #content
 
   - if @query
-    %h1 Search Collection
-    %h3
-      Query:
-      %span{:style=>"background:#005500; color: #00ff00;"}= @query
-      %span{:style=>"color: #999;"}
-        = " (#{@alltracks.size} results)"
-
+    %h1 Search Results
+    %p.subtitle
+      query:
+      %span{:style=>"color: red"}= @query
+      = " (#{@alltracks.size} results)"
     %br
+    
   - else
     %h1 Browse (grouped by Directories)
-
 
 
 

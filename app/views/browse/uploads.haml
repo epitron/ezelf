@@ -5,7 +5,7 @@
   #browser{ :style => "font-family: Tahoma;" }
     - @tree.each do |user,tree|
       - # %h3= "#{link_to user.name, :action=>"show", :controller=>"users", :id=>user.id}'s uploads"
-      %h3= "#{user.name}'s uploads"
+      %p.topic= "#{user.name}'s uploads"
       - tree.each do |relative_path, filenames|
         - the_id = SHA1::new("#{user.name}/#{relative_path}").to_s
         %p.subtitle

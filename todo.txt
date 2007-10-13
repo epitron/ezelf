@@ -21,14 +21,17 @@
     
 === Major Features ============================
 
+  ./ Uploads Section
+  * User Accounts
+  * Listening History
+  * Tag Editor (with Metadata Revisions? eg. dump ID3 blob to a table somewhere)
+  * Upload Importer
   * News  
   * Some kind of "Unique ID" tag in each MP3 to identify it if the DB gets corrupted
     |_ MBID
     |_ ELFID
-  * Upload/Mass Import wizard
-  * Listening History
-  * Tag Editor (with Metadata Revisions? eg. dump ID3 blob to a table somewhere)
   * Better Importer (treat DIRs as albums, inconsistent dirs are inserted into the DB, but marked as "dirty")
+  * Snarfed Shoutcast Stations
   * Forums (beast integration?) or Comments
   * Covers
   * Bittorrent (Azureus, rTorrent -> http://libtorrent.rakshasa.no/wiki/RTorrentXMLRPCGuide)
