@@ -15,5 +15,5 @@ def dir_tree(base)
     tree[reldir] << fn
   end
 
-  tree.to_a.sort
+  tree #.to_a.sort
 end

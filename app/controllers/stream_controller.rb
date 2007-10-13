@@ -166,9 +166,9 @@ class StreamController < ApplicationController
       output = []
       output << "#EXTM3U"
       #for path in Dir["#{base}/#{relative_path}/**/*.mp3"].sort
-      for filename in tree[relative_path]
+      for filename in tree[relative_path].sort
         output << "#EXTINF:-1,#{relative_path}/#{filename}"
-        output << url_for :action=>"uploaded_file", :user=>user.id, :relative_path=>relative_path, :filename=>filename
+        output << url_for(:action=>"uploaded_file", :user=>user.id, :relative_path=>relative_path, :filename=>filename)
       end
       
       headers["Content-Type"] = "audio/x-mpegurl; charset=utf-8"

@@ -22,7 +22,7 @@ class BrowseController < ApplicationController
 
       @tree = {}
       for user in User.find :all
-        @tree[user] = user.tree_of_uploaded_files
+        @tree[user] = user.tree_of_uploaded_files.to_a.sort
       end
     end
 
