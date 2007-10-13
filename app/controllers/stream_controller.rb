@@ -87,8 +87,7 @@ class StreamController < ApplicationController
 
     def xsendfile(path, options)
       headers["Content-Transfer-Encoding"] = "binary"
-      headers["Content-Type"] = "application/force-download"
-      headers["Content-Type"] = options[:type] if options[:type]
+      headers["Content-Type"] = options[:type] || "application/force-download"
 
       headers["X-Sendfile"] = path
       headers["Content-Disposition"] = "attachment; file=\"#{File.basename path}\""
