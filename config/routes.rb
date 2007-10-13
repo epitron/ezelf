@@ -22,6 +22,10 @@ ActionController::Routing::Routes.draw do |map|
               :controller=>"stream",
               :action=>"uploaded_file"
 
+  #map.connect 'date/:year/:month/:day', :controller => 'blog', :action => 'by_date',
+  #            :month => nil, :day => nil,
+  #            :requirements => {:year => /\d{4}/, :day => /\d{1,2}/, :month => /\d{1,2}/}
+
   # Install the default route as the lowest priority.
   map.connect ':controller/:action/:id.:format'
   map.connect ':controller/:action/:id'
