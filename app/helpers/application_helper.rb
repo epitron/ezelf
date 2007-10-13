@@ -21,10 +21,10 @@ module ApplicationHelper
     
     def main_tabs
       [
-        Tab.new( "home",     { :controller => "browse", :action => "index"  }  ),
+        Tab.new( "home",     { :controller => "browse", :action => "index"    }  ),
         Tab.new( "artists",  { :controller => "browse", :action => "artists"  }  ),
         Tab.new( "files",    { :controller => "browse", :action => "files"    }  ),
-        #Tab.new( "users",    { :controller => "users",  :action => "list"     }  ),
+        Tab.new( "uploads",  { :controller => "browse",  :action => "uploads" }  ),
         Tab.new( "shuffle",  { :controller => "stream", :action => "shuffle"  }  ),
         #Tab.new( "stations", { :controller => "browse", :action => "stations" }  ),
       ]
