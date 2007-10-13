@@ -16,6 +16,16 @@ class BrowseController < ApplicationController
         @tracks = Track.all
     end
 
+    def uploads
+      # Collect all uploads by user. Results in:
+      #   @alluploads[user] = { 'Album Name'=>['1.mp3', '2.mp3', ...], ... }
+
+      @tree = {}
+      for user in User.find :all
+        @tree[user] = user.tree_of_uploaded_files
+      end
+    end
+
     def files
         @alltracks = Track.find :all, :order=>"relative_path, filename"
         @tree = @alltracks.group_by{|o| o.relative_path}.to_a.sort_by{|k,v| k}

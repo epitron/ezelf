@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 15
+# Schema version: 18
 #
 # Table name: users
 #
@@ -10,6 +10,7 @@
 #  email      :string(255)   
 #  created_at :string(255)   
 #  validated  :boolean(1)    
+#  upload_dir :string(255)   
 #
 
 # == Schema Information

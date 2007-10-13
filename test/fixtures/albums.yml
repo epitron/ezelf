@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 15
+# Schema version: 18
 #
 # Table name: albums
 #
@@ -7,7 +7,7 @@
 #  name         :string(255)   
 #  artist_id    :integer(11)   
 #  year         :integer(11)   
-#  tracks_count :integer(11)   
+#  tracks_count :integer(11)   default(0)
 #  compilation  :boolean(1)    
 #  updated_at   :datetime      
 #  created_at   :datetime      

@@ -1,11 +1,11 @@
 # == Schema Information
-# Schema version: 15
+# Schema version: 18
 #
 # Table name: artists
 #
 #  id           :integer(11)   not null, primary key
 #  name         :string(255)   
-#  albums_count :integer(11)   
+#  albums_count :integer(11)   default(0)
 #  tracks_count :integer(11)   
 #  updated_at   :datetime      
 #  created_at   :datetime      
