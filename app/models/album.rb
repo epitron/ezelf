@@ -18,7 +18,7 @@ class Album < ActiveRecord::Base
     belongs_to :artist, :counter_cache => true
 
     def self.random(n)
-      self.find :all, :limit=>n, :order=>"RAND()"
+      self.find :all, :limit=>n, :order=>"RAND()", :include=>:artist
     end
 
     def cover

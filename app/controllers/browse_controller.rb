@@ -22,8 +22,10 @@ class BrowseController < ApplicationController
 
       @tree = {}
       for user in User.find :all
-        files = user.tree_of_uploaded_files.to_a.sort
-        @tree[user] = files if files.any?
+        if user.upload_dir
+          files = user.tree_of_uploaded_files.to_a.sort
+          @tree[user] = files if files.any?
+        end
       end
     end
 

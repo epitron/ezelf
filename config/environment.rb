@@ -18,7 +18,7 @@ require File.join(File.dirname(__FILE__), 'boot')
 
 #############################################################################
 ## ELF Settings
-#require File.join(File.dirname(__FILE__), 'settings')
+require File.join(File.dirname(__FILE__), 'settings')
 #############################################################################
 
 
@@ -32,7 +32,7 @@ require File.join(File.dirname(__FILE__), 'exceptions')
 ## Rails Config Crap
 Rails::Initializer.run do |config|
 
-  config.frameworks -= [ :action_web_service, :action_mailer ]
+  config.frameworks -= [ :action_web_service ] #, :action_mailer ]
   # config.plugins = %W( exception_notification ssl_requirement )
   # config.load_paths += %W( #{RAILS_ROOT}/extras )
   # config.log_level = :debug
@@ -54,6 +54,18 @@ end
 # Mime::Type.register "text/richtext", :rtf
 # Mime::Type.register "application/x-mobile", :mobile
 
+#############################################################################
+
+
+#############################################################################
+## ActionMailer
+ActionMailer::Base.server_settings = { 
+  :address=>SETTINGS.smtp_server,    # default: localhost
+  :port=>'25',                        # default: 25
+#  :user_name=>'user',
+#  :password=>'pass',
+#  :authentication=>:plain             # :plain, :login or :cram_md5
+}
 #############################################################################
 
 

@@ -25,13 +25,14 @@ Content-Type: audio/mpeg
 class StreamController < ApplicationController
 
     session :off, :only => %w[track]
-
+    skip_before_filter :login_required
+    
     layout false
 
     def session_from_params
-        if key = params[:key]
-            key
-        end
+      if key = params[:key]
+        key
+      end
     end
 
 =begin
@@ -85,6 +86,10 @@ class StreamController < ApplicationController
     end
 =end
 
+    ####################################################################
+    ## Utility Stuff
+    ####################################################################
+
     def xsendfile(path, options)
       headers["Content-Transfer-Encoding"] = "binary"
       headers["Content-Type"] = options[:type] || "application/force-download"
@@ -98,17 +103,6 @@ class StreamController < ApplicationController
       render :nothing => true
     end
 
-    def track
-      track = Track.find(params[:id])
-      #pp request.env
-      #"HTTP_RANGE"=>"bytes=878672-",
-      #send_file track.fullpath, :type => 'audio/mpeg', :stream => true, :buffer_size => 4096, :disposition => 'inline'
-      #stream_file track.fullpath, :type => 'audio/mpeg', :stream => true, :buffer_size => 4096, :disposition => 'inline'
-      xsendfile track.fullpath, :type => 'audio/mpeg'
-    end
-
-    ### Playlists
-
     def render_playlist
       headers["Content-Type"] = "audio/x-mpegurl; charset=utf-8"
       output = []
@@ -121,7 +115,9 @@ class StreamController < ApplicationController
       render :text => output.join("\n")
     end
 
-    #after_filter :playlist_filter, :only=>[:album, :artist, :shuffle, :folder]
+    ####################################################################
+    ## Things to Stream
+    ####################################################################
 
     def album
       @album = Album.find(params[:id])
@@ -146,6 +142,20 @@ class StreamController < ApplicationController
       @tracks = Track.find :all, :conditions=>{:relative_path => params[:relative_path]}, :order=>"relative_path, filename"
       render_playlist
     end
+
+    def track
+      track = Track.find(params[:id])
+      #pp request.env
+      #"HTTP_RANGE"=>"bytes=878672-",
+      #send_file track.fullpath, :type => 'audio/mpeg', :stream => true, :buffer_size => 4096, :disposition => 'inline'
+      #stream_file track.fullpath, :type => 'audio/mpeg', :stream => true, :buffer_size => 4096, :disposition => 'inline'
+      xsendfile track.fullpath, :type => 'audio/mpeg'
+    end
+
+
+    ####################################################################
+    ## Uploads
+    ####################################################################
     
     def safe_subdir?(base, sub)
       path = File.join(base, sub)
