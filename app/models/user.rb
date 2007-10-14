@@ -51,6 +51,7 @@ class User < ActiveRecord::Base
   ########################################################################
 
   attr_protected :activated_at
+  before_create :make_activation_code
 
   validates_presence_of     :login, :email
   validates_presence_of     :password,                   :if => :password_required?
@@ -66,7 +67,7 @@ class User < ActiveRecord::Base
   def self.authenticate(login, password)
     user = find_by_login(login) # need to get the salt
     
-    if user and user.password == password and user.activated_at
+    if user and user.password == password and user.activated?
       user 
     else
       nil
@@ -76,6 +77,10 @@ class User < ActiveRecord::Base
   def activate
     @activated = true
     update_attributes(:activated_at => Time.now.utc, :activation_code => nil)
+  end
+  
+  def activated?
+    !activated_at.nil?
   end
 
   def recently_activated?
