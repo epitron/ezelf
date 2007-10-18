@@ -8,8 +8,14 @@
 
 === BUGS ===
 
+* ID3 tag not read properly (short TAGNs):
+    http://elf.kicks-ass.net/stream/track/57215.mp3
+
+* Uploads: show new directories first (by mtime?)
+
 * Make sure all playlists have .m3u after them, for stupid browsers.
   |_ using redirects? the content-type filename header?
+  |_ restify!
 
 * ELO - Greatest Hits & Ventures - Greatest Hits have the same album name, so they get
   grouped together as Various artists. This is a problem...
@@ -38,12 +44,16 @@
 
 === ezElf ============================
 
+* Lighthouse boxes are pretty.. I WANT THEM:
+    http://rubinius.lighthouseapp.com/projects/5089-rubinius/overview
+
 * UI improvements:
   - [list view], [cover view]
   - hovering over CD icons shows album name
   - icon for "5-disc" chunks
   - "music" section, with tabs for albums/artists/dirs
   - re-collapse Artists
+  - album/track details displays "recently listened to by..." on right
 
 * Search improvements:
   - "party ben" should find "partyben"
