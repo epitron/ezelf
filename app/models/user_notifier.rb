@@ -2,13 +2,13 @@ class UserNotifier < ActionMailer::Base
   
   def signup_notification(user)
     setup_email(user)
-    @subject    += 'ELFTIVATION PROTOCOL: Phase 1'
+    @subject    += 'ELFTIVATION SEQUENCE INITIATED: Phase 1'
     @body[:url]  = "http://elf.kicks-ass.net/account/activate/#{user.activation_code}"
   end
   
   def activation(user)
     setup_email(user)
-    @subject    += 'ELFTIVATION SUCCESSFUL.'
+    @subject    += 'ELFTIVATION SEQUENCE COMPLETE.'
     @body[:url]  = "http://elf.kicks-ass.net/"
   end
   
