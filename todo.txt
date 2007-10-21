@@ -30,6 +30,13 @@
   ./ Uploads Section
   * User Accounts
   * Listening History
+    |_ recent listens for every object
+    |_ cached counts for album/artist/track listens
+  * Activity Log
+    |_ recent uploads
+    |_ new users
+    |_ listens
+    |_ messages
   * Tag Editor (with Metadata Revisions? eg. dump ID3 blob to a table somewhere)
   * Upload Importer
   * News  
@@ -54,6 +61,7 @@
   - "music" section, with tabs for albums/artists/dirs
   - re-collapse Artists
   - album/track details displays "recently listened to by..." on right
+    |_ http://www.emusic.com/album/10875/10875840.html?fref=150051
 
 * Search improvements:
   - "party ben" should find "partyben"
