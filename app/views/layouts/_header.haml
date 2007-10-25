@@ -1,11 +1,22 @@
 %ul#nav
-  %li#search
-    %form{:action=>"/browse/search", :method => "get"}
-      Find:
-      %input#search_box{:type=>"text", :name=>"query", :value=>@query}
 
-  - for tab in main_tabs
-    %li{:class=>tab_selected?(tab) ? "selected" : "unselected"}= link_to tab.name, tab.parameters
+  - if logged_in?
+  
+    - if current_user.validated?
+
+      %li#search
+        %form{:action=>"/browse/search", :method => "get"}
+          Find:
+          %input#search_box{:type=>"text", :name=>"query", :value=>@query}
+
+      - for tab in main_tabs
+        %li{:class=>tab_selected?(tab) ? "selected" : "unselected"}= link_to tab.name, tab.parameters
+        
+  - else
+    %li
+      not logged in!
+    %li
+      = link_to "sign up now?", :controller=>"account", :action=>"signup"
 
 
 %h1

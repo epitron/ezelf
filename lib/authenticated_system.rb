@@ -1,5 +1,11 @@
 module AuthenticatedSystem
   protected
+    # Inclusion hook to make #current_user and #logged_in?
+    # available as ActionView helper methods.
+    def self.included(base)
+      base.send :helper_method, :current_user, :logged_in?
+    end
+
     # Returns true or false if the user is logged in.
     # Preloads @current_user with the user model if they're logged in.
     def logged_in?
@@ -8,7 +14,13 @@ module AuthenticatedSystem
     
     # Accesses the current user from the session.
     def current_user
-      @current_user ||= (session[:user_id] and User.find(session[:user_id])) || :false
+      begin
+        @current_user ||= (session[:user_id] and User.find(session[:user_id])) || :false
+      rescue ActiveRecord::RecordNotFound
+        puts "User no longer exists."
+        session[:user_id] = nil
+        redirect_to "/"
+      end
     end
     
     # Store the given user in the session.
@@ -50,7 +62,7 @@ module AuthenticatedSystem
     def login_required
       username, passwd = get_auth_data
       self.current_user ||= User.authenticate(username, passwd) || :false if username && passwd
-      logged_in? && authorized? ? true : access_denied
+      logged_in? && authorized? && current_user.enabled? ? true : access_denied
     end
     
     # Redirect as appropriate when an access request fails.
@@ -65,7 +77,11 @@ module AuthenticatedSystem
       respond_to do |accepts|
         accepts.html do
           store_location
-          redirect_to :controller => '/account', :action => 'login'
+          if logged_in?
+            redirect_to :controller => 'account', :action => 'index'
+          else
+            redirect_to :controller => 'account', :action => 'login'
+          end
         end
         accepts.xml do
           headers["Status"]           = "Unauthorized"
@@ -95,12 +111,6 @@ module AuthenticatedSystem
       session[:return_to] = nil
     end
     
-    # Inclusion hook to make #current_user and #logged_in?
-    # available as ActionView helper methods.
-    def self.included(base)
-      base.send :helper_method, :current_user, :logged_in?
-    end
-
     # When called with before_filter :login_from_cookie will check for an :auth_token
     # cookie and log the user back in if apropriate
     def login_from_cookie

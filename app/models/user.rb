@@ -27,7 +27,7 @@ class User < ActiveRecord::Base
 
   def default_upload_dir
     root = SETTINGS.root_of_upload_dirs || '/dump/ftp'
-    dir = "#{root}/#{self.login}"
+    dir = "#{root}/#{self.name}"
 
     if File.exists? dir
       dir
@@ -44,6 +44,10 @@ class User < ActiveRecord::Base
   def tree_of_uploaded_files
     dir_tree(self.upload_dir)
   end
+  
+  def validated?
+    activated? and enabled?
+  end
 
 
   ########################################################################
@@ -53,19 +57,28 @@ class User < ActiveRecord::Base
   attr_protected :activated_at
   before_create :make_activation_code
 
-  validates_presence_of     :login, :email
-  validates_presence_of     :password,                   :if => :password_required?
-  validates_presence_of     :password_confirmation,      :if => :password_required?
-  validates_length_of       :password, :within => 4..40, :if => :password_required?
-  validates_confirmation_of :password,                   :if => :password_required?
-  validates_length_of       :login,    :within => 3..40
+  validates_presence_of     :name, :email
+  validates_presence_of     :new_password                   #:if => :password_required?
+  validates_presence_of     :new_password_confirmation,      :if => :confirmation_required?
+  validates_length_of       :password, :within => 4..40 #:if => :password_required?
+  validates_confirmation_of :new_password,                   :if => :confirmation_required?
+  validates_length_of       :name,    :within => 3..40
   validates_length_of       :email,    :within => 3..100
-  validates_uniqueness_of   :login, :email, :case_sensitive => false
+  validates_uniqueness_of   :name, :email, :case_sensitive => false
+
+  def confirmation_required?
+    #new_record?
+    not new_password.blank?
+  end
+  def password_required?
+    #crypted_password.blank? || !password.blank?
+    !password.blank?
+  end
 
   
   # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
   def self.authenticate(login, password)
-    user = find_by_login(login) # need to get the salt
+    user = find_by_name(login) # need to get the salt
     
     if user and user.password == password and user.activated?
       user 
@@ -81,6 +94,10 @@ class User < ActiveRecord::Base
   
   def activated?
     !activated_at.nil?
+  end
+  
+  def disabled?
+    not enabled?
   end
 
   def recently_activated?
@@ -130,11 +147,6 @@ protected
     end
 =end
     
-  def password_required?
-    #crypted_password.blank? || !password.blank?
-    !password.blank?
-  end
-
   def make_activation_code
     self.activation_code = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )
   end

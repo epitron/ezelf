@@ -54,7 +54,9 @@ class Track < ActiveRecord::Base
   end
 
   def path
-    Pathname.new( fullpath )
+    p = Pathname.new( fullpath )
+    raise "File not found: #{fullpath}" unless p.exist?
+    p
   end
 
   def fullpath

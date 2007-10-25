@@ -5,8 +5,6 @@ class UserActivationAndLastfm < ActiveRecord::Migration
     
     add_column :users, :lastfm_login, :string
     add_column :users, :lastfm_password, :string
-    
-    rename_column :users, :name, :login
   end
 
   def self.down
@@ -15,7 +13,5 @@ class UserActivationAndLastfm < ActiveRecord::Migration
     
     remove_column :users, :lastfm_login
     remove_column :users, :lastfm_password
-
-    rename_column :users, :login, :name
   end
 end

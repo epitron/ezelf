@@ -1,5 +1,6 @@
 class AccountController < ApplicationController
 
+  layout "default"
 
   skip_before_filter :login_required
 
@@ -51,6 +52,8 @@ class AccountController < ApplicationController
       flash[:notice] = "Your account has been activated." 
       UserNotifier.deliver_activation(@user)
       redirect_back_or_default(:controller => '')
+    else
+      flash[:notice] = "Activation failed."
     end
   end  
 
