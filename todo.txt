@@ -41,6 +41,12 @@
   * Upload Importer
   * News
   * Requests
+  * Flag top-3 tracks
+    |_ Album recommending:
+    |   * everyone would like this
+    |   * good if you're into this sort of thing
+    |   * interesting new ideas
+    |_ A way of saying "This is a good end-to-end album!"
   * Some kind of "Unique ID" tag in each MP3 to identify it if the DB gets corrupted
     |_ MBID
     |_ ELFID
@@ -114,8 +120,6 @@
   * /stream/track should accept the user key in the url to retrieve the session (or use IP if it's missing)
     |_ "http://<big key>@<hostname>/stream/<track id>.mp3"
     |_ add "last_ip" to User model
-
-* Flag top-3 tracks with a thumbs-up icon
 
 * Associate artists, albums, or songs by linking "what sounds good together"
 
