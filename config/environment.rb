@@ -10,7 +10,7 @@ require 'sha1'
 
 #############################################################################
 ## Rails Init Crap
-RAILS_GEM_VERSION = '1.2.3' unless defined? RAILS_GEM_VERSION
+RAILS_GEM_VERSION = '1.2.5' unless defined? RAILS_GEM_VERSION
 # ENV['RAILS_ENV'] ||= 'production'
 require File.join(File.dirname(__FILE__), 'boot')
 #############################################################################
@@ -59,7 +59,7 @@ end
 
 #############################################################################
 ## ActionMailer
-ActionMailer::Base.server_settings = { 
+ActionMailer::Base.smtp_settings = { 
   :address=>SETTINGS.smtp_server,    # default: localhost
   :port=>'25',                        # default: 25
 #  :user_name=>'user',

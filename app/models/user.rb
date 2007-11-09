@@ -54,28 +54,17 @@ class User < ActiveRecord::Base
   ## Authentication Stuff
   ########################################################################
 
+  #attr_accessor :password_confirmation
   attr_protected :activated_at
   before_create :make_activation_code
 
   validates_presence_of     :name, :email
-  validates_presence_of     :new_password                   #:if => :password_required?
-  validates_presence_of     :new_password_confirmation,      :if => :confirmation_required?
-  validates_length_of       :password, :within => 4..40 #:if => :password_required?
-  validates_confirmation_of :new_password,                   :if => :confirmation_required?
-  validates_length_of       :name,    :within => 3..40
-  validates_length_of       :email,    :within => 3..100
   validates_uniqueness_of   :name, :email, :case_sensitive => false
+  validates_length_of       :name, :within => 3..40
+  validates_length_of       :email, :within => 3..100
+  validates_length_of       :password, :within => 4..40
+  validates_confirmation_of :password, :if => proc{|u| not u.password_confirmation.blank?}
 
-  def confirmation_required?
-    #new_record?
-    not new_password.blank?
-  end
-  def password_required?
-    #crypted_password.blank? || !password.blank?
-    !password.blank?
-  end
-
-  
   # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
   def self.authenticate(login, password)
     user = find_by_name(login) # need to get the salt

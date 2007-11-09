@@ -6,18 +6,18 @@
 <% form_for :user do |f| -%>
 
   <p>
-    <label for="login">Username</label>
+    <label for="user_name">Username</label>
     <br/>
     <%= f.text_field :name %>
   </p>
 
   <p>
-    <label for="email">Email</label><br/>
+    <label for="user_email">Email</label><br/>
     <%= f.text_field :email %>
   </p>
 
   <p>
-    <label for="password">Password</label>
+    <label for="user_password">Password</label>
     <br/>
     <%= f.password_field :password %>
   </p>
@@ -25,7 +25,7 @@
   <p>
     <label for="password_confirmation">Confirm Password</label>
     <br/>
-    <%= f.password_field :password_confirmation %>
+    <%= password_field_tag "password_confirmation", nil, :size=>30 %>
   </p>
 
   <p>

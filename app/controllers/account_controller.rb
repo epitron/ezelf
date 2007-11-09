@@ -24,13 +24,27 @@ class AccountController < ApplicationController
 
 
   def signup
-    @user = User.new(params[:user])
-    return unless request.post?
+    unless request.post?
+      @user = User.new
+      return
+    end
+    
+    userinfo = params[:user]
+    pass_confirmation = params[:password_confirmation]
+    
+    raise "Bad password confirmation" unless userinfo[:password] == pass_confirmation
+    
+    @user = User.new userinfo
     @user.save!
+    
     self.current_user = @user
+    
     flash[:notice] = "Thanks for signing up!"
+    
     UserNotifier.deliver_signup_notification(@user)
+    
     redirect_back_or_default(:controller => '')
+    
   rescue ActiveRecord::RecordInvalid
     render :action => 'signup'
   end
@@ -51,7 +65,7 @@ class AccountController < ApplicationController
       self.current_user = @user
       flash[:notice] = "Your account has been activated." 
       UserNotifier.deliver_activation(@user)
-      redirect_back_or_default(:controller => '')
+      redirect_to '/'
     else
       flash[:notice] = "Activation failed."
     end

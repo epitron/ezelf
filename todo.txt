@@ -29,6 +29,7 @@
 
   ./ Uploads Section
   * User Accounts
+    |_ Checkout: http://svn.rails-engines.org/plugins/user_engine/README
   * Listening History
     |_ recent listens for every object
     |_ cached counts for album/artist/track listens

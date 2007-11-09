@@ -1,34 +1,4 @@
-# == Schema Information
-# Schema version: 18
-#
-# Table name: users
-#
-#  id         :integer(11)   not null, primary key
-#  name       :string(255)   
-#  password   :string(255)   
-#  fullname   :string(255)   
-#  email      :string(255)   
-#  created_at :string(255)   
-#  validated  :boolean(1)    
-#  upload_dir :string(255)   
-#
-
-# == Schema Information
-# Schema version: 10
-#
-# Table name: users
-#
-#  id         :integer(11)   not null, primary key
-#  name       :string(255)   
-#  password   :string(255)   
-#  fullname   :string(255)   
-#  email      :string(255)   
-#  created_at :string(255)   
-#  validated  :boolean(1)    
-#
-
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-one:
-  id: 1
-two:
-  id: 2
+epi:
+  name: epi
+  password: crinkle
+  email: chris@ill-logic.com
