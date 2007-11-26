@@ -8,6 +8,8 @@
 
 === BUGS ===
 
+### Problems with the program itself:
+
 * ID3 tag not read properly (short TAGNs):
     http://elf.kicks-ass.net/stream/track/57215.mp3
 
@@ -25,6 +27,14 @@
     https://fngtps.com/projects/multibyte_for_rails/wiki/UnicodePrimer
     http://www.ruby.org.ee/wiki/Unicode_in_Ruby/Rails
     
+
+### Problems with people's browsers/desktop software:
+
+* Quicktime hijacks M3U's in Firefox and tries to play 'em in
+  the browser.
+
+
+
 === Major Features ============================
 
   ./ Uploads Section
