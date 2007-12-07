@@ -69,6 +69,8 @@
 
 === ezElf ============================
 
+* Spinners!
+
 * Lighthouse boxes are pretty.. I WANT THEM:
     http://rubinius.lighthouseapp.com/projects/5089-rubinius/overview
 
