@@ -2,8 +2,10 @@
 #content
 
   %center
-    %h1= "#{@elf_title} MP3 Streaming System"
-    %img{:src=>@elf_image}
+    - elf = random_elf
+    %h1= "#{elf.name} MP3 Streaming System"
+    %a{ :href=>"" }
+      %img{:src=>elf.url}
 
 
 #right
