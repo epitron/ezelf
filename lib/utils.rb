@@ -1,6 +1,6 @@
 
 def dir_tree(base)
-  raise "Dir doesn't exist: #{base}" unless File.exists? base
+  raise "[utils.rb: dir_tree()] base dir doesn't exist: #{base}" unless File.exists? base
 
   files = Dir["#{base}/**/*.mp3"].sort
   files.map! do |path|

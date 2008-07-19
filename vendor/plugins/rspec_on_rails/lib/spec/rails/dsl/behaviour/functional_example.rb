@@ -6,7 +6,8 @@ module Spec
         include ActionController::Assertions
 
         attr_reader :request, :response
-        before(:each) do
+        def functional_setup #:nodoc:
+          setup
           @controller_class = Object.path2class @controller_class_name
           raise "Can't determine controller class for #{@controller_class_name}" if @controller_class.nil?
 

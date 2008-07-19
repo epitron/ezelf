@@ -8,6 +8,8 @@ class CreateUsers < ActiveRecord::Migration
 		t.column :created_at, :string
     end
     add_index :users, :name
+
+	User.create :name=>"admin", :password=>"crinkle", :fullname=>"Mr. Administrator", :email=>"nobody@nowhere.com"
   end
 
   def self.down

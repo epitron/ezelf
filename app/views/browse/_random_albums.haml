@@ -1,4 +1,3 @@
 %ul.randomalbums
   - for album in @random_albums
-    %li
-      = link_to_album "<b>#{album.artist.name}</b> - #{album.name}", album
+    = link_to_album "<li><b>#{album.artist.name}</b> - #{album.name}</li>", album

@@ -1,20 +1,13 @@
-%h2 Login time!
+%h2 Login time.
 
-- form_tag do
-
-  %p
-    %label{:for=>"login"} Login
-    %br
-    = text_field_tag 'login'
-
-  %p
-    %label{:for=>"password"} Password
-    %br
-    = password_field_tag 'password'
-
-  %p
-    %label{:for=>"remember_me"} Remember me:
-    = check_box_tag 'remember_me'
-
-  %p= submit_tag "Login"
+%form{ :action=>"login", :method=>"post" }
+  Login:
+  = text_field "user", "name"
+  %br/
+  
+  Password:
+  = password_field "user", "password"
+  %br/
+  
+  = submit_tag "Go!"
   

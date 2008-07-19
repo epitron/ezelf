@@ -32,14 +32,10 @@ class RspecScaffoldGenerator < Rails::Generator::NamedBase
        ActionView::Base::DEFAULT_TEMPLATE_HANDLER_PREFERENCE.include?(:erb) then
       @resource_generator = "scaffold"
       @default_file_extension = "html.erb"
+      @resource_edit_path = "/edit"
     else
       @resource_generator = "scaffold_resource"
       @default_file_extension = "rhtml"
-    end
-    
-    if ActionController::Base.respond_to?(:resource_action_separator)
-      @resource_edit_path = "/edit"
-    else
       @resource_edit_path = ";edit"
     end
   end

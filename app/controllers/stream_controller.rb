@@ -1,4 +1,5 @@
 require 'sha1'
+require 'zip/zip'
 
 =begin
 
@@ -25,14 +26,13 @@ Content-Type: audio/mpeg
 class StreamController < ApplicationController
 
     session :off, :only => %w[track]
-    skip_before_filter :login_required
-    
+
     layout false
 
     def session_from_params
-      if key = params[:key]
-        key
-      end
+        if key = params[:key]
+            key
+        end
     end
 
 =begin
@@ -86,10 +86,6 @@ class StreamController < ApplicationController
     end
 =end
 
-    ####################################################################
-    ## Utility Stuff
-    ####################################################################
-
     def xsendfile(path, options)
       headers["Content-Transfer-Encoding"] = "binary"
       headers["Content-Type"] = options[:type] || "application/force-download"
@@ -103,6 +99,17 @@ class StreamController < ApplicationController
       render :nothing => true
     end
 
+    def track
+      track = Track.find(params[:id])
+      #pp request.env
+      #"HTTP_RANGE"=>"bytes=878672-",
+      #send_file track.fullpath, :type => 'audio/mpeg', :stream => true, :buffer_size => 4096, :disposition => 'inline'
+      #stream_file track.fullpath, :type => 'audio/mpeg', :stream => true, :buffer_size => 4096, :disposition => 'inline'
+      xsendfile track.fullpath, :type => 'audio/mpeg'
+    end
+
+    ### Playlists
+
     def render_playlist
       headers["Content-Type"] = "audio/x-mpegurl; charset=utf-8"
       output = []
@@ -115,14 +122,41 @@ class StreamController < ApplicationController
       render :text => output.join("\n")
     end
 
-    ####################################################################
-    ## Things to Stream
-    ####################################################################
+    def render_zipfile
+      puts "Removing old zips:"
+      Dir['/tmp/elfzip*'].each{|p| puts "  - #{p}"; File.unlink p}
 
+      tempzip = Tempfile.new("elfzip")
+      tempzip.close!
+
+      puts "Creating zip: #{tempzip.path}"
+      Zip::ZipFile.open(tempzip.path, Zip::ZipFile::CREATE) do |zf|
+        for track in @tracks
+         begin
+          dest = File.join(track.relative_path, track.filename)
+          src = track.fullpath
+          puts "  * #{dest}"
+          zf.add( dest, src )
+         rescue ActiveRecord::RecordNotFound
+          puts "Couldn't find track #{track.id}"
+         end
+        end
+      end
+      File.chmod 0644, tempzip.path, true
+      xsendfile tempzip.path, :type => 'application/zip'
+    end
+
+    #after_filter :playlist_filter, :only=>[:album, :artist, :shuffle, :folder]
+
+    Mime::Type.register "application/zip", :zip
+    Mime::Type.register "audio/x-mpegurl", :m3u
     def album
       @album = Album.find(params[:id])
       @tracks = @album.sorted_tracks
-      render_playlist
+      respond_to do |format|
+        format.zip { render_zipfile }
+        format.m3u { render_playlist }
+      end
     end
 
     def artist
@@ -142,20 +176,6 @@ class StreamController < ApplicationController
       @tracks = Track.find :all, :conditions=>{:relative_path => params[:relative_path]}, :order=>"relative_path, filename"
       render_playlist
     end
-
-    def track
-      track = Track.find(params[:id])
-      #pp request.env
-      #"HTTP_RANGE"=>"bytes=878672-",
-      #send_file track.fullpath, :type => 'audio/mpeg', :stream => true, :buffer_size => 4096, :disposition => 'inline'
-      #stream_file track.fullpath, :type => 'audio/mpeg', :stream => true, :buffer_size => 4096, :disposition => 'inline'
-      xsendfile track.fullpath, :type => 'audio/mpeg'
-    end
-
-
-    ####################################################################
-    ## Uploads
-    ####################################################################
     
     def safe_subdir?(base, sub)
       path = File.join(base, sub)

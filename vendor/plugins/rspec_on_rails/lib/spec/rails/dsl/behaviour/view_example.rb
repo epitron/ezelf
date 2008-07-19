@@ -24,13 +24,22 @@ module Spec
       #     end
       #   end
       class ViewExample < FunctionalExample
-        before(:each) do
-          ensure_that_flash_and_session_work_properly
+        class << self
+          def before_eval # :nodoc:
+            prepend_before {view_setup}
+            append_after {teardown}
+            configure
+          end          
         end
 
         def initialize(example) #:nodoc:
           super
           @controller_class_name = "Spec::Rails::DSL::ViewExampleController"
+        end
+
+        def view_setup #:nodoc:
+          functional_setup
+          ensure_that_flash_and_session_work_properly
         end
 
         def ensure_that_flash_and_session_work_properly #:nodoc:
@@ -145,7 +154,7 @@ module Spec
           @controller.template
         end
 
-        Spec::DSL::BehaviourFactory.register(:view, self)
+        Spec::DSL::BehaviourFactory.add_example_class(:view, self)
       end
 
       class ViewExampleController < ApplicationController #:nodoc:

@@ -17,14 +17,7 @@
   %body
     #header= render :partial=>"layouts/header"
   
-    - if flash[:notice]
-      #notice
-        = flash[:notice]
-        
-    = error_messages_for :user
-  
     #container= @content_for_layout
   
-    - if logged_in? and current_user.validated?
-      #footer= render :partial=>"layouts/footer"
+    #footer= render :partial=>"layouts/footer"
   

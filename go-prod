@@ -1,1 +1,2 @@
-mongrel_rails start -e production
+#mongrel_rails start -e production
+thin -e production start

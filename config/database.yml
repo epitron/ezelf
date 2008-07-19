@@ -1,0 +1,23 @@
+development:
+  adapter: mysql
+  database: ezelf
+#  encoding: utf8
+  username: root
+  password: crinkle
+  host: localhost
+
+test:
+  adapter: mysql
+  database: ezelf_test
+#  encoding: utf8
+  username: root
+  password: crinkle
+  host: localhost
+
+production:
+  adapter: mysql
+  database: ezelf
+#  encoding: utf8
+  username: root
+  password: crinkle
+  host: localhost

@@ -8,16 +8,8 @@
 
 === BUGS ===
 
-### Problems with the program itself:
-
-* ID3 tag not read properly (short TAGNs):
-    http://elf.kicks-ass.net/stream/track/57215.mp3
-
-* Uploads: show new directories first (by mtime?)
-
 * Make sure all playlists have .m3u after them, for stupid browsers.
   |_ using redirects? the content-type filename header?
-  |_ restify!
 
 * ELO - Greatest Hits & Ventures - Greatest Hits have the same album name, so they get
   grouped together as Various artists. This is a problem...
@@ -27,52 +19,21 @@
     https://fngtps.com/projects/multibyte_for_rails/wiki/UnicodePrimer
     http://www.ruby.org.ee/wiki/Unicode_in_Ruby/Rails
     
-
-### Problems with people's browsers/desktop software:
-
-* Quicktime hijacks M3U's in Firefox and tries to play 'em in
-  the browser.
-
-
-
 === Major Features ============================
 
-  ./ Uploads Section
-  * User Accounts
-    |_ Checkout: http://svn.rails-engines.org/plugins/user_engine/README
-  * Listening History
-    |_ recent listens for every object
-    |_ cached counts for album/artist/track listens
-  * Activity Log
-    |_ recent uploads
-    |_ new users
-    |_ listens
-    |_ messages
-  * Tag Editor (with Metadata Revisions? eg. dump ID3 blob to a table somewhere)
-  * Upload Importer
-  * News
-  * Requests
-  * Flag top-3 tracks
-    |_ Album recommending:
-    |   * everyone would like this
-    |   * good if you're into this sort of thing
-    |   * interesting new ideas
-    |_ A way of saying "This is a good end-to-end album!"
+  * News  
   * Some kind of "Unique ID" tag in each MP3 to identify it if the DB gets corrupted
     |_ MBID
     |_ ELFID
+  * Upload/Mass Import wizard
+  * Listening History
+  * Tag Editor (with Metadata Revisions? eg. dump ID3 blob to a table somewhere)
   * Better Importer (treat DIRs as albums, inconsistent dirs are inserted into the DB, but marked as "dirty")
-  * Snarfed Shoutcast Stations
   * Forums (beast integration?) or Comments
   * Covers
   * Bittorrent (Azureus, rTorrent -> http://libtorrent.rakshasa.no/wiki/RTorrentXMLRPCGuide)
 
 === ezElf ============================
-
-* Spinners!
-
-* Lighthouse boxes are pretty.. I WANT THEM:
-    http://rubinius.lighthouseapp.com/projects/5089-rubinius/overview
 
 * UI improvements:
   - [list view], [cover view]
@@ -80,8 +41,6 @@
   - icon for "5-disc" chunks
   - "music" section, with tabs for albums/artists/dirs
   - re-collapse Artists
-  - album/track details displays "recently listened to by..." on right
-    |_ http://www.emusic.com/album/10875/10875840.html?fref=150051
 
 * Search improvements:
   - "party ben" should find "partyben"
@@ -134,6 +93,8 @@
     |_ "http://<big key>@<hostname>/stream/<track id>.mp3"
     |_ add "last_ip" to User model
 
+* Flag top-3 tracks with a thumbs-up icon
+
 * Associate artists, albums, or songs by linking "what sounds good together"
 
 * Ajaxiness (things expand!)
@@ -174,16 +135,6 @@ manual page.
       http://lists.centos.org/pipermail/centos/2005-August/050031.html
 
 === Design "Inspiration" =========================
-
-* google (blue)
-      http://userstyles.org/style_screenshots/843_after.png
-
-* ILM (blue)
-      http://www.ilm.com/employment/jobs/job?job=ILM00407
-
-* babblin5
-    Great design overall! Great fonts, good colours, clear, logical, lots of relevant stuff at your fingertips, yet not overly busy looking.
-      http://babblin5.com/?p=17
 
 * filehippo
     i like the boxes

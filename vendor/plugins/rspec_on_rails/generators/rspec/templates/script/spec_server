@@ -6,46 +6,27 @@ require 'drb/drb'
 require 'rbconfig'
 require 'spec'
 require 'optparse'
-specmate = "#{ENV['HOME']}/Library/Application\ Support/TextMate/Bundles/RSpec.tmbundle/Support/lib"
+specmate = ENV['HOME'] + "/Library/Application\ Support/TextMate/Bundles/RSpec.tmbundle/Support/lib"
 if File.directory?(specmate)
-  $LOAD_PATH.unshift(specmate)
-  require 'spec/mate/text_mate_formatter'
+  $LOAD_PATH.unshift(specmate) 
+  require 'text_mate_formatter'
 end
 
 # This is based on Florian Weber's TDDMate
+
 module Spec
   module Runner
     class RailsSpecServer
-      def run(argv, stderr, stdout)
+      def run(args, stderr, stdout)
         $stdout = stdout
         $stderr = stderr
 
-        base = ActiveRecord::Base
-        def base.clear_reloadable_connections!
-          active_connections.each do |name, conn|
-            if conn.requires_reloading?
-              conn.disconnect!
-              active_connections.delete(name)
-            end
-          end
-        end        
-
-        if ::Dispatcher.respond_to?(:cleanup_application)
-          ::Dispatcher.cleanup_application
-        elsif ::Dispatcher.respond_to?(:reset_application!)
-          ::Dispatcher.reset_application!
-        end
+        ::Dispatcher.reset_application!
         ::Dependencies.mechanism = :load
         require_dependency('application.rb') unless Object.const_defined?(:ApplicationController)
         load File.dirname(__FILE__) + '/../spec/spec_helper.rb'
-
-        ::Spec::Runner::CommandLine.run(
-          ::Spec::Runner::OptionParser.parse(
-            argv,
-            $stderr,
-            $stdout
-          )
-        )
+    
+        ::Spec::Runner::CommandLine.run(args, stderr, stdout, false)
       end
     end
   end
@@ -62,7 +43,7 @@ def restart_test_server
   ruby         = File::join(config['bindir'], config['ruby_install_name']) + config['EXEEXT']
   command_line = [ruby, $0, ARGV].flatten.join(' ')
   exec(command_line)
-end
+end  
 
 def daemonize(pid_file = nil)
   return yield if $DEBUG

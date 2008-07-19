@@ -1,4 +1,4 @@
 ### Global defaults
 
-smtp_server: localhost
-root_of_upload_dirs: /var/ftp
+dirs:
+  - "/home/epi/mp3/albums"

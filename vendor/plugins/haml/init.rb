@@ -1,6 +1,7 @@
-require 'haml'
-require 'haml/template'
-require 'sass'
-require 'sass/plugin'
+begin
+  require File.join(File.dirname(__FILE__), 'lib', 'haml') # From here
+rescue LoadError
+  require 'haml' # From gem
+end
 
-ActionView::Base.register_template_handler('haml', Haml::Template)
+Haml.init_rails(binding)

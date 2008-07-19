@@ -37,39 +37,36 @@ Processing BrowseController#session_key (for 127.0.0.1 at 2007-06-13 05:30:28) [
 
 class ApplicationController < ActionController::Base
 
-  include AuthenticatedSystem
-  before_filter :login_required
-  
-  # use this for "remember me"
-  #before_filter :login_from_cookie
-  
-  #session :session_key => '_ezelf_session_id'
+    include LoginSystem
 
-  if true #SETTINGS.disable_authentication
-    def login_filter
-      unless session[:user_id]
-        session[:user_id] = 0
-        begin
-          @user = User.find(0)
-        rescue
-          @user = User.new(:name=>"anonymous")
+    session :session_key => '_ezelf_session_id'
+
+    if true #SETTINGS.disable_authentication
+        def login_filter
+            unless session[:user_id]
+                session[:user_id] = 0
+                begin
+                    @user = User.find(0)
+                rescue
+                    @user = User.new(:name=>"anonymous")
+                end
+            end
+            return true
         end
-      end
-      return true
     end
-  end
 
-  #before_filter :session_from_params
-  #before_filter :login_filter
-  #before_filter :show_env
+    before_filter :session_from_params
+    before_filter :login_filter
+    #before_filter :show_env
 
-  def session_from_params; end
+    def session_from_params; end
 
-  def show_env
-    puts ":::::::::::::::Env::::::::::::::::::"
-    pp request.env
-    puts
-    # if an HTTPAuth username is supplied, use it as a "User Key" and find the user's session.
-  end
+    def show_env
+        puts ":::::::::::::::Env::::::::::::::::::"
+        pp request.env
+        puts
+
+        # if an HTTPAuth username is supplied, use it as a "User Key" and find the user's session.
+    end
 
 end

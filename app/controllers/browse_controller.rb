@@ -3,9 +3,9 @@ class BrowseController < ApplicationController
 
     def index
         @random_albums = Album.random(10)
-        elf = random_elf
-        @elf_image = "/elves/#{elf}"
-        @elf_title = elf.gsub /\.[^\.]+$/, ''
+        #elf = random_elf
+        #@elf_image = "/elves/#{elf}"
+        #@elf_title = elf.gsub /\.[^\.]+$/, ''
     end
 
     def artists
@@ -22,10 +22,8 @@ class BrowseController < ApplicationController
 
       @tree = {}
       for user in User.find :all
-        if user.upload_dir
-          files = user.tree_of_uploaded_files.to_a.sort
-          @tree[user] = files if files.any?
-        end
+        files = user.tree_of_uploaded_files.to_a.sort
+        @tree[user] = files if files.any?
       end
     end
 
