@@ -90,7 +90,8 @@ require 'mp3info_with_extensions'
 
 #############################################################################
 ## Music Services
-require 'scrobbler'
+#require 'scrobbler'
+require 'active_scaffold'
 require 'rbrainz'
 #############################################################################
 

@@ -1,0 +1,8 @@
+%h3
+  Random albums:
+  %br
+  = link_to_remote "(get more)", :url => { :action => 'more_random_albums' }
+
+%ul.randomalbums
+  - for album in @random_albums
+    = link_to_album "<li><b>#{album.artist.name}</b> - #{album.name}</li>", album

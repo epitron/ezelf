@@ -1,23 +1,11 @@
 development:
-  adapter: mysql
-  database: ezelf
-#  encoding: utf8
-  username: root
-  password: crinkle
-  host: localhost
+  adapter: sqlite3
+  dbfile: db/dev.db
 
 test:
-  adapter: mysql
-  database: ezelf_test
-#  encoding: utf8
-  username: root
-  password: crinkle
-  host: localhost
+  adapter: sqlite3
+  dbfile: db/test.db
 
 production:
-  adapter: mysql
-  database: ezelf
-#  encoding: utf8
-  username: root
-  password: crinkle
-  host: localhost
+  adapter: sqlite3
+  dbfile: db/prod.db

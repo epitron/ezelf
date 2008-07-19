@@ -1,0 +1,12 @@
+log/*.log
+db/*.sqlite3
+db/*.db
+db/schema.rb
+tmp/**/*
+doc/api
+doc/app
+doc/plugins
+nbproject
+vendor/plugins/**/.git
+vendor/plugins/**/.svn
+vendor/plugins-disabled

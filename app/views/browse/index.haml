@@ -1,69 +1,12 @@
 
 #content
-  %h1 All aboard the Elf Train!
 
-  %p
-    The Elf is <b>back on the air!</b>
-
-  %p
-    What took so long? Well, like most stories of woe,
-    it starts with man's insatiable need for more hard drive space. 
-    The ELF was suffering from a serious case of being too big for its britches,
-    and the only cure was bigger pants.
-
-  %p
-    After a round of donation-asking, and many donations
-    from kindly ELF users,
-    the ELF had what it needed -- 300 gigs of hot hard-drive action.
-    Soon, the ELF would be bursting at the seams with sweet, sweet music.
-
-  %p
-    Unfortunately, dame fate intervened. The hard-drive-installing server monkeys 
-    got a bit rambunctious and destroyed everything
-    on the server, leaving the ELF a braindead vegetable.
-
-  %p
-    At this point I was dataless, ELFless, disheartened, and seriously questioning the
-    reliability of this monkey-ridden ISP. So, I set out on a quest to first find
-    some less rambunctious monkeys to host the ELF, and then to
-    muster the strength to create an entirely new
-    ELF from the ground up. Not just any ELF -- an ELF of the FUTURE, using fancy new Web2.7b technology.
-  %p
-    Well, I'm pleased to announce that after only 9 months of incubation, 
-    <b>a new ELF was born!</b>
-
-  %p
-    Be warned that this new ELF doesn't really know how to walk yet, so if there
-    are any problems, be sure to <a href="mailto:chris@ill-logic.com">drop me a note.</a> Enjoy your stay!
-
-  %p (For those of you who are curious, here is my <a href="http://chris.ill-logic.com/sandbox/browser/ezelf/todo.txt">current TODO list.</a>)
-
-  %h3 Things you can do (some can't be done):
-
-  %ul
-    %li= link_to "Browse Artists", :controller=>"browse", :action=>"artists"
-    %li= link_to "Browse Files", :controller=>"browse", :action=>"files"
-    %li
-      Shuffle: [
-      - links = [50, 100, 400].map{|n| link_to "#{n} songs", :controller=>"stream", :action=>"shuffle", :id=>n }
-      = links.join ' | '
-      ]
-    %li Browse Albums
-    %li Listening History / Stats
-    %li Upload Music
-
-
-//  %center
-//   %h1= "#{@elf_title} MP3 Streaming System"
-//   %img{:src=>@elf_image}
-
+  %center
+   %h1= "#{@elf_title} MP3 Streaming System"
+   %img{:src=>@elf_image}
 
 
 #right
-  %h3
-    Random albums:
-    %br
-    = link_to_remote "(get more)", :url => { :action => 'more_random_albums' }
   #randomalbums
     = render :partial=>"random_albums"
 
