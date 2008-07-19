@@ -1,4 +1,4 @@
-class LoginSystem < ActiveRecord::Migration
+class ModifyLoginSystem < ActiveRecord::Migration
   def self.up
   	add_column :users, :validated, :boolean, :default=>false
   	rename_column :login_histories, :date, :created_at

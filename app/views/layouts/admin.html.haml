@@ -12,13 +12,8 @@
 
     .linkbar
       %b= link_to "home", "/"
+      = link_to "sources", admin_sources_url
       = link_to "users", admin_users_url
-      = link_to "jobs", admin_jobs_url
-      = link_to "products", admin_products_url
-      = link_to "options", admin_options_url
-      = link_to "option categories", admin_option_categories_url
-      = link_to "credit cards", admin_credit_cards_url
-      = link_to "contacts", admin_contacts_url
 
     .content
       = yield

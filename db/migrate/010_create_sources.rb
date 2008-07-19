@@ -10,6 +10,8 @@ class CreateSources < ActiveRecord::Migration
     remove_index :tracks, :root
     remove_column :tracks, :root
     add_index :tracks, :source_id
+    
+    Source.create(:name=>"Test Albums", :uri=>"test/albums")
   end
 
   def self.down

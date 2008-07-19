@@ -1,0 +1,58 @@
+.linkbar {
+  background-color: #eeeeee;
+}
+
+.linkbar a, .loginbar a {
+    margin: 0px 10px;    
+}
+
+.loginbar {
+    background-color: #fefed6;
+  display: table;
+  float: right;
+}
+
+.sidebar {
+    width: 150px;
+    padding-left: 10px;
+    background-color: #eeffee;
+    float: left;
+}
+
+.content_with_sidebar {
+    border: thin dotted silver;
+    padding: 1em 1em 1em 1em;
+    margin-left: 160px;
+}
+
+.content {
+    border: thin dotted silver;
+    padding: 1em 1em 1em 1em;
+}
+
+.notice {
+    padding: 1em 1em 1em 1em;
+    border-left: 1em;
+    background: yellow;
+}
+
+.error {
+    background: red;
+    color: white;
+}
+
+.hidden {
+    display: none;
+}
+
+.box {
+    padding: 1em 1em 1em 1em;
+    border-left: 1em;
+    background-color: #fcfcec;
+}
+.box2 {
+    padding: 1em 1em 1em 1em;
+    border-left: 1em;
+    background-color: #cae4fe;
+}
+

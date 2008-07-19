@@ -1,6 +1,28 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
-    def streamlined_top_menus
+
+  def get_random_albums(n=10)
+#    result = begin
+#      self.find :all, :limit=>n, :order=>"RAND()", :include=>:artist
+#    rescue ActiveRecord::StatementInvalid
+#      self.find :all, :limit=>n, :order=>"RANDOM()", :include=>:artist
+#    end
+
+    Album.all(:select=>:id).sort_by{rand}[0...n].map{|x|x.reload}
+  end
+
+  def random_elf
+      elves = Dir["#{RAILS_ROOT}/public/elves/*"]
+      filename = File.basename(elves[rand(elves.size)])
+      url = "/elves/#{filename}"
+      name = filename.gsub(/\.[^\.]+$/, '')
+
+      OpenStruct.new(:url=>url, :name=>name)
+  end
+
+    
+  
+  def streamlined_top_menus
         [
             ["Home", { :controller => "browse", :action => "index" }],
             ["Users", { :controller => "users", :action => "index" }],

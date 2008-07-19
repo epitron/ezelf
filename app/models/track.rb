@@ -25,6 +25,7 @@
 # http://id3lib-ruby.rubyforge.org/doc/index.html
 # http://ruby-mp3info.rubyforge.org/
 
+require 'mp3info_with_extensions'
 require 'pathname'
 
 class Track < ActiveRecord::Base

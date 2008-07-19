@@ -39,8 +39,18 @@ class ApplicationController < ActionController::Base
 
     include LoginSystem
 
-    session :session_key => '_ezelf_session_id'
+    before_filter :session_from_params
+    before_filter :login_filter
+    #before_filter :show_env
+    #
+    #before_filter :check_sources, :except=>[]
 
+    def check_sources
+      if Source.count == 0
+        redirect_to :controller=>"admin/sources" # unless current controller == sources
+      end
+    end
+  
     if true #SETTINGS.disable_authentication
         def login_filter
             unless session[:user_id]
@@ -55,9 +65,6 @@ class ApplicationController < ActionController::Base
         end
     end
 
-    before_filter :session_from_params
-    before_filter :login_filter
-    #before_filter :show_env
 
     def session_from_params; end
 

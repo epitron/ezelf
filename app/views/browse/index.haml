@@ -2,11 +2,11 @@
 #content
 
   %center
-   %h1= "#{@elf_title} MP3 Streaming System"
-   %img{:src=>@elf_image}
+    %h1= "#{@elf_title} MP3 Streaming System"
+    %img{:src=>@elf_image}
 
 
 #right
   #randomalbums
-    = render :partial=>"random_albums"
+    = render :partial => "layouts/random_albums" 
 

@@ -11,6 +11,7 @@ require 'sha1'
 #############################################################################
 ## Rails Init Crap
 #RAILS_GEM_VERSION = '1.2.3' unless defined? RAILS_GEM_VERSION
+RAILS_GEM_VERSION = '2.1.0' unless defined? RAILS_GEM_VERSION
 # ENV['RAILS_ENV'] ||= 'production'
 require File.join(File.dirname(__FILE__), 'boot')
 #############################################################################
@@ -41,6 +42,20 @@ Rails::Initializer.run do |config|
   # config.active_record.observers = :cacher, :garbage_collector
   # config.active_record.default_timezone = :utc
   
+  config.action_controller.session = {
+    :session_key => '_.-~":!# elfcookie #!:"~-._',
+    :secret      => %{
+      Rin (臨) - Strength of mind and body
+      Byō (兵) - Direction of energy
+      Tō (闘) - Harmony with the universe
+      Sha (者) - Healing of self and others
+      Kai (皆) - Premonition of danger
+      Jin (陣) - Knowing the thoughts of others
+      Retsu (列) - Mastery of Time and Space
+      Zai (在) - Controlling the elements of nature
+      Zen (前) - Enlightenment
+    }.gsub(/\s+/,'')
+  }
   # See Rails::Configuration for more options
 end
 
@@ -79,19 +94,20 @@ require 'monkeypatches.rb'
 #############################################################################
 ## Misc...
 require 'utils.rb'
+require 'ostruct'
 #############################################################################
 
 
 #############################################################################
 ## MP3 Info
-require 'mp3info_with_extensions'
+#require 'audioinfo'
+#require 'mp3info_with_extensions'
 #############################################################################
 
 
 #############################################################################
 ## Music Services
 #require 'scrobbler'
-require 'active_scaffold'
 require 'rbrainz'
 #############################################################################
 

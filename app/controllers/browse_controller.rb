@@ -2,10 +2,6 @@ class BrowseController < ApplicationController
     layout "default"
 
     def index
-        @random_albums = Album.random(10)
-        #elf = random_elf
-        #@elf_image = "/elves/#{elf}"
-        #@elf_title = elf.gsub /\.[^\.]+$/, ''
     end
 
     def artists
@@ -77,15 +73,9 @@ class BrowseController < ApplicationController
     end
 
     def more_random_albums
-      @random_albums = Album.random(10)
       render :update do |page|
-        page.replace_html "randomalbums", :partial => 'random_albums'
+        page.replace_html "randomalbums", :partial => 'layouts/random_albums'
       end
-    end
-
-    def random_elf
-        elves = Dir["public/elves/*"]
-        File.basename elves[rand(elves.size)]
     end
 
 end
