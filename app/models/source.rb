@@ -24,7 +24,6 @@
 require 'pathname'
 require 'uri'
 
-
 class MusicFolder < Pathname
   alias_method :blank?, :size?
   alias_method :dir?, :directory?
@@ -62,6 +61,7 @@ end
 
 class Source < ActiveRecord::Base
     has_many :tracks
+    belongs_to :encoding
     
     URI_RECOGNIZER = %r{^(\w\{3-20\})://([^/]+)/.+}
     #has_many :albums, :through=>:tracks
@@ -70,7 +70,7 @@ class Source < ActiveRecord::Base
     def properly_encode_path(path)
         # http://www.gnu.org/software/libiconv/
         # Windows => "ISO-8859-1"
-        from = encoding
+        from = encoding.name
         to = "UTF-8"
 
         if from and from != to
