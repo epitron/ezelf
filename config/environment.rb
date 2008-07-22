@@ -41,9 +41,9 @@ Rails::Initializer.run do |config|
   # config.action_controller.session_store = :sql_session_store
   # config.active_record.observers = :cacher, :garbage_collector
   # config.active_record.default_timezone = :utc
-  
+
   config.action_controller.session = {
-    :session_key => '_.-~":!# elfcookie #!:"~-._',
+    :session_key => '_elfcookie',
     :secret      => %{
       Rin (臨) - Strength of mind and body
       Byō (兵) - Direction of energy
