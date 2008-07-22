@@ -29,9 +29,12 @@ require File.join(File.dirname(__FILE__), 'exceptions')
 #############################################################################
 
 
+
+
 #############################################################################
 ## Rails Initializer
 # (See Rails::Configuration for more options)
+
 Rails::Initializer.run do |config|
 
   config.frameworks -= [ :action_web_service, :action_mailer ]
@@ -58,22 +61,36 @@ Rails::Initializer.run do |config|
     }.gsub(/\s+/,'')
   }
 
-  config.gem 'ruby-audioinfo', :lib=>'audioinfo'
+  
+  config.gem 'rio'
+
+  
+  #############################################################################
+  ## MP3 Info
+  require 'mp3info'
+  require 'audioinfo/album'
+  #config.gem 'ruby-audioinfo', :lib=>'audioinfo', :lib=>'audioinfo/album'
+  #config.gem 'ruby-mp3info', :lib=>'mp3info'
+  config.gem 'ruby-ogginfo', :lib=>'ogginfo'
+  config.gem 'MP4Info', :lib=>'mp4info'
+  config.gem 'flacinfo-rb', :lib=>'flacinfo'
+  config.gem 'wmainfo-rb', :lib=>'wmainfo'
+
+  #require 'lib/audioinfo'
+  #require 'mp3info_with_extensions'
+  #############################################################################
+  
+  #############################################################################
+  ## Music Services
   config.gem 'rbrainz'
   config.gem 'scrobbler'
+  #############################################################################
+  
 end
 
-# Inflector.inflections do |inflect|
-#   inflect.plural /^(ox)$/i, '\1en'
-#   inflect.singular /^(ox)en/i, '\1'
-#   inflect.irregular 'person', 'people'
-#   inflect.uncountable %w( fish sheep )
-# end
-
-# Mime::Type.register "text/richtext", :rtf
-# Mime::Type.register "application/x-mobile", :mobile
-
 #############################################################################
+
+
 
 
 #############################################################################
@@ -89,6 +106,8 @@ end
 #############################################################################
 
 
+
+
 #############################################################################
 ## mONKEY pATCHES
 require 'monkeypatches.rb'
@@ -99,20 +118,6 @@ require 'monkeypatches.rb'
 ## Misc...
 require 'utils.rb'
 require 'ostruct'
-#############################################################################
-
-
-#############################################################################
-## MP3 Info
-#require 'audioinfo'
-#require 'mp3info_with_extensions'
-#############################################################################
-
-
-#############################################################################
-## Music Services
-#require 'scrobbler'
-require 'rbrainz'
 #############################################################################
 
 

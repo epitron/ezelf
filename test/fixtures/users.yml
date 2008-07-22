@@ -1,15 +1,15 @@
 # == Schema Information
-# Schema version: 18
+# Schema version: 20
 #
 # Table name: users
 #
-#  id         :integer(11)   not null, primary key
+#  id         :integer       not null, primary key
 #  name       :string(255)   
 #  password   :string(255)   
 #  fullname   :string(255)   
 #  email      :string(255)   
 #  created_at :string(255)   
-#  validated  :boolean(1)    
+#  validated  :boolean       
 #  upload_dir :string(255)   
 #
 

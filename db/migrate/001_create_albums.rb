@@ -18,6 +18,7 @@ class CreateAlbums < ActiveRecord::Migration
       t.column :year, :integer
       t.column :tracks_count, :integer, :default=>0
       t.column :various, :boolean, :default=>false
+      t.integer :source_id
     end
     
     add_index :albums, :artist_id

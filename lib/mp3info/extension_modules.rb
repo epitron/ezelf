@@ -6,43 +6,36 @@ class Mp3Info
     def method_missing(meth,*args)
       m = meth.id2name
       if /=$/ =~ m
-	      self[m.chop] = (args.length<2 ? args[0] : args)
-	    elsif /\?$/ =~ m
-	      self[m.chop] != nil
+	self[m.chop] = (args.length<2 ? args[0] : args)
       else
-	      self[m]
+	self[m]
+      end
+    end
+  end  
+  
+  class ::String
+    if RUBY_VERSION < "1.9.0"
+      alias getbyte []
+    else
+      def getbyte(i)
+        self[i].ord
       end
     end
   end
 
-  module NumericBits #:nodoc:
-    ### returns the selected bit range (b, a) as a number
-    ### NOTE: b > a  if not, returns 0
-    def bits(b, a)
-      t = 0
-      b.downto(a) { |i| t += t + self[i] }
-      t
+  module Mp3FileMethods #:nodoc: 
+    if RUBY_VERSION < "1.9.0"
+      def getbyte
+        getc
+      end
     end
-  end
-
-  module Mp3FileMethods #:nodoc:
+                        
     def get32bits
-      (getc << 24) + (getc << 16) + (getc << 8) + getc
+      (getbyte << 24) + (getbyte << 16) + (getbyte << 8) + getbyte
     end
+
     def get_syncsafe
-      (getc << 21) + (getc << 14) + (getc << 7) + getc
-    end
+      (getbyte << 21) + (getbyte << 14) + (getbyte << 7) + getbyte
+    end                 
   end
-
 end
-
-class HashObject < Hash
-  include Mp3Info::HashKeys
-end
-
-class Mp3FileObject < File
-  include Mp3Info::Mp3FileMethods
-end
-
-Fixnum.class_eval { include Mp3Info::NumericBits }
-Bignum.class_eval { include Mp3Info::NumericBits }

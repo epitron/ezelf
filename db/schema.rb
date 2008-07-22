@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 19) do
+ActiveRecord::Schema.define(:version => 20) do
 
   create_table "albums", :force => true do |t|
     t.string   "name"
@@ -17,6 +17,7 @@ ActiveRecord::Schema.define(:version => 19) do
     t.integer  "year"
     t.integer  "tracks_count", :default => 0
     t.boolean  "compilation",  :default => false
+    t.integer  "source_id"
     t.datetime "updated_at"
     t.datetime "created_at"
   end
@@ -50,6 +51,16 @@ ActiveRecord::Schema.define(:version => 19) do
   end
 
   add_index "login_histories", ["user_id"], :name => "index_login_histories_on_user_id"
+
+  create_table "photos", :force => true do |t|
+    t.integer  "photoized_id"
+    t.string   "photoized_type"
+    t.string   "path"
+    t.integer  "width"
+    t.integer  "height"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "playlists", :force => true do |t|
     t.string  "name"

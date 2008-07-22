@@ -1,23 +1,23 @@
 # == Schema Information
-# Schema version: 18
+# Schema version: 20
 #
 # Table name: tracks
 #
-#  id            :integer(11)   not null, primary key
+#  id            :integer       not null, primary key
 #  title         :string(255)   
-#  album_id      :integer(11)   
+#  album_id      :integer       
 #  number        :string(10)    
-#  disc          :integer(11)   
-#  artist_id     :integer(11)   
+#  disc          :integer       
+#  artist_id     :integer       
 #  relative_path :string(255)   
 #  filename      :string(255)   
-#  source_id     :integer(11)   
+#  source_id     :integer       
 #  length        :float         
-#  bitrate       :integer(11)   
-#  vbr           :boolean(1)    
+#  bitrate       :integer       
+#  vbr           :boolean       
 #  updated_at    :datetime      
 #  created_at    :datetime      
-#  bytes         :integer(11)   
+#  bytes         :integer       
 #  ctime         :datetime      
 #  mtime         :datetime      
 #
