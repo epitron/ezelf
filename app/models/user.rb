@@ -15,6 +15,7 @@
 
 class User < ActiveRecord::Base
   has_many :playlists
+  has_many :listenings
   has_many :logins, :class_name => 'LoginHistory'
 
   def last_login

@@ -1,20 +1,20 @@
 class TrackBytes < ActiveRecord::Migration
   def self.up
-	add_column :tracks, :bytes, :integer
+    add_column :tracks, :bytes, :integer
 
-        puts "-- setting file sizes"
+    puts "-- setting file sizes"
 
-        for track in Track.find(:all)
-          begin
-            track.bytes = track.path.size
-            track.save
-          rescue Exception => e
-            puts "Exception: #{e}"
-          end
-        end
+    for track in Track.find(:all)
+      begin
+        track.bytes = track.path.size
+        track.save
+      rescue Exception => e
+        puts "Exception: #{e}"
+      end
+    end
   end
 
   def self.down
-	remove_column :tracks, :bytes
+    remove_column :tracks, :bytes
   end
 end

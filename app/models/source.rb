@@ -65,7 +65,7 @@ class Source < ActiveRecord::Base
   end
 
   
-  def each_album(fast=true, &block)
+  def each_album(fast=false, &block)
     
     path = rio(uri)
     raise "can only scan dirs" unless path.dir?
@@ -74,47 +74,90 @@ class Source < ActiveRecord::Base
     path.all.dirs do |dir|
       album = AudioInfo::Album.new(dir.path, fast)
       unless album.empty?
-        album = AudioInfo::Album.new(dir.path, false) if album.va?
+        album = AudioInfo::Album.new(dir.path, false) if album.va? and fast
         yield album
         counter += 1
       end
     end
     
+    counter
+    
+  end
+  
+  
+  def all_albums
+    albums = []
+    each_album { |album| albums << album }
+    albums
   end
   
   
   def print_albums
-    albums = []
     each_album do |album|
-      puts album.path
-      puts "discnum: #{album.discnum}"
-      puts "  empty: #{album.empty?}"
-      puts "    va?: #{album.va?}"
-      puts "  files: #{album.files.size}"
-      puts " images: #{album.images.map{|f|rio(f).filename}.join(', ')}"
-      puts "artists: #{album.artists.inspect}"
-      puts "         |_ guess: #{album.guess_artist}"
-      puts
-      albums << album
+      album.print
     end
-    albums
+    nil
   end
   
-  def import_albums
+  
+  def import!
     each_album do |album|
+      #=> test/albums/Whitey - The Light at the End of the Tunnel is a Train (2005)
+      #          va?: false
+      # guess_artist: Whitey
+      #  guess_album: The Light At The End Of The Tunnel Is A Train
+      #      discnum: 0
+      #         path: test/albums/Whitey - The Light at the End of the Tunnel is a Train (2005)
+      #         base: test/albums/Whitey - The Light at the End of the Tunnel is a Train (2005)
+      # path->artist: Whitey
+      #        empty: false
+      #        files: 2
+      #       images: Copy of folder.jpg, folder.jpg
+      #      artists: ["Whitey"]
+      #       albums: ["The Light At The End Of The Tunnel Is A Train"]
+      #        years: ["2005"]
+
+      # Artist
+      n_artist = Artist.find_or_create_by_name(album.guess_artist)
+      
+      # Album
+      discnum = (album.discnum == 0) ? nil : album.discnum
+      n_album = n_artist.albums.find_or_create_by_name_and_year_and_discnum_and_source_id(album.guess_album, album.year, discnum, self.id)
+      album.images.each { |image| n_album.images.create(:path=>image) }
+      source_root = Pathname.new(self.uri)
+      
+      # Tracks
+      album.files.each do |f|
+        puts f.path
+        p = Pathname.new(f.path)
+        n_album.tracks.create(
+          :title=>f.title,
+          :number=>f.tracknum,
+          :length=>f.length,
+          :relative_path=>p.dirname.relative_path_from(source_root).to_s,
+          :filename=>File.split(f.path).last,
+          :bytes=>p.size,
+          :ctime=>p.ctime,
+          :mtime=>p.mtime,
+          :source_id=>self.id
+        )
+      end
       
     end
   end
   
+  
   def reinitialize!
     clear!
-    import_albums
+    import!
   end
 
+  
   def clear!
-    Track.all(:conditions=>{:source=>self}).each(&:destroy)
-    Album.all(:conditions=>{:source=>self}).each(&:destroy)
+    Track.delete_all(:source_id=>self.id)
+    Album.delete_all(:source_id=>self.id)
   end
+  
   
   ## MusicFolder interface...
   
@@ -151,22 +194,92 @@ end
 
 class AudioInfo::Album
   
-  def guess_artist
-    if va?
-      "Various Artists"
-    else
-      squashed_artists = artists.map{|a| a.gsub(/\s+/, '')}.map(&:downcase).uniq
-      if squashed_artists.size > 1
-        puts "  |_ more than one artist? => #{artists.inspect}"
+  def artist_from_path
+    chunks = Pathname(path).split
+    2.times do
+      chunk = chunks.pop.to_s
+      parts = chunk.split(/ - /)
+      return case parts.size
+        when 2
+          parts[0]
+        when 3
+          parts[1]
+        when 1
+          parts[0]
       end
-      artists.first
+      next if discnum != 0
     end
+    nil
+  end
+  
+  def guess_artist
+    if va? and squashed_artists.size < 2
+      puts "  |_ WTF! va! and squashed_artists = #{squashed_artists.inspect}?"
+    end
+    
+    return artist_from_path if squashed_artists.size > 1
+    return artists.first
+  end
+  
+  def guess_album
+    if squashed_albums.size > 1
+      puts "  |_ WTF! squashed_albums = #{squashed_albums.inspect}"
+    end
+    albums.first
+  end
+  
+  def year
+    years.first.blank? ? nil : years.first
   end
   
   def artists
     @artists ||= files.map(&:artist).uniq
   end
   
+  def albums
+    @albums ||= files.map(&:album).uniq
+  end
+
+  def years
+    @years ||= files.map(&:year).uniq
+  end
+
+  def squashed_artists
+    @squashed_artists ||= artists.map(&:squash).map(&:downcase).uniq
+  end
+  
+  def squashed_albums
+    @squashed_albums ||= albums.map(&:squash).map(&:downcase).uniq
+  end
+  
+
+  def print
+    album = self
+    puts "=> #{album.path}"
+    puts "          va?: #{album.va?}"
+    puts " guess_artist: #{album.guess_artist}"
+    puts "  guess_album: #{album.guess_album}"
+    puts "      discnum: #{album.discnum}"
+    puts "         path: #{album.path}"
+    puts "         base: #{album.basename}"
+    puts " path->artist: #{artist_from_path}"
+    puts "        empty: #{album.empty?}"
+    puts "        files: #{album.files.size}"
+    puts "       images: #{album.images.map{|f|rio(f).filename}.join(', ')}"
+    puts "      artists: #{album.artists.inspect}"
+    puts "       albums: #{album.albums.inspect}"
+    puts "        years: #{album.years.inspect}"
+    puts
+  end
+  
+  
+  
+end
+
+class String
+  def squash
+    gsub(/[\s']+/, '')
+  end
 end
 
 ## NOTE:

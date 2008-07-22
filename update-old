@@ -1,0 +1,113 @@
+#!/usr/bin/ruby
+require 'pp'
+
+### ActiveRecord
+#puts "loading dbcon..."
+#require 'dbcon'
+puts "loading rails environment..."
+require 'config/environment'
+
+### Mp3Info
+puts "loading mp3info_with_extensions..."
+require 'mp3info_with_extensions'
+
+# http://id3lib-ruby.rubyforge.org/doc/index.html
+
+
+def nuke_everything
+  puts "Nuking all Tracks, Albums and Artists..."
+  Track.delete_all
+  Album.delete_all
+  Artist.delete_all
+end
+
+
+def clean_up
+  puts "Cleaning up..."
+  
+  puts "* Tracks exist?"
+  for track in Track.find :all
+    unless File.exists? track.fullpath
+      puts "  [file missing] #{track.fullpath}"
+      track.destroy
+    end
+  end
+
+  puts "* Albums have tracks?"
+  for album in Album.find :all
+    unless album.tracks.any?
+      puts "  [album empty] #{album.artist.name} - #{album.name}"
+      album.destroy
+    end
+  end
+
+  puts "* Artists have albums or tracks?"
+  for artist in Artist.find :all
+    unless artist.albums.any? or artist.tracks.any?
+      puts "  [artist empty] #{artist.name}"
+      artist.destroy
+    end
+  end
+end
+
+
+
+if $0 == __FILE__
+
+  # get sources
+  sources = Source.find(:all)
+  pp sources.map{|s|[s.name, s.uri]}
+  
+  # clean up?
+  if ARGV.first == "-c"
+  
+    clean_up
+  
+  elsif sources.any?
+    
+    # nuke everything first?
+    if ARGV.first == '-n'
+      nuke_everything
+    end
+    
+    def get_mp3s(path)
+      if PLATFORM =~ /win32$/
+        path = path.gsub("[","\\[")
+      end
+      
+      Dir["#{path}/**/*.mp3"].sort
+    end
+    
+  	for source in sources
+  		puts "checking dir: #{source.uri}"
+  		puts File.directory?(source.uri) ? "...exists!" : "...NOT exists?!?!"
+  		
+	    next unless source.dir?
+  	    
+	    puts "===== importing all tracks from #{source.name} ========================"
+	    puts "uri: #{source.uri}"
+	    puts
+  	    
+	    root = source.uri
+	    for mp3path in get_mp3s(root)
+        # remove the root, and the leading slash
+        mp3path = mp3path.gsub(root, '').gsub(%r{^/}, '')
+        puts " - #{mp3path}"
+        
+        # create a new track
+        begin
+        	Track.add_file(source, mp3path)
+  	    rescue Mp3InfoError, NoMemoryError
+		      puts "   |_ Error parsing mp3"
+    		  next
+  		  end
+	    end
+  	end
+  	
+  else
+    
+  	puts "No sources found. (see install instructions)"
+    
+  end
+  
+end  

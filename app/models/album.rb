@@ -10,29 +10,30 @@
 #  tracks_count :integer       default(0)
 #  compilation  :boolean       
 #  source_id    :integer       
+#  discnum      :integer       
 #  updated_at   :datetime      
 #  created_at   :datetime      
 #
 
 class Album < ActiveRecord::Base
-    has_many :tracks #, :order => :number
-    belongs_to :artist, :counter_cache => true
-    has_many :photos, :as => :photoized
+  has_many :tracks #, :order => :number
+  belongs_to :artist, :counter_cache => true
+  has_many :images, :as => :imaged
 
-    def cover
-      a = Scrobbler::Album.new(artist.name, name, :include_info => true)
-      pp a      
-    end
+  def cover
+    a = Scrobbler::Album.new(artist.name, name, :include_info => true)
+    pp a      
+  end
 
-    def sorted_tracks
-      tracks.sort_by{|track| track.number.to_i}
-    end
+  def sorted_tracks
+    tracks.sort_by{|track| track.number.to_i}
+  end
 
-    def nice_name
-      title = name.blank? ? "Unkonwn" : name
-      title += " (#{year})" if year
-      title
-    end
+  def nice_name
+    title = name.blank? ? "Unkonwn" : name
+    title += " (#{year})" if year
+    title
+  end
       
 end
 

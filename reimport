@@ -1,7 +1,1 @@
-#DB=db/dev.db
-#rm $DB
-#rake db:migrate
-##sqlite3 $DB -init db/product-data.sql
-#./import_fixtures
-#rake annotate_models
-rake db:reimport
+rake db:reimport --trace

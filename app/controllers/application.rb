@@ -37,50 +37,50 @@ Processing BrowseController#session_key (for 127.0.0.1 at 2007-06-13 05:30:28) [
 
 class ApplicationController < ActionController::Base
 
-    include LoginSystem
+  include LoginSystem
 
-    before_filter :session_from_params
-    before_filter :login_filter
-    #before_filter :show_env
-    #
-    #before_filter :check_sources, :except=>[]
+  before_filter :session_from_params
+  before_filter :login_filter
+  #before_filter :show_env
+  #
+  #before_filter :check_sources, :except=>[]
 
-    def check_sources
-      if Source.count == 0
-        redirect_to :controller=>"admin/sources" # unless current controller == sources
-      end
+  def check_sources
+    if Source.count == 0
+      redirect_to :controller=>"admin/sources" # unless current controller == sources
     end
-  
-    if true #SETTINGS.disable_authentication
-        def login_filter
-            unless session[:user_id]
-                session[:user_id] = 0
-                begin
-                    @user = User.find(0)
-                rescue
-                    @user = User.new(:name=>"anonymous")
-                end
-            end
-            return true
+  end
+
+  if true #SETTINGS.disable_authentication
+    def login_filter
+      unless session[:user_id]
+        session[:user_id] = 0
+        begin
+          @user = User.find(0)
+        rescue
+          @user = User.new(:name=>"anonymous")
         end
+      end
+      return true
     end
+  end
 
 
-    def session_from_params; end
+  def session_from_params; end
 
-    def show_env
-        puts ":::::::::::::::Env::::::::::::::::::"
-        pp request.env
-        puts
+  def show_env
+    puts ":::::::::::::::Env::::::::::::::::::"
+    pp request.env
+    puts
 
-        # if an HTTPAuth username is supplied, use it as a "User Key" and find the user's session.
-    end
+    # if an HTTPAuth username is supplied, use it as a "User Key" and find the user's session.
+  end
 
 end
 
   
 class AdminController < ApplicationController
-  layout "admin"
+  #layout "admin"
   #before_filter :administrators_only!
   
 protected  

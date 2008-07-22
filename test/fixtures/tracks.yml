@@ -4,17 +4,18 @@
 # Table name: tracks
 #
 #  id            :integer       not null, primary key
-#  title         :string(255)   
 #  album_id      :integer       
+#  title         :string(255)   
+#  string        :string(255)   
 #  number        :string(10)    
 #  disc          :integer       
+#  bitrate       :integer       
+#  length        :integer       
+#  vbr           :boolean       
 #  artist_id     :integer       
 #  relative_path :string(255)   
 #  filename      :string(255)   
 #  source_id     :integer       
-#  length        :float         
-#  bitrate       :integer       
-#  vbr           :boolean       
 #  updated_at    :datetime      
 #  created_at    :datetime      
 #  bytes         :integer       

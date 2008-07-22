@@ -33,7 +33,7 @@ class AudioInfo
   VERSION = "0.1.4"
 
   attr_reader :path, :extension, :musicbrainz_infos, :tracknum, :bitrate, :vbr
-  attr_reader :artist, :album, :title, :length, :date
+  attr_reader :artist, :album, :title, :length, :date, :year
   
   # "block version" of #new()
   def self.open(*args)
@@ -289,7 +289,7 @@ class AudioInfo
   end
 
   def default_tag_fill(tag = @info.tag)
-    %w{artist album title}.each do |v|
+    %w{artist album title year}.each do |v|
       instance_variable_set( "@#{v}".to_sym, sanitize(tag[v].to_s) )
     end
   end

@@ -24,6 +24,8 @@ class Artist < ActiveRecord::Base
   has_many :compilation_tracks, 
            :class_name => "Track" #, :order => :number
 
+  has_many :images, :as => :imaged
+  
   def tracks
     album_tracks + compilation_tracks
   end
