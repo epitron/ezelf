@@ -3,6 +3,7 @@ db/*.sqlite3
 db/*.db
 db/schema.rb
 config/databases.yml
+config/database.yml
 tmp/**/*
 doc/api
 doc/app
