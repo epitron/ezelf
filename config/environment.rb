@@ -30,7 +30,8 @@ require File.join(File.dirname(__FILE__), 'exceptions')
 
 
 #############################################################################
-## Rails Config Crap
+## Rails Initializer
+# (See Rails::Configuration for more options)
 Rails::Initializer.run do |config|
 
   config.frameworks -= [ :action_web_service, :action_mailer ]
@@ -56,7 +57,10 @@ Rails::Initializer.run do |config|
       Zen (前) - Enlightenment
     }.gsub(/\s+/,'')
   }
-  # See Rails::Configuration for more options
+
+  config.gem 'ruby-audioinfo', :lib=>'audioinfo'
+  config.gem 'rbrainz'
+  config.gem 'scrobbler'
 end
 
 # Inflector.inflections do |inflect|

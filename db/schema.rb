@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 18) do
+ActiveRecord::Schema.define(:version => 19) do
 
   create_table "albums", :force => true do |t|
     t.string   "name"
@@ -35,6 +35,11 @@ ActiveRecord::Schema.define(:version => 18) do
 
   add_index "artists", ["updated_at"], :name => "index_artists_on_updated_at"
   add_index "artists", ["name"], :name => "index_artists_on_name"
+
+  create_table "encodings", :force => true do |t|
+    t.string "name"
+    t.string "description"
+  end
 
   create_table "login_histories", :force => true do |t|
     t.integer  "user_id"
@@ -80,10 +85,10 @@ ActiveRecord::Schema.define(:version => 18) do
   add_index "similar_artists", ["artist_id"], :name => "index_similar_artists_on_artist_id"
 
   create_table "sources", :force => true do |t|
-    t.string "name"
-    t.string "description"
-    t.string "uri"
-    t.string "encoding"
+    t.string  "name"
+    t.string  "description"
+    t.string  "uri"
+    t.integer "encoding_id", :default => 1
   end
 
   create_table "tracks", :force => true do |t|
