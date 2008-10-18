@@ -1,0 +1,4 @@
+### Global defaults
+
+uploads_root:
+  - "uploads"

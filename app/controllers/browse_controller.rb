@@ -55,7 +55,7 @@ class BrowseController < ApplicationController
         raise "Invalid html_id: #{html_id}"
       end
     end    
-
+    
     def expand_artist
       #html_id = params[:id]
       @artist = Artist.find( params[:id], :include=>{:albums=>:tracks} )

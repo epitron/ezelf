@@ -23,17 +23,21 @@ class User < ActiveRecord::Base
   end
 
   def default_upload_dir
-    dir = "/dump/ftp/#{self.name}"
-
-    if File.exists? dir
-      return dir
-    else
-      raise "Error: Upload dir #{dir} doesn't exist."
-    end
+    "#{SETTINGS[:uploads_root]}/#{self.name}"
   end
 
   def upload_dir
     @attributes["upload_dir"] || default_upload_dir
+  end
+
+  def valid_upload_dir?
+    File.exists? upload_dir
+
+#    if File.exists? dir
+#      return dir
+#    else
+#      raise "Error: Upload dir #{dir} doesn't exist."
+#    end
   end
 
   def tree_of_uploaded_files

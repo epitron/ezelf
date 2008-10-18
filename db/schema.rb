@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20) do
+ActiveRecord::Schema.define(:version => 21) do
 
   create_table "albums", :force => true do |t|
     t.string   "name"
@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(:version => 20) do
     t.integer  "tracks_count", :default => 0
     t.boolean  "compilation",  :default => false
     t.integer  "source_id"
+    t.integer  "discnum"
     t.datetime "updated_at"
     t.datetime "created_at"
   end
@@ -42,6 +43,27 @@ ActiveRecord::Schema.define(:version => 20) do
     t.string "description"
   end
 
+  create_table "images", :force => true do |t|
+    t.integer  "imaged_id"
+    t.string   "imaged_type"
+    t.string   "path"
+    t.integer  "width"
+    t.integer  "height"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "listenings", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "track_id"
+    t.datetime "started_at"
+    t.datetime "finished_at"
+  end
+
+  add_index "listenings", ["started_at"], :name => "index_listenings_on_started_at"
+  add_index "listenings", ["track_id"], :name => "index_listenings_on_track_id"
+  add_index "listenings", ["user_id"], :name => "index_listenings_on_user_id"
+
   create_table "login_histories", :force => true do |t|
     t.integer  "user_id"
     t.datetime "created_at"
@@ -51,16 +73,6 @@ ActiveRecord::Schema.define(:version => 20) do
   end
 
   add_index "login_histories", ["user_id"], :name => "index_login_histories_on_user_id"
-
-  create_table "photos", :force => true do |t|
-    t.integer  "photoized_id"
-    t.string   "photoized_type"
-    t.string   "path"
-    t.integer  "width"
-    t.integer  "height"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "playlists", :force => true do |t|
     t.string  "name"
@@ -103,17 +115,18 @@ ActiveRecord::Schema.define(:version => 20) do
   end
 
   create_table "tracks", :force => true do |t|
-    t.string   "title"
     t.integer  "album_id"
+    t.string   "title"
+    t.string   "string"
     t.string   "number",        :limit => 10
     t.integer  "disc"
+    t.integer  "bitrate"
+    t.integer  "length"
+    t.boolean  "vbr"
     t.integer  "artist_id"
     t.string   "relative_path"
     t.string   "filename"
     t.integer  "source_id"
-    t.float    "length"
-    t.integer  "bitrate"
-    t.boolean  "vbr"
     t.datetime "updated_at"
     t.datetime "created_at"
     t.integer  "bytes"

@@ -22,7 +22,7 @@ namespace :db do
   
   desc "Import fixtures..."
   task :import_fixtures => [:environment] do
-    #fixtures = %w(products product_types images users colors turnarounds)
+    #fixtures = %w(products product_types images users colors turnarounds payment_methods_users)
     fixtures = Dir["#{RAILS_ROOT}/spec/fixtures/*.yml"]
 
     fixtures.each do |fixture|

@@ -9,9 +9,11 @@ class CreateEncodings < ActiveRecord::Migration
       t.remove :encoding
       t.integer :encoding_id, :default => 1
     end
-    
+
+    # http://www.basis.com/onlinedocs/documentation/inst/character_encoding.htm    
     Encoding.create :id=>1, :name=>'UTF-8', :description=>'UTF-8 (Unix)'
-    Encoding.create :id=>2, :name=>'ISO-8859-1', :description=>'ISO-8859-1 (DOS)'
+    Encoding.create :id=>2, :name=>'ISO-8859-1', :description=>'ISO-8859-1 (Windows)'
+    Encoding.create :id=>3, :name=>'Cp1252', :description=>'Cp1252 (Windows)'
   end
 
   def self.down
