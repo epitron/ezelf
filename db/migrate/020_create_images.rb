@@ -12,7 +12,7 @@ class CreateImages < ActiveRecord::Migration
       t.timestamps
     end
     
-    add_index :listened_tracks, [:imaged_id, :imaged_type]
+    add_index :images, [:imaged_id, :imaged_type]
   end
 
   def self.down
