@@ -13,3 +13,4 @@ vendor/plugins/**/.git
 vendor/plugins/**/.svn
 vendor/plugins-disabled
 test/albums/*
+.eprj
