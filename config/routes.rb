@@ -8,6 +8,7 @@ ActionController::Routing::Routes.draw do |map|
     admin.connect "/", :controller=>"home"
     admin.resources :users, :active_scaffold => true
     admin.resources :sources, :active_scaffold => true
+    admin.resources :commands
   end
 
   map.connect 'stream/uploaded_file/:username', #/:relative_filepath',

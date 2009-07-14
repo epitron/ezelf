@@ -69,12 +69,15 @@ Rails::Initializer.run do |config|
   ## MP3 Info
   require 'mp3info'
   require 'audioinfo/album'
-  config.gem 'ruby-audioinfo', :lib=>'audioinfo', :lib=>'audioinfo/album'
-  #config.gem 'ruby-mp3info', :lib=>'mp3info'
-  config.gem 'ruby-ogginfo', :lib=>'ogginfo'
-  config.gem 'MP4Info', :lib=>'mp4info'
-  config.gem 'flacinfo-rb', :lib=>'flacinfo'
-  config.gem 'wmainfo-rb', :lib=>'wmainfo'
+  config.gem 'ruby-audioinfo',   :lib=>'audioinfo', :lib=>'audioinfo/album'
+  #config.gem 'ruby-mp3info',    :lib=>'mp3info'
+  config.gem 'ruby-ogginfo',     :lib=>'ogginfo'
+  config.gem 'MP4Info',          :lib=>'mp4info'
+  config.gem 'flacinfo-rb',      :lib=>'flacinfo'
+  config.gem 'wmainfo-rb',       :lib=>'wmainfo'
+  config.gem 'rubyzip',          :lib=>'zip/zip'
+
+  config.gem "thoughtbot-clearance", :lib => 'clearance', :source  => 'http://gems.github.com'
 
   #require 'lib/audioinfo'
   #require 'mp3info_with_extensions'

@@ -1,5 +1,4 @@
 require 'sha1'
-require 'zip/zip'
 
 =begin
 
@@ -65,7 +64,10 @@ class StreamController < ApplicationController
       end
 
       if options[:stream]
-          render :status => options[:status], :text => Proc.new { |response, output|
+
+          render :status  => options[:status],
+                 :text    => Proc.new do |response, output|
+
               sent = 0; last_size = 0
               logger.info "Streaming file #{path}" unless logger.nil?
               len = options[:buffer_size] || 4096
@@ -76,7 +78,9 @@ class StreamController < ApplicationController
                   print ("\b"*last_size)+"#{sent}"
                   last_size = sent.to_s.size
               end
-          }
+
+          end
+
       else
           logger.info "Sending file #{path}" unless logger.nil?
           render :status => options[:status], :text => file.read

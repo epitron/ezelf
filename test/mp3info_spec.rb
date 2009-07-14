@@ -10,3 +10,10 @@ describe "MP3Info Module" do
     mp3.tag["artist"][-1].should_not equal 0
   end
 end
+
+describe "Truncated" do
+  it "should handle truncated mp3s" do
+    mp3 = Mp3Info::new('truncated.mp3')
+    p mp3.tag["artist"]
+  end
+end
