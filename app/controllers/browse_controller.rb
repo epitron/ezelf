@@ -1,9 +1,6 @@
 class BrowseController < ApplicationController
     layout "default"
 
-    def index
-    end
-
     def artists
         @artists = Artist.find(:all, :order=>"artists.name", :include=>:albums).select{|a| a.albums.size > 0}
     end

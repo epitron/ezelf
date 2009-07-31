@@ -1,7 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
 
   ## Static Pages
-  map.root :controller => "browse"
+  map.root :controller => "home"
 
   ## Administration
   map.namespace :admin do |admin|

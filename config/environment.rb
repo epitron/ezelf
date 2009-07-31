@@ -11,7 +11,7 @@ require 'sha1'
 #############################################################################
 ## Rails Init Crap
 #RAILS_GEM_VERSION = '1.2.3' unless defined? RAILS_GEM_VERSION
-RAILS_GEM_VERSION = '2.1.0' unless defined? RAILS_GEM_VERSION
+RAILS_GEM_VERSION = '2.3.x' unless defined? RAILS_GEM_VERSION
 # ENV['RAILS_ENV'] ||= 'production'
 require File.join(File.dirname(__FILE__), 'boot')
 #############################################################################
@@ -30,14 +30,13 @@ require File.join(File.dirname(__FILE__), 'exceptions')
 
 
 
-
 #############################################################################
 ## Rails Initializer
 # (See Rails::Configuration for more options)
 
 Rails::Initializer.run do |config|
 
-  config.frameworks -= [ :action_web_service, :action_mailer ]
+  config.frameworks -= [ :action_web_service, ] #:action_mailer ]
   # config.plugins = %W( exception_notification ssl_requirement )
   # config.load_paths += %W( #{RAILS_ROOT}/extras )
   # config.log_level = :debug
@@ -79,6 +78,11 @@ Rails::Initializer.run do |config|
 
   config.gem "thoughtbot-clearance", :lib => 'clearance', :source  => 'http://gems.github.com'
 
+  config.gem 'thoughtbot-factory_girl',
+    :lib     => 'factory_girl',
+    :source  => "http://gems.github.com"
+    #:version => '1.2.1'
+
   #require 'lib/audioinfo'
   #require 'mp3info_with_extensions'
   #############################################################################
@@ -108,6 +112,12 @@ end
 
 #############################################################################
 
+
+
+#############################################################################
+## Clearance config
+DO_NOT_REPLY = "donotreply@example.com"
+#############################################################################
 
 
 

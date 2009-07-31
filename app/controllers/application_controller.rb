@@ -36,6 +36,7 @@ Processing BrowseController#session_key (for 127.0.0.1 at 2007-06-13 05:30:28) [
 =end
 
 class ApplicationController < ActionController::Base
+  include Clearance::Authentication
 
   include LoginSystem
 
@@ -79,13 +80,3 @@ class ApplicationController < ActionController::Base
 end
 
   
-class AdminController < ApplicationController
-  #layout "admin"
-  #before_filter :administrators_only!
-  
-protected  
-  def administrators_only!
-    #current_user.admin?
-  end
-  
-end

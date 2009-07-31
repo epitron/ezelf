@@ -1,3 +1,4 @@
+=begin
 namespace :gems do
   desc 'Install required gems'
   task :install do
@@ -20,3 +21,4 @@ mocha rspec rspec_hpricot_matchers thoughtbot-factory_girl }
   end
 end
 
+=end

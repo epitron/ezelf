@@ -14,9 +14,14 @@
 #
 
 class User < ActiveRecord::Base
+  include Clearance::User
   has_many :playlists
   has_many :listenings
   has_many :logins, :class_name => 'LoginHistory'
+
+  ########################################################################
+  ## Elf Things
+  ########################################################################
 
   def last_login
     LoginHistory.find :first, :order=>"date desc"
@@ -41,7 +46,22 @@ class User < ActiveRecord::Base
   end
 
   def tree_of_uploaded_files
-    dir_tree(self.upload_dir)
+    if valid_upload_dir?
+      dir_tree(self.upload_dir)
+    else
+      []
+    end
   end
+
+
+  ########################################################################
+  ## Validation Stuff
+  ########################################################################
+
+  validates_presence_of     :name, :email
+  validates_uniqueness_of   :name, :email, :case_sensitive => false
+  validates_length_of       :name, :within => 3..40
+  validates_length_of       :email, :within => 3..100
+  validates_length_of       :password, :within => 4..40
 
 end

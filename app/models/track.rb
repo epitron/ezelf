@@ -56,7 +56,9 @@ class Track < ActiveRecord::Base
   end
 
   def path
-    Pathname.new( fullpath )
+    p = Pathname.new( fullpath )
+    raise "File not found: #{fullpath}" unless p.exist?
+    p
   end
 
   def fullpath
@@ -65,6 +67,10 @@ class Track < ActiveRecord::Base
 
   def title
     attributes['title'] || 'Unknown'
+  end
+
+  def playlist_title
+    "#{artist.name} - #{album.name} - #{number}. #{title}"
   end
 
   def modified?
