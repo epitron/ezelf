@@ -9,34 +9,32 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 21) do
+ActiveRecord::Schema.define(:version => 22) do
 
   create_table "albums", :force => true do |t|
     t.string   "name"
     t.integer  "artist_id"
     t.integer  "year"
-    t.integer  "tracks_count", :default => 0
-    t.boolean  "compilation",  :default => false
-    t.integer  "source_id"
-    t.integer  "discnum"
+    t.integer  "tracks_count"
+    t.boolean  "compilation"
     t.datetime "updated_at"
     t.datetime "created_at"
   end
 
-  add_index "albums", ["updated_at"], :name => "index_albums_on_updated_at"
-  add_index "albums", ["name"], :name => "index_albums_on_name"
   add_index "albums", ["artist_id"], :name => "index_albums_on_artist_id"
+  add_index "albums", ["name"], :name => "index_albums_on_name"
+  add_index "albums", ["updated_at"], :name => "index_albums_on_updated_at"
 
   create_table "artists", :force => true do |t|
     t.string   "name"
-    t.integer  "albums_count", :default => 0
+    t.integer  "albums_count"
     t.integer  "tracks_count"
     t.datetime "updated_at"
     t.datetime "created_at"
   end
 
-  add_index "artists", ["updated_at"], :name => "index_artists_on_updated_at"
   add_index "artists", ["name"], :name => "index_artists_on_name"
+  add_index "artists", ["updated_at"], :name => "index_artists_on_updated_at"
 
   create_table "encodings", :force => true do |t|
     t.string "name"
@@ -76,6 +74,15 @@ ActiveRecord::Schema.define(:version => 21) do
 
   add_index "login_histories", ["user_id"], :name => "index_login_histories_on_user_id"
 
+  create_table "news", :force => true do |t|
+    t.string   "title"
+    t.string   "content"
+    t.string   "summary"
+    t.string   "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "playlists", :force => true do |t|
     t.string  "name"
     t.integer "user_id"
@@ -98,8 +105,8 @@ ActiveRecord::Schema.define(:version => 21) do
     t.datetime "created_at"
   end
 
-  add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
   add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
+  add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
 
   create_table "similar_artists", :force => true do |t|
     t.integer  "artist_id"
@@ -117,18 +124,17 @@ ActiveRecord::Schema.define(:version => 21) do
   end
 
   create_table "tracks", :force => true do |t|
-    t.integer  "album_id"
     t.string   "title"
-    t.string   "string"
+    t.integer  "album_id"
     t.string   "number",        :limit => 10
     t.integer  "disc"
-    t.integer  "bitrate"
-    t.integer  "length"
-    t.boolean  "vbr"
     t.integer  "artist_id"
     t.string   "relative_path"
     t.string   "filename"
     t.integer  "source_id"
+    t.float    "length"
+    t.integer  "bitrate"
+    t.boolean  "vbr"
     t.datetime "updated_at"
     t.datetime "created_at"
     t.integer  "bytes"
@@ -136,13 +142,13 @@ ActiveRecord::Schema.define(:version => 21) do
     t.datetime "mtime"
   end
 
-  add_index "tracks", ["updated_at"], :name => "index_tracks_on_updated_at"
-  add_index "tracks", ["source_id"], :name => "index_tracks_on_source_id"
-  add_index "tracks", ["filename"], :name => "index_tracks_on_filename"
-  add_index "tracks", ["relative_path"], :name => "index_tracks_on_relative_path"
-  add_index "tracks", ["number"], :name => "index_tracks_on_number"
   add_index "tracks", ["album_id"], :name => "index_tracks_on_album_id"
+  add_index "tracks", ["filename"], :name => "index_tracks_on_filename"
+  add_index "tracks", ["number"], :name => "index_tracks_on_number"
+  add_index "tracks", ["relative_path"], :name => "index_tracks_on_relative_path"
+  add_index "tracks", ["source_id"], :name => "index_tracks_on_source_id"
   add_index "tracks", ["title"], :name => "index_tracks_on_title"
+  add_index "tracks", ["updated_at"], :name => "index_tracks_on_updated_at"
 
   create_table "users", :force => true do |t|
     t.string  "name"

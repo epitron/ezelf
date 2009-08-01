@@ -1,5 +1,5 @@
 class AccountController < ApplicationController
-	model   :user
+	#model   :user
 	layout  'login', :except=>:login
 	
 	skip_before_filter :login_filter
