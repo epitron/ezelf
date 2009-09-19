@@ -32,7 +32,7 @@ class User < ActiveRecord::Base
   end
 
   def upload_dir
-    @attributes["upload_dir"] || default_upload_dir
+    File.expand_path( @attributes["upload_dir"] || default_upload_dir )
   end
 
   def valid_upload_dir?

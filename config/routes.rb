@@ -18,6 +18,7 @@ ActionController::Routing::Routes.draw do |map|
   ## Default Routes as the lowest priority.
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action/:id.:format'
+  map.connect ':controller/:action.:format'
   
   # The priority is based upon order of creation: first created -> highest priority.
 

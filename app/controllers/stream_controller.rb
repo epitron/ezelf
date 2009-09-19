@@ -2,14 +2,14 @@ require 'sha1'
 
 class StreamController < ApplicationController
 
+  include StreamHelper
+
   Mime::Type.register "application/zip",      :zip
   Mime::Type.register "audio/x-mpegurl",      :m3u
   Mime::Type.register "audio/x-scpls",        :pls
   Mime::Type.register "application/xspf+xml", :xspf
 
   session :off, :only => %w[track]
-
-  include StreamHelper
 
   layout false
 
@@ -176,13 +176,16 @@ class StreamController < ApplicationController
   #after_filter :playlist_filter, :only=>[:album, :artist, :shuffle, :folder]
 
   def album
-    @album = Album.find(params[:id])
-    @tracks = @album.sorted_tracks
+    @tracks = Album.find(params[:id]).sorted_tracks
+    render_playlist
+  end
+
+  def render_playlist
     respond_to do |format|
-      format.zip    { render_zipfile        @tracks }
       format.m3u    { render_m3u_playlist   @tracks }
       format.pls    { render_pls_playlist   @tracks }
       format.xspf   { render_xspf_playlist  @tracks }
+      format.zip    { render_zipfile        @tracks }
     end
   end
 

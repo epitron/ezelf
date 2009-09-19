@@ -11,7 +11,7 @@ require 'sha1'
 #############################################################################
 ## Rails Init Crap
 #RAILS_GEM_VERSION = '1.2.3' unless defined? RAILS_GEM_VERSION
-RAILS_GEM_VERSION = '2.3.2' unless defined? RAILS_GEM_VERSION
+RAILS_GEM_VERSION = '2.3.4' unless defined? RAILS_GEM_VERSION
 # ENV['RAILS_ENV'] ||= 'production'
 require File.join(File.dirname(__FILE__), 'boot')
 #############################################################################
