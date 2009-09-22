@@ -64,7 +64,7 @@ module ApplicationHelper
             Tab.new( "artists",  { :controller => "browse", :action => "artists"  }  ),
             Tab.new( "files",    { :controller => "browse", :action => "files"    }  ),
             Tab.new( "uploads",  { :controller => "browse",  :action => "uploads" }  ),
-            Tab.new( "shuffle",  { :controller => "stream", :action => "shuffle"  }  ),
+            Tab.new( "shuffle",  { :controller => "stream", :action => "shuffle.m3u"  }  ),
     #Tab.new( "stations", { :controller => "browse", :action => "stations" }  ),
     ]
   end

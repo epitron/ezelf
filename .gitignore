@@ -14,3 +14,5 @@
 /test/albums*
 /.eprj
 /.idea
+/uploads
+/backup
