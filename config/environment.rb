@@ -76,12 +76,12 @@ Rails::Initializer.run do |config|
   config.gem 'wmainfo-rb',       :lib=>'wmainfo'
   config.gem 'rubyzip',          :lib=>'zip/zip'
 
-  config.gem "thoughtbot-clearance", :lib => 'clearance', :source  => 'http://gems.github.com'
+  #config.gem "thoughtbot-clearance", :lib => 'clearance', :source  => 'http://gems.github.com'
 
-  config.gem 'thoughtbot-factory_girl',
-    :lib     => 'factory_girl',
-    :source  => "http://gems.github.com"
-    #:version => '1.2.1'
+  #config.gem 'thoughtbot-factory_girl',
+  #  :lib     => 'factory_girl',
+  #  :source  => "http://gems.github.com"
+  #  #:version => '1.2.1'
 
   #require 'lib/audioinfo'
   #require 'mp3info_with_extensions'
