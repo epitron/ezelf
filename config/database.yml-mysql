@@ -1,7 +1,7 @@
 development:
   adapter: mysql
   database: ezelf
-#  encoding: utf8
+  encoding: utf8
   username: root
   password: 
   host: localhost
@@ -9,7 +9,7 @@ development:
 test:
   adapter: mysql
   database: ezelf_test
-#  encoding: utf8
+  encoding: utf8
   username: root
   password: 
   host: localhost
@@ -17,7 +17,7 @@ test:
 production:
   adapter: mysql
   database: ezelf
-#  encoding: utf8
+  encoding: utf8
   username: root
   password: 
   host: localhost
