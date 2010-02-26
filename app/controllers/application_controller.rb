@@ -43,7 +43,6 @@ class ApplicationController < ActionController::Base
   before_filter :session_from_params
   before_filter :login_filter
   #before_filter :show_env
-  #
   #before_filter :check_sources, :except=>[]
 
   def check_sources

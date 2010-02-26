@@ -2,7 +2,7 @@ require 'sha1'
 
 class StreamController < ApplicationController
 
-  include StreamHelper
+  include ApplicationHelper
 
   Mime::Type.register "application/zip",      :zip
   Mime::Type.register "audio/x-mpegurl",      :m3u
