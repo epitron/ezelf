@@ -1,0 +1,41 @@
+listen=YES
+ftp_username=ftp
+
+anonymous_enable=NO
+
+guest_enable=YES
+guest_username=ftp
+
+local_enable=YES
+local_root=/home/ftp/$USER
+local_umask=022
+write_enable=YES
+nopriv_user=nobody
+chroot_local_user=YES
+
+pam_service_name=vsftpd
+user_config_dir=/etc/vsftpd_users
+user_sub_token=$USER
+virtual_use_local_privs=YES
+hide_ids=YES
+
+ftpd_banner=The Land of Chocolate
+dirmessage_enable=YES
+xferlog_enable=YES
+connect_from_port_20=YES
+ls_recurse_enable=YES
+secure_chroot_dir=/var/run/vsftpd
+rsa_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem
+rsa_private_key_file=/etc/ssl/private/ssl-cert-snakeoil.key
+
+max_per_ip=2
+
+# pasv mode
+#port_enable=NO
+pasv_enable=YES
+pasv_min_port=30000
+pasv_max_port=40000
+# enable for FXP
+pasv_promiscuous=YES
+
+

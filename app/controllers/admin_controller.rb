@@ -1,5 +1,5 @@
 class AdminController < ApplicationController
-  include Clearance::Authentication
+  #include Clearance::Authentication
   #layout "admin"
   #before_filter :administrators_only!
 

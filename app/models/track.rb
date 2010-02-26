@@ -81,6 +81,10 @@ class Track < ActiveRecord::Base
     Track.find_by_sql("SELECT * FROM artists,albums,tracks WHERE tracks.album_id = albums.id AND albums.artist_id = artists.id ORDER BY artists.name,albums.name,tracks.number")
   end
 
+  def self.random(num=150)
+    find_by_sql( ["SELECT * FROM tracks ORDER BY rand() LIMIT ?", num])
+  end
+
   def self.format_tracknum(num)
     num.to_s.gsub(/\d+/) {|m| "%0.2d" % m }
   end
@@ -92,7 +96,6 @@ class Track < ActiveRecord::Base
       model.create fields
     end
   end
-  
   
 #  def self.add_file( source, path_and_filename )
 #  

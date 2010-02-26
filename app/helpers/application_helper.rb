@@ -1,26 +1,34 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
 
-
+  ##############################################################################
   ## Link helpers
+  ##############################################################################
 
-
-  def link_to_track(desc, track)
-      url = url_for :controller=>:stream, :action=>"track", :id=>track.id
-      return "<a href=\"#{url}.mp3\">#{desc || url}</a>"
+  def track_url(track)
+    "#{url_for :controller=>:stream, :action=>"track", :id=>track.id, :only_path=>false}.mp3"
   end
 
+  def link_to_track(desc, track)
+      %{<a href="#{ track_url(track) }">#{ desc || url }</a>}
+  end
 
   def link_to_album(desc, album)
     url = url_for :controller=>:stream, :action=>"album", :id=>album.id
-    return "<a href=\"#{url}.m3u\">#{desc || url}</a>"
+    %{<a href="#{url}.m3u">#{ desc || url }</a>}
   end
 
+  def js(*args)
+    content_for :header, javascript_include_tag(*args)
+  end
 
-
+  def css(*args)
+    content_for :header, stylesheet_link_tag(*args)
+  end
   
+  ##############################################################################
   ## Random things
-
+  ##############################################################################
 
   def get_random_albums(n=10)
     #result = begin
@@ -30,7 +38,6 @@ module ApplicationHelper
     #end
     Album.all(:select=>:id).sort_by{rand}[0...n].map{|x|x.reload}
   end
-
 
   def random_elf
     elves = Dir["#{RAILS_ROOT}/public/elves/*"]
@@ -44,8 +51,9 @@ module ApplicationHelper
 
 
 
+  ##############################################################################
   ## Tabs
-
+  ##############################################################################
 
   class Tab
     attr_accessor :selected, :name, :parameters
@@ -56,8 +64,8 @@ module ApplicationHelper
       @parameters = parameters
     end
   end
-    
 
+    
   def main_tabs
     [
             Tab.new( "home",     { :controller => "home",   :action => "index"    }  ),
@@ -131,10 +139,11 @@ module ApplicationHelper
       
     tabbar.join ""
   end
-      
 
 
+  ##############################################################################
   ## Throbber
+  ##############################################################################
 
   def ajax_throbber
     %{
@@ -149,7 +158,5 @@ module ApplicationHelper
       </div>
     }
   end
-
-
 
 end

@@ -75,4 +75,8 @@ class BrowseController < ApplicationController
       end
     end
 
+    def pageplayer
+      render :layout=>false
+    end
+
 end

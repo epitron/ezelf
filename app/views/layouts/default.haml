@@ -11,7 +11,9 @@
     = stylesheet_link_tag "extra"
   
     %link{:rel=>"SHORTCUT ICON", :href=>"/favicon.ico"}
-  
+
+    = yield :header
+
     = @content_for_head
   
   %body

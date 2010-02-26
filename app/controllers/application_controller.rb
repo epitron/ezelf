@@ -36,7 +36,7 @@ Processing BrowseController#session_key (for 127.0.0.1 at 2007-06-13 05:30:28) [
 =end
 
 class ApplicationController < ActionController::Base
-  include Clearance::Authentication
+  #include Clearance::Authentication
 
   include LoginSystem
 

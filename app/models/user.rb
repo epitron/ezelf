@@ -14,7 +14,7 @@
 #
 
 class User < ActiveRecord::Base
-  include Clearance::User
+  #include Clearance::User
   has_many :playlists
   has_many :listenings
   has_many :logins, :class_name => 'LoginHistory'

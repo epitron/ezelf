@@ -1,0 +1,53 @@
+- css("page-player", "optional-themes", "optional-annotations")
+
+- js("soundmanager2")
+
+- content_for :header do
+  :javascript
+    soundManager.useHighPerformance = true; // keep flash on screen, boost performance
+    soundManager.useFastPolling = true; // increased JS callback frequency
+    soundManager.url = "/swf/";
+    var PP_CONFIG = {
+      flashVersion: 9,       // version of Flash to tell SoundManager to use - either 8 or 9. Flash 9 required for peak / spectrum data.
+      usePeakData: true     // [Flash 9 only] whether or not to show peak data (left/right channel values) - nor noticable on CPU
+      //useWaveformData: true, // [Flash 9 only] show raw waveform data - WARNING: LIKELY VERY CPU-HEAVY
+      //useEQData: false,      // [Flash 9 only] show EQ (frequency spectrum) data
+      //useFavIcon: true,      // try to apply peakData to address bar (Firefox + Opera) - performance note: appears to make Firefox 3 do some temporary, heavy disk access/swapping/garbage collection at first(?)
+      //useMovieStar: true     // Flash 9.0r115+ only: Support for a subset of MPEG4 formats.
+    };
+
+- js "page-player"
+
+	
+.content
+  %h1 69 Random Tracks
+
+  %ul.playlist
+    - for track in Track.random(69)
+      %li
+        %a{:href=>track_url(track)}
+          = track.title
+          %span.comment= track.artist.name
+
+  #control-template
+    / control markup inserted dynamically after each link
+    .controls
+      .statusbar
+        .loading
+        .position  
+    .timing
+      #sm2_timing.timing-data
+        %span.sm2_position
+          \%s1
+        \/
+        %span.sm2_total
+          \%s2
+    .peak
+      .peak-box
+        %span.l 
+        %span.r
+
+  #spectrum-container.spectrum-container
+    .spectrum-box
+      .spectrum
+
