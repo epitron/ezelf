@@ -1,10 +1,10 @@
 # == Schema Information
-# Schema version: 20
+# Schema version: 22
 #
 # Table name: similar_artists
 #
-#  id            :integer       not null, primary key
-#  artist_id     :integer       
+#  id            :integer(4)    not null, primary key
+#  artist_id     :integer(4)    
 #  similar_cache :text          
 #  updated_at    :datetime      
 #

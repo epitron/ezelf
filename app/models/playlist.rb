@@ -1,11 +1,11 @@
 # == Schema Information
-# Schema version: 20
+# Schema version: 22
 #
 # Table name: playlists
 #
-#  id      :integer       not null, primary key
+#  id      :integer(4)    not null, primary key
 #  name    :string(255)   
-#  user_id :integer       
+#  user_id :integer(4)    
 #
 
 # == Schema Information

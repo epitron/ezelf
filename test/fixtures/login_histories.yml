@@ -1,10 +1,10 @@
 # == Schema Information
-# Schema version: 20
+# Schema version: 22
 #
 # Table name: login_histories
 #
-#  id          :integer       not null, primary key
-#  user_id     :integer       
+#  id          :integer(4)    not null, primary key
+#  user_id     :integer(4)    
 #  created_at  :datetime      
 #  ip          :string(255)   
 #  hostname    :string(255)   

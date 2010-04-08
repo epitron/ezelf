@@ -43,7 +43,11 @@ class StreamController < ApplicationController
     #"HTTP_RANGE"=>"bytes=878672-",
     #send_file track.fullpath, :type => 'audio/mpeg', :stream => true, :buffer_size => 4096, :disposition => 'inline'
     #stream_file track.fullpath, :type => 'audio/mpeg', :stream => true, :buffer_size => 4096, :disposition => 'inline'
-    xsendfile track.fullpath, :type => 'audio/mpeg'
+    if RAILS_ENV == "production"
+      xsendfile track.fullpath, :type => 'audio/mpeg'
+    else
+      send_file track.fullpath, :type => 'audio/mpeg'
+    end
   end
 
 

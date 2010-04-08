@@ -1,12 +1,11 @@
 #!/usr/bin/env ruby
+
 puts "+ Loading environment..."
 require 'config/environment'
 
+[Artist, Album, Track].each { |table| table.truncate! }
+
 for source in Source.all
-  puts "#{source}"
-  puts "+ Removing old albums..."
-  source.clear!
-  
   puts "+ Importing albums..."
   source.import!
   

@@ -15,8 +15,10 @@ ActiveRecord::Schema.define(:version => 22) do
     t.string   "name"
     t.integer  "artist_id"
     t.integer  "year"
-    t.integer  "tracks_count"
-    t.boolean  "compilation"
+    t.integer  "tracks_count", :default => 0
+    t.boolean  "compilation",  :default => false
+    t.integer  "source_id"
+    t.integer  "discnum"
     t.datetime "updated_at"
     t.datetime "created_at"
   end
@@ -27,7 +29,7 @@ ActiveRecord::Schema.define(:version => 22) do
 
   create_table "artists", :force => true do |t|
     t.string   "name"
-    t.integer  "albums_count"
+    t.integer  "albums_count", :default => 0
     t.integer  "tracks_count"
     t.datetime "updated_at"
     t.datetime "created_at"
@@ -124,17 +126,18 @@ ActiveRecord::Schema.define(:version => 22) do
   end
 
   create_table "tracks", :force => true do |t|
-    t.string   "title"
     t.integer  "album_id"
+    t.string   "title"
+    t.string   "string"
     t.string   "number",        :limit => 10
     t.integer  "disc"
+    t.integer  "bitrate"
+    t.integer  "length"
+    t.boolean  "vbr"
     t.integer  "artist_id"
     t.string   "relative_path"
     t.string   "filename"
     t.integer  "source_id"
-    t.float    "length"
-    t.integer  "bitrate"
-    t.boolean  "vbr"
     t.datetime "updated_at"
     t.datetime "created_at"
     t.integer  "bytes"
