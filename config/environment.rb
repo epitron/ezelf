@@ -10,8 +10,7 @@ require 'sha1'
 
 #############################################################################
 ## Rails Init Crap
-#RAILS_GEM_VERSION = '1.2.3' unless defined? RAILS_GEM_VERSION
-RAILS_GEM_VERSION = '2.3.4' unless defined? RAILS_GEM_VERSION
+RAILS_GEM_VERSION = '2.3.5' unless defined? RAILS_GEM_VERSION
 # ENV['RAILS_ENV'] ||= 'production'
 require File.join(File.dirname(__FILE__), 'boot')
 #############################################################################
@@ -36,6 +35,35 @@ require File.join(File.dirname(__FILE__), 'exceptions')
 
 Rails::Initializer.run do |config|
 
+  #############################################################################
+  ## Utils
+  config.gem 'rio'
+  config.gem 'rubyzip',          :lib=>'zip/zip'
+  #############################################################################
+
+  #############################################################################
+  ## MP3 Info
+  require 'mp3info'
+  #config.gem 'ruby-mp3info',    :lib=>'mp3info'
+
+  config.gem 'ruby-audioinfo',   :lib=>'audioinfo', :lib=>'audioinfo/album'
+  #require 'audioinfo/album'
+
+  config.gem 'ruby-ogginfo',     :lib=>'ogginfo'
+  config.gem 'MP4Info',          :lib=>'mp4info'
+  config.gem 'flacinfo-rb',      :lib=>'flacinfo'
+  config.gem 'wmainfo-rb',       :lib=>'wmainfo'
+
+  #require 'lib/audioinfo'
+  #require 'mp3info_with_extensions'
+  #############################################################################
+  
+  #############################################################################
+  ## Music Services
+  config.gem 'rbrainz'
+  config.gem 'scrobbler'
+  #############################################################################
+  
   config.frameworks -= [ :action_web_service, ] #:action_mailer ]
   # config.plugins = %W( exception_notification ssl_requirement )
   # config.load_paths += %W( #{RAILS_ROOT}/extras )
@@ -60,39 +88,6 @@ Rails::Initializer.run do |config|
     }.gsub(/\s+/,'')
   }
 
-  
-  config.gem 'rio'
-
-  
-  #############################################################################
-  ## MP3 Info
-  require 'mp3info'
-  #require 'audioinfo/album'
-  config.gem 'ruby-audioinfo',   :lib=>'audioinfo', :lib=>'audioinfo/album'
-  #config.gem 'ruby-mp3info',    :lib=>'mp3info'
-  config.gem 'ruby-ogginfo',     :lib=>'ogginfo'
-  config.gem 'MP4Info',          :lib=>'mp4info'
-  config.gem 'flacinfo-rb',      :lib=>'flacinfo'
-  config.gem 'wmainfo-rb',       :lib=>'wmainfo'
-  config.gem 'rubyzip',          :lib=>'zip/zip'
-
-  #config.gem "thoughtbot-clearance", :lib => 'clearance', :source  => 'http://gems.github.com'
-
-  #config.gem 'thoughtbot-factory_girl',
-  #  :lib     => 'factory_girl',
-  #  :source  => "http://gems.github.com"
-  #  #:version => '1.2.1'
-
-  #require 'lib/audioinfo'
-  #require 'mp3info_with_extensions'
-  #############################################################################
-  
-  #############################################################################
-  ## Music Services
-  config.gem 'rbrainz'
-  config.gem 'scrobbler'
-  #############################################################################
-  
 end
 
 #############################################################################

@@ -1,9 +1,9 @@
 # == Schema Information
-# Schema version: 20
+# Schema version: 22
 #
 # Table name: encodings
 #
-#  id          :integer       not null, primary key
+#  id          :integer(4)    not null, primary key
 #  name        :string(255)   
 #  description :string(255)   
 #

@@ -1,13 +1,12 @@
 # == Schema Information
-# Schema version: 20
+# Schema version: 22
 #
 # Table name: sources
 #
-#  id          :integer       not null, primary key
+#  id          :integer(4)    not null, primary key
 #  name        :string(255)   
 #  description :string(255)   
 #  uri         :string(255)   
-#  encoding_id :integer       default(1)
 #
 
 # == Schema Information

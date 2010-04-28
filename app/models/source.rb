@@ -1,13 +1,12 @@
 # == Schema Information
-# Schema version: 20
+# Schema version: 22
 #
 # Table name: sources
 #
-#  id          :integer       not null, primary key
+#  id          :integer(4)    not null, primary key
 #  name        :string(255)   
 #  description :string(255)   
 #  uri         :string(255)   
-#  encoding_id :integer       default(1)
 #
 
 require 'pathname'
@@ -68,6 +67,7 @@ class Source < ActiveRecord::Base
   def each_album(fast=false, &block)
     
     path = rio(uri)
+    p [:path, path]
     raise "can only scan dirs" unless path.dir?
 
     counter = 0
@@ -233,15 +233,15 @@ class AudioInfo::Album
   end
   
   def artists
-    @artists ||= files.map(&:artist).uniq
+    @artists ||= files.map(&:artist).compact.uniq
   end
   
   def albums
-    @albums ||= files.map(&:album).uniq
+    @albums ||= files.map(&:album).compact.uniq
   end
 
   def years
-    @years ||= files.map(&:year).uniq
+    @years ||= files.map(&:year).compact.uniq
   end
 
   def squashed_artists

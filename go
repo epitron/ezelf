@@ -1,1 +1,1 @@
-script/server -e development -p 3001
+script/server -e development -p 3000
