@@ -20,7 +20,7 @@ class StreamedZip
 
     #open streams
     #out = open "test.zip", "wb"
-    command = %{cd "#{root}"; zip -r -0 -@ -}
+    command = %{cd "#{root}"; zip -r -X -0 -@ -}
     puts "  |_ command: #{command.inspect}"
     stdin, stdout, stderr = Open3.popen3(command)
 
