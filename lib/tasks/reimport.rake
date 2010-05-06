@@ -1,35 +1,23 @@
-require 'import_fixtures'
 
 namespace :db do
 
+  def do_task(name)
+    puts "#" * 80
+    puts "## #{name}"
+    puts "#" * 80
+    Rake::Task[name].invoke
+    puts
+  end
+
   desc "Reimport..."
   task :reimport => [:environment] do
-    puts "+ Removing dev database..."
-    dbfile = "#{RAILS_ROOT}/db/dev.db"
-    rm dbfile if File.exists? dbfile
-    
-    puts "+ Removing schema.rb..."
-    schema = "#{RAILS_ROOT}/db/schema.rb"
-    rm schema if File.exists? schema
-    
-    puts "+ Migrating..."
-    Rake::Task["db:migrate"].invoke
-    #Rake::Task["db:import_fixtures"].invoke
-    
-    puts "+ Annotating..."
-    Rake::Task["annotate_models"].invoke
-  end
-  
-  desc "Import fixtures..."
-  task :import_fixtures => [:environment] do
-    #fixtures = %w(products product_types images users colors turnarounds payment_methods_users)
-    fixtures = Dir["#{RAILS_ROOT}/spec/fixtures/*.yml"]
+    do_task("db:drop")
+    do_task("db:create")
+    do_task("db:migrate")
+    do_task("db:fixtures:load")
 
-    fixtures.each do |fixture|
-      import_fixture(fixture)
-    end
-    
-    #Rake::Task[:secondary].invoke
+    do_task("db:test:clone_structure")
+    #do_task("annotate_models")
   end
   
 end
