@@ -68,12 +68,13 @@ module ApplicationHelper
     
   def main_tabs
     [
-            Tab.new( "home",     { :controller => "home",   :action => "index"    }  ),
-            Tab.new( "artists",  { :controller => "browse", :action => "artists"  }  ),
-            Tab.new( "files",    { :controller => "browse", :action => "files"    }  ),
-            Tab.new( "uploads",  { :controller => "browse",  :action => "uploads" }  ),
-            Tab.new( "shuffle",  { :controller => "stream", :action => "shuffle.m3u"  }  ),
-    #Tab.new( "stations", { :controller => "browse", :action => "stations" }  ),
+      Tab.new( "home",     { :controller => "home",   :action => "index"    }  ),
+      Tab.new( "player",   { :controller => "browse", :action => "player"  }  ),
+      Tab.new( "artists",  { :controller => "browse", :action => "artists"  }  ),
+      Tab.new( "files",    { :controller => "browse", :action => "files"    }  ),
+      Tab.new( "uploads",  { :controller => "browse",  :action => "uploads" }  ),
+      Tab.new( "shuffle",  { :controller => "stream", :action => "shuffle.m3u"  }  ),
+      #Tab.new( "stations", { :controller => "browse", :action => "stations" }  ),
     ]
   end
 
