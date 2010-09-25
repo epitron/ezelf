@@ -30,12 +30,12 @@ function PagePlayer(oConfigOverride) {
     useEQData: false,       // [Flash 9 only]: enable sound EQ (frequency spectrum data) - WARNING: Also CPU-intensive.
     fillGraph: false,       // [Flash 9 only]: draw full lines instead of only top (peak) spectrum points
     allowRightClick:true,   // let users right-click MP3 links ("save as...", etc.) or discourage (can't prevent.)
-    useThrottling: false,   // try to rate-limit potentially-expensive calls (eg. dragging position around)
+    useThrottling: true,   // try to rate-limit potentially-expensive calls (eg. dragging position around)
     autoStart: false,       // begin playing first sound when page loads
     playNext: true,         // stop after one sound, or play through list until end
     updatePageTitle: true,  // change the page title while playing sounds
     emptyTime: '-:--',      // null/undefined timer values (before data is available)
-    useFavIcon: true       // try to show peakData in address bar (Firefox + Opera)
+    useFavIcon: false       // try to show peakData in address bar (Firefox + Opera) - may be too CPU heavy
   }
 
   sm.debugMode = (window.location.href.toString().match(/debug=1/i)?true:false); // enable with #debug=1 for example
@@ -72,6 +72,7 @@ function PagePlayer(oConfigOverride) {
   this.cssBase = this.cssBase.join(' ');
 
   // apply some items to SM2
+  sm.useFlashBlock = true;
   sm.flashVersion = this.config.flashVersion;
   if (sm.flashVersion >= 9) {
     sm.useMovieStar = this.config.useMovieStar; // enable playing FLV, MP4 etc.
@@ -92,6 +93,7 @@ function PagePlayer(oConfigOverride) {
   this.dragTimer = null;
   this.pageTitle = document.title;
   this.lastWPExec = new Date();
+  this.lastWLExec = new Date();
   this.vuMeterData = [];
   this.oControls = null;
 
@@ -102,6 +104,8 @@ function PagePlayer(oConfigOverride) {
   this.removeEventHandler = function(o,evtName,evtHandler) {
     typeof(attachEvent)=='undefined'?o.removeEventListener(evtName,evtHandler,false):o.detachEvent('on'+evtName,evtHandler);
   }
+
+var count = 0;
 
   this.hasClass = function(o,cStr) {
     return (typeof(o.className)!='undefined'?new RegExp('(^|\\s)'+cStr+'(\\s|$)').test(o.className):false);
@@ -120,7 +124,7 @@ function PagePlayer(oConfigOverride) {
   }
 
   this.getElementsByClassName = function(className,tagNames,oParent) {
-    var doc = (oParent||document);
+    var doc = (oParent?oParent:document);
     var matches = [];
     var i,j;
     var nodes = [];
@@ -262,11 +266,23 @@ function PagePlayer(oConfigOverride) {
     },
 
     whileloading: function() {
-      this._data.oLoading.style.width = (((this.bytesLoaded/this.bytesTotal)*100)+'%'); // theoretically, this should work.
-      if (!this._data.didRefresh && this._data.metadata) {
-        this._data.didRefresh = true;
-        this._data.metadata.refresh();
+      function doWork() {
+        this._data.oLoading.style.width = (((this.bytesLoaded/this.bytesTotal)*100)+'%'); // theoretically, this should work.
+        if (!this._data.didRefresh && this._data.metadata) {
+          this._data.didRefresh = true;
+          this._data.metadata.refresh();
+        }
       }
+      if (!pl.config.useThrottling) {
+        doWork.apply(this);
+      } else {
+        d = new Date();
+        if (d && d-self.lastWLExec>30 || this.bytesLoaded === this.bytesTotal) {
+          doWork.apply(this);
+          self.lastWLExec = d;
+        }
+      }
+
     },
 
     onload: function() {
@@ -314,7 +330,7 @@ function PagePlayer(oConfigOverride) {
         this._data.oPosition.style.width = (((this.position/self.getDurationEstimate(this))*100)+'%');
       } else {
         d = new Date();
-        if (d-self.lastWPExec>500) {
+        if (d-self.lastWPExec>30) {
           self.updateTime.apply(this);
 	      if (sm.flashVersion >= 9) {
             if (pl.config.usePeakData && this.instanceOptions.usePeakData) {
@@ -322,7 +338,7 @@ function PagePlayer(oConfigOverride) {
 	        }
 	        if (pl.config.useWaveformData && this.instanceOptions.useWaveformData || pl.config.useEQData && this.instanceOptions.useEQData) {
 		      self.updateGraph.apply(this);
-			}
+		}
           }
           if (this._data.metadata) self.refreshMetadata(this);
           this._data.oPosition.style.width = (((this.position/self.getDurationEstimate(this))*100)+'%');
@@ -430,7 +446,7 @@ function PagePlayer(oConfigOverride) {
   }
 
   this.getTheDamnTarget = function(e) {
-    return (e.target||e.srcElement||window.event.srcElement);
+    return (e.target||(window.event?window.event.srcElement:null));
   }
   
   this.withinStatusBar = function(o) {
@@ -444,6 +460,9 @@ function PagePlayer(oConfigOverride) {
       return (pl.config.allowRightClick); // ignore right-clicks
     }
     var o = self.getTheDamnTarget(e);
+    if (!o) {
+      return true;
+    }
     if (self.dragActive) self.stopDrag(); // to be safe
     if (self.withinStatusBar(o)) {
       // self.handleStatusClick(e);
@@ -457,88 +476,87 @@ function PagePlayer(oConfigOverride) {
       return true;
     }
     var sURL = o.getAttribute('href');
-    if (!o.href || (!sm.canPlayURL(o.href) && !self.hasClass(o,'playable')) || self.hasClass(o,'exclude')) {
-      if (isIE && o.onclick) {
-        return false; // IE will run this handler before .onclick(), everyone else is cool?
-      }
-      return true; // pass-thru for non-MP3/non-links
-    }
-    var soundURL = o.href;
-    var thisSound = self.getSoundByObject(o);
-    if (thisSound) {
-      // sound already exists
-      self.setPageTitle(thisSound._data.originalTitle);
-      if (thisSound == self.lastSound) {
-        // ..and was playing (or paused) and isn't in an error state
-		if (thisSound.readyState != 2) {
-		  if (thisSound.playState != 1) {
-			// not yet playing
-			thisSound.play();
-		  } else {
-            thisSound.togglePause();
-          }
-		} else {
-		  sm._writeDebug('Warning: sound failed to load (security restrictions, 404 or bad format)',2);
-		}
-      } else {
-        // ..different sound
-        if (self.lastSound) self.stopSound(self.lastSound);
-        thisSound._data.oTimingBox.appendChild(document.getElementById('spectrum-container'));
-        thisSound.togglePause(); // start playing current
-      }
+    if (!o.href || (!sm.canPlayLink(o) && !self.hasClass(o,'playable')) || self.hasClass(o,'exclude')) {
+      // do nothing, don't return anything.
     } else {
-      // create sound
-      thisSound = sm.createSound({
-        id:'pagePlayerMP3Sound'+(self.soundCount++),
-        url:soundURL,
-        onplay:self.events.play,
-        onstop:self.events.stop,
-        onpause:self.events.pause,
-        onresume:self.events.resume,
-        onfinish:self.events.finish,
-        whileloading:self.events.whileloading,
-        whileplaying:self.events.whileplaying,
-		onmetadata:self.events.metadata,
-        onload:self.events.onload
-      });
-      // append control template
-      var oControls = self.oControls.cloneNode(true);
-      o.parentNode.appendChild(oControls);
-      o.parentNode.appendChild(document.getElementById('spectrum-container'));
-      self.soundsByObject[o.rel] = thisSound;
-      // tack on some custom data
-      thisSound._data = {
-        oLink: o, // DOM reference within SM2 object event handlers
-        oLI: o.parentNode,
-        oControls: self.getElementsByClassName('controls','div',o.parentNode)[0],
-        oStatus: self.getElementsByClassName('statusbar','div',o.parentNode)[0],
-        oLoading: self.getElementsByClassName('loading','div',o.parentNode)[0],
-        oPosition: self.getElementsByClassName('position','div',o.parentNode)[0],
-        oTimingBox: self.getElementsByClassName('timing','div',o.parentNode)[0],
-        oTiming: self.getElementsByClassName('timing','div',o.parentNode)[0].getElementsByTagName('div')[0],
-        oPeak: self.getElementsByClassName('peak','div',o.parentNode)[0],
-        oGraph: self.getElementsByClassName('spectrum-box','div',o.parentNode)[0],
-        nIndex: self.getSoundIndex(o),
-        className: self.css.sPlaying,
-        originalTitle: o.innerHTML,
-        metadata: null
-      };
-      thisSound._data.oTimingBox.appendChild(document.getElementById('spectrum-container'));
-      // "Metadata"
-      if (thisSound._data.oLI.getElementsByTagName('ul').length) {
-        thisSound._data.metadata = new Metadata(thisSound);
-      }
-      // set initial timer stuff (before loading)
-      var str = self.strings['timing'].replace('%s1',self.config.emptyTime);
-      str = str.replace('%s2',self.config.emptyTime);
-      thisSound._data.oTiming.innerHTML = str;
-      self.sounds.push(thisSound);
-      if (self.lastSound) self.stopSound(self.lastSound);
-      self.resetGraph.apply(thisSound);
-      thisSound.play();
-    }
-    self.lastSound = thisSound; // reference for next call
-    return self.stopEvent(e);
+	  // we have something we're interested in.
+	    var soundURL = o.href;
+	    var thisSound = self.getSoundByObject(o);
+	    if (thisSound) {
+	      // sound already exists
+	      self.setPageTitle(thisSound._data.originalTitle);
+	      if (thisSound == self.lastSound) {
+	        // ..and was playing (or paused) and isn't in an error state
+			if (thisSound.readyState != 2) {
+			  if (thisSound.playState != 1) {
+				// not yet playing
+				thisSound.play();
+			  } else {
+	            thisSound.togglePause();
+	          }
+			} else {
+			  sm._writeDebug('Warning: sound failed to load (security restrictions, 404 or bad format)',2);
+			}
+	      } else {
+	        // ..different sound
+	        if (self.lastSound) self.stopSound(self.lastSound);
+	        thisSound._data.oTimingBox.appendChild(document.getElementById('spectrum-container'));
+	        thisSound.togglePause(); // start playing current
+	      }
+	    } else {
+	      // create sound
+	      thisSound = sm.createSound({
+	        id:'pagePlayerMP3Sound'+(self.soundCount++),
+	        url:decodeURI(soundURL),
+	        onplay:self.events.play,
+	        onstop:self.events.stop,
+	        onpause:self.events.pause,
+	        onresume:self.events.resume,
+	        onfinish:self.events.finish,
+	        whileloading:self.events.whileloading,
+	        whileplaying:self.events.whileplaying,
+	        onmetadata:self.events.metadata,
+	        onload:self.events.onload
+	      });
+	      // append control template
+	      var oControls = self.oControls.cloneNode(true);
+	      o.parentNode.appendChild(oControls);
+	      o.parentNode.appendChild(document.getElementById('spectrum-container'));
+	      self.soundsByObject[o.rel] = thisSound;
+	      // tack on some custom data
+	      thisSound._data = {
+	        oLink: o, // DOM reference within SM2 object event handlers
+	        oLI: o.parentNode,
+	        oControls: self.getElementsByClassName('controls','div',o.parentNode)[0],
+	        oStatus: self.getElementsByClassName('statusbar','div',o.parentNode)[0],
+	        oLoading: self.getElementsByClassName('loading','div',o.parentNode)[0],
+	        oPosition: self.getElementsByClassName('position','div',o.parentNode)[0],
+	        oTimingBox: self.getElementsByClassName('timing','div',o.parentNode)[0],
+	        oTiming: self.getElementsByClassName('timing','div',o.parentNode)[0].getElementsByTagName('div')[0],
+	        oPeak: self.getElementsByClassName('peak','div',o.parentNode)[0],
+	        oGraph: self.getElementsByClassName('spectrum-box','div',o.parentNode)[0],
+	        nIndex: self.getSoundIndex(o),
+	        className: self.css.sPlaying,
+	        originalTitle: o.innerHTML,
+	        metadata: null
+	      };
+	      thisSound._data.oTimingBox.appendChild(document.getElementById('spectrum-container'));
+	      // "Metadata"
+	      if (thisSound._data.oLI.getElementsByTagName('ul').length) {
+	        thisSound._data.metadata = new Metadata(thisSound);
+	      }
+	      // set initial timer stuff (before loading)
+	      var str = self.strings['timing'].replace('%s1',self.config.emptyTime);
+	      str = str.replace('%s2',self.config.emptyTime);
+	      thisSound._data.oTiming.innerHTML = str;
+	      self.sounds.push(thisSound);
+	      if (self.lastSound) self.stopSound(self.lastSound);
+	      self.resetGraph.apply(thisSound);
+	      thisSound.play();
+	    }
+	    self.lastSound = thisSound; // reference for next call
+	    return self.stopEvent(e);
+	 }
   }
   
   this.handleMouseDown = function(e) {
@@ -548,6 +566,9 @@ function PagePlayer(oConfigOverride) {
       return (pl.config.allowRightClick); // ignore right-clicks
     }
     var o = self.getTheDamnTarget(e);
+    if (!o) {
+      return true;
+    }
     if (!self.withinStatusBar(o)) return true;
     self.dragActive = true;
     self.lastSound.pause();
@@ -602,10 +623,13 @@ function PagePlayer(oConfigOverride) {
   }
   
   this.stopEvent = function(e) {
-   if (typeof e != 'undefined' && typeof e.preventDefault != 'undefined') {
-      e.preventDefault();
-    } else if (typeof event != 'undefined' && typeof event.returnValue != 'undefined') {
-      event.returnValue = false;
+   if (typeof e != 'undefined') {
+      if (typeof e.preventDefault != 'undefined') {
+        e.preventDefault();
+      } else if (typeof e.returnValue != 'undefined' || typeof event != 'undefined') {
+        (e||event).cancelBubble = true;
+        (e||event).returnValue = false;
+      }
     }
     return false;
   }
@@ -613,6 +637,9 @@ function PagePlayer(oConfigOverride) {
   this.setPosition = function(e) {
     // called from slider control
     var oThis = self.getTheDamnTarget(e);
+    if (!oThis) {
+      return true;
+    }
     var oControl = oThis;
     while (!self.hasClass(oControl,'controls') && oControl.parentNode) {
       oControl = oControl.parentNode;
@@ -635,7 +662,7 @@ function PagePlayer(oConfigOverride) {
     if (oSound.instanceOptions.isMovieStar) {
 	  return (oSound.duration);
     } else {
-      return (!oSound._data.metadata || !oSound._data.metadata.data.givenDuration?oSound.durationEstimate:oSound._data.metadata.data.givenDuration);
+      return (!oSound._data.metadata || !oSound._data.metadata.data.givenDuration?(oSound.durationEstimate||0):oSound._data.metadata.data.givenDuration);
     }
   }
 
@@ -730,7 +757,7 @@ function PagePlayer(oConfigOverride) {
     // grab all links, look for .mp3
     var foundItems = 0;
     for (var i=0; i<oLinks.length; i++) {
-      if ((sm.canPlayURL(oLinks[i].href) || self.hasClass(oLinks[i],'playable')) && !self.hasClass(oLinks[i],'exclude')) {
+      if ((sm.canPlayLink(oLinks[i]) || self.hasClass(oLinks[i],'playable')) && !self.hasClass(oLinks[i],'exclude')) {
         oLinks[i].rel = 'pagePlayerMP3Sound'+i;
         self.links[self.links.length] = oLinks[i];
         self.addClass(oLinks[i],self.css.sDefault); // add default CSS decoration
