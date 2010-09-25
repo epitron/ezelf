@@ -16,7 +16,7 @@ Requirements:
 How to Install:
 
   1) create "config/database.yml"
-     (see the sample files in the config dir for info)
+     (see the example database.yml-{mysql,sqlite} files in the "config" dir)
   2) run "rake db:migrate"
   3) run "script/server"
   4) go to "http://localhost:3000/sources"

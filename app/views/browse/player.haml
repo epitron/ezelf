@@ -1,11 +1,15 @@
 - css("page-player", "optional-themes", "optional-annotations")
 
-- js("soundmanager2-jsmin")
+- js "soundmanager2-nodebug-jsmin"
 
 - content_for :header do
   :javascript
     soundManager.useHighPerformance = true; // keep flash on screen, boost performance
     soundManager.useFastPolling = true; // increased JS callback frequency
+    //soundManager.useHTML5Audio = true;
+    //soundManager.debugMode = true;
+    //soundManager.debugFlash = true;           // enable debugging output inside SWF, troubleshoot Flash/browser issues
+    soundManager.onerror = function() { alert('some error!'); }
     soundManager.url = "/swf/";
     var PP_CONFIG = {
       flashVersion: 9,       // version of Flash to tell SoundManager to use - either 8 or 9. Flash 9 required for peak / spectrum data.
@@ -15,9 +19,10 @@
       //useEQData: false,      // [Flash 9 only] show EQ (frequency spectrum) data
       //useMovieStar: true     // Flash 9.0r115+ only: Support for a subset of MPEG4 formats.
     };
+    
+  - js "page-player"
 
-- js "page-player"
-
+/ #soundmanager-debug
 	
 .content
   %h1 69 Random Tracks

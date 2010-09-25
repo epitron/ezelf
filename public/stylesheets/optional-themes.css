@@ -204,6 +204,3 @@ ul.playlist.shiny li.sm2_playing {
  background-position:0px -1px;
  _background-image:none; /* can't be bothered with IE 6. */
 }
-
-ul.playlist li .comment {font-size:0.65em;opacity:0.5}
-
