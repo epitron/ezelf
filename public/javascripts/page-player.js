@@ -537,7 +537,9 @@ var count = 0;
 	        oGraph: self.getElementsByClassName('spectrum-box','div',o.parentNode)[0],
 	        nIndex: self.getSoundIndex(o),
 	        className: self.css.sPlaying,
-	        originalTitle: o.innerHTML,
+	        /* originalTitle: o.innerHTML, */
+	        /* TWEAK: Strip out <span> tags. */ 
+	        originalTitle: $(o).text().replace(/^\s+/g, '').replace(/\s+$/g, '').replace(/\n/g, " - ").replace(/\s+/g, ' '),	        
 	        metadata: null
 	      };
 	      thisSound._data.oTimingBox.appendChild(document.getElementById('spectrum-container'));

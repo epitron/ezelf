@@ -6,9 +6,12 @@
     %title= "ezELF :: #{request.env["PATH_INFO"]}"
   
     = %{<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">}
-    = javascript_include_tag 'prototype', 'effects', 'application' #, 'controls'
-    = stylesheet_link_tag "beast"
-    = stylesheet_link_tag "extra"
+    - if @jquery
+      = js 'jquery-1.4.2.min'
+    - else
+      = js 'prototype', 'effects', 'application' #, 'controls'
+      
+    = css "beast", "extra"
   
     %link{:rel=>"SHORTCUT ICON", :href=>"/favicon.ico"}
 

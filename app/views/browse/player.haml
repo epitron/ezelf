@@ -1,14 +1,18 @@
-- css("page-player", "page-player-mytweaks", "optional-themes", "optional-annotations")
-
-- js "soundmanager2-nodebug-jsmin"
+- @jquery = true
 
 - content_for :header do
+
+  = css "page-player", "page-player-mytweaks", "optional-themes", "optional-annotations"
+  
+  = js "soundmanager2-nodebug-jsmin"
+  / = js "soundmanager2"
+  
   :javascript
     soundManager.useHighPerformance = true; // keep flash on screen, boost performance
     soundManager.useFastPolling = true; // increased JS callback frequency
     //soundManager.useHTML5Audio = true;
     //soundManager.debugMode = true;
-    //soundManager.debugFlash = true;           // enable debugging output inside SWF, troubleshoot Flash/browser issues
+    soundManager.debugFlash = true; // enable debugging output inside SWF, troubleshoot Flash/browser issues
     soundManager.onerror = function() { alert('some error!'); }
     soundManager.url = "/swf/";
     var PP_CONFIG = {
@@ -20,9 +24,11 @@
       //useMovieStar: true     // Flash 9.0r115+ only: Support for a subset of MPEG4 formats.
     };
     
-  - js "page-player"
+  = js "page-player"
 
-/ #soundmanager-debug
+  
+/ #soundmanager-debug debug
+
 	
 .content
   %h1 69 Random Tracks

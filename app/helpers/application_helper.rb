@@ -19,11 +19,11 @@ module ApplicationHelper
   end
 
   def js(*args)
-    content_for :header, javascript_include_tag(*args)
+    javascript_include_tag(*args)
   end
 
   def css(*args)
-    content_for :header, stylesheet_link_tag(*args)
+    stylesheet_link_tag(*args)
   end
   
   ##############################################################################
