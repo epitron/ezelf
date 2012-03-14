@@ -1,4 +1,4 @@
-require 'sha1'
+require 'digest/sha1'
 
 class StreamController < ApplicationController
 

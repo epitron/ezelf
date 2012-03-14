@@ -1,16 +1,15 @@
+# encoding: UTF-8
+
 #############################################################################
 ## Unicode!
-$KCODE = 'u'
-#require 'jcode'
-require 'iconv'
-require 'sha1'
+#require 'iconv'
 #############################################################################
 
 
 
 #############################################################################
 ## Rails Init Crap
-RAILS_GEM_VERSION = '2.3.10' unless defined? RAILS_GEM_VERSION
+RAILS_GEM_VERSION = '2.3.14' unless defined? RAILS_GEM_VERSION
 # ENV['RAILS_ENV'] ||= 'production'
 require File.join(File.dirname(__FILE__), 'boot')
 #############################################################################
@@ -34,36 +33,9 @@ require File.join(File.dirname(__FILE__), 'exceptions')
 # (See Rails::Configuration for more options)
 
 Rails::Initializer.run do |config|
-
-  #############################################################################
-  ## Utils
-  config.gem 'rio'
-  config.gem 'rubyzip',          :lib=>'zip/zip'
-  #############################################################################
-
-  #############################################################################
-  ## MP3 Info
+  
   require 'mp3info'
-  #config.gem 'ruby-mp3info',    :lib=>'mp3info'
 
-  config.gem 'ruby-audioinfo',   :lib=>'audioinfo', :lib=>'audioinfo/album'
-  #require 'audioinfo/album'
-
-  config.gem 'ruby-ogginfo',     :lib=>'ogginfo'
-  config.gem 'MP4Info',          :lib=>'mp4info'
-  config.gem 'flacinfo-rb',      :lib=>'flacinfo'
-  config.gem 'wmainfo-rb',       :lib=>'wmainfo'
-
-  #require 'lib/audioinfo'
-  #require 'mp3info_with_extensions'
-  #############################################################################
-  
-  #############################################################################
-  ## Music Services
-  config.gem 'rbrainz'
-  config.gem 'scrobbler'
-  #############################################################################
-  
   config.frameworks -= [ :action_web_service, ] #:action_mailer ]
   # config.plugins = %W( exception_notification ssl_requirement )
   # config.load_paths += %W( #{RAILS_ROOT}/extras )

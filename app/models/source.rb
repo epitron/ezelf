@@ -11,12 +11,13 @@
 
 require 'pathname'
 require 'uri'
+require 'audioinfo'
 
 class Source < ActiveRecord::Base
 
   has_many :tracks
   has_many :albums
-  belongs_to :encoding
+  belongs_to :encoding, :foreign_key => 'encoding_id', :class_name=>"EncodingType"
 
   
   URI_RECOGNIZER = %r{^(\w\{3-20\})://([^/]+)/.+}
@@ -65,13 +66,14 @@ class Source < ActiveRecord::Base
 
   
   def each_album(fast=false, &block)
+    #path = rio(uri)
+    path = Path[uri]
     
-    path = rio(uri)
     p [:path, path]
     raise "can only scan dirs" unless path.dir?
 
     counter = 0
-    path.all.dirs do |dir|
+    path.ls.select(&:dir?).each do |dir|
       album = AudioInfo::Album.new(dir.path, fast)
       unless album.empty?
         album = AudioInfo::Album.new(dir.path, false) if album.va? and fast

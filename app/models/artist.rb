@@ -11,8 +11,6 @@
 #  created_at   :datetime      
 #
 
-require 'scrobbler'
-
 class Artist < ActiveRecord::Base
   
   has_many :albums

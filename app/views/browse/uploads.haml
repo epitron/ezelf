@@ -7,7 +7,7 @@
       - # %h3= "#{link_to user.name, :action=>"show", :controller=>"users", :id=>user.id}'s uploads"
       %h3= "#{user.name}'s uploads"
       - tree.each do |relative_path, filenames|
-        - the_id = SHA1::new("#{user.name}/#{relative_path}").to_s
+        - the_id = Digest::SHA1.hexdigest("#{user.name}/#{relative_path}")
         %p.subtitle
           = link_to "<img src='/images/play16.png' width=16 height=16>", :controller=>"stream", :action=>"uploaded_dir", :relative_path=>relative_path, :user=>user.id
           = link_to_function "#{relative_path}/", "Element.toggle('#{the_id}')"
