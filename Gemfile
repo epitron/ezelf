@@ -1,11 +1,13 @@
 source 'http://rubygems.org'
 
-gem 'rails', '2.3.14'
+gem 'rails', '~> 2.3'
 gem 'haml'
 gem 'sass'
 gem 'mysql'
 
 #gem 'epitools'
+
+gem 'rake', '~> 0.9'
 
 #############################################################################
 ## Utils
