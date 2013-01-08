@@ -100,7 +100,7 @@ module Rails
 
       private
         def read_environment_rb
-          File.read("#{RAILS_ROOT}/config/environment.rb")
+          File.read("#{RAILS_ROOT}/config/environment.rb", encoding: 'UTF-8')
         end
     end
   end
