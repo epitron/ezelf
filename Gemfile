@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '~> 2.3'
+gem 'rails', '~> 2.3.18'
 gem 'haml'
 gem 'sass'
 gem 'mysql'
