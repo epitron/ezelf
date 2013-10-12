@@ -39,3 +39,12 @@ gem 'wmainfo-rb'#,       :lib=>'wmainfo'
 #############################################################################
 
 gem "will_paginate", "2.3.15"
+
+
+group :development do
+  gem 'pry-rails'
+  gem 'awesome_print'
+
+  gem 'better_errors'
+  gem 'binding_of_caller'
+end
