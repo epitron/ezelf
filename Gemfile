@@ -4,6 +4,7 @@ gem 'rails', '~> 2.3.18'
 gem 'haml'
 gem 'sass'
 gem 'mysql'
+gem 'iconv'
 
 #gem 'epitools'
 
