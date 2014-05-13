@@ -15,7 +15,8 @@ module ApplicationHelper
 
   def link_to_album(desc, album)
     url = url_for :controller=>:stream, :action=>"album", :id=>album.id
-    %{<a href="#{url}.m3u">#{ desc || url }</a>}
+    # %{<a href="#{url}.m3u">#{ desc || url }</a>}
+    %{<a href="#{url}.xspf">#{ desc || url }</a>}
   end
 
   def js(*args)
@@ -73,7 +74,8 @@ module ApplicationHelper
       Tab.new( "artists",  { :controller => "browse", :action => "artists"  }  ),
       Tab.new( "files",    { :controller => "browse", :action => "files"    }  ),
       Tab.new( "uploads",  { :controller => "browse",  :action => "uploads" }  ),
-      Tab.new( "shuffle",  { :controller => "stream", :action => "shuffle.m3u"  }  ),
+      # Tab.new( "shuffle",  { :controller => "stream", :action => "shuffle.m3u"  }  ),
+      Tab.new( "shuffle",  { :controller => "stream", :action => "shuffle.xspf"  }  ),
       #Tab.new( "stations", { :controller => "browse", :action => "stations" }  ),
     ]
   end

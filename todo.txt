@@ -6,6 +6,25 @@
     \__\___/ \__,_|\___/|___/
 
 
+
+== NEW THINGS: ==
+
+* Foobar2000 Style Library Organization
+* Link individual tracks to people
+  * Use user-agent to determine whether to render a webpage or stream the MP3
+* Start playing tracks directly in the "artists" page
+* Dragon drop uploads
+* Import
+  * Youtube playlists
+  * Clementine/Amarok/etc. Ratings
+  * Play remotely (already-supported streaming protocol? UPnP?)
+* Buckets
+* Desktop notifications
+* Stars
+* Accounts
+  * Paranoia: Each website access (w/ account) allows an IP for <2 days?>
+
+
 === BUGS ===
 
 ### Problems with the program itself:
