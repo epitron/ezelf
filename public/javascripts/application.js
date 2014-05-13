@@ -28,7 +28,8 @@ function do_ajax_request( uri ) {
 }
 
 function play_album(album_id) {
-  location = "/stream/album/" + album_id + ".m3u";
+  // location = "/stream/album/" + album_id + ".m3u";
+  location = "/stream/album/" + album_id + ".xspf";
 }
 
 function loading(div_id) {
