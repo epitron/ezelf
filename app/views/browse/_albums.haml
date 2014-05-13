@@ -1,7 +1,8 @@
 - @artist.albums.each do |album|
   %ul
     %h3
-      = link_to image_tag("play16.png"), :controller=>"stream", :action=>"album", :id=>"#{album.id}.m3u"
+      / = link_to image_tag("play16.png"), :controller=>"stream", :action=>"album", :id=>"#{album.id}.m3u"
+      = link_to image_tag("play16.png"), :controller=>"stream", :action=>"album", :id=>"#{album.id}.xspf"
       = album.nice_name
     %ul.tracks
       - album.sorted_tracks.each do |track|
