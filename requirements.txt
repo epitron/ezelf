@@ -1,5 +1,0 @@
-Requirements:
-
-  - Ruby on Rails v1.2.x
-  - MySQL gem
-

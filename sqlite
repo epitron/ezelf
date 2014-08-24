@@ -1,4 +1,0 @@
-cd config
-rm database.yml
-ln -s database.yml-sqlite database.yml
-cd ..

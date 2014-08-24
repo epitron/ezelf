@@ -42,7 +42,7 @@ gem "will_paginate", "2.3.15"
 
 
 group :development do
-#  gem 'pry-rails'
+  # gem 'pry-rails'
   gem 'awesome_print'
   gem 'zeus'
   gem 'sqlite3'
