@@ -44,7 +44,10 @@ gem "will_paginate", "2.3.15"
 group :development do
 #  gem 'pry-rails'
   gem 'awesome_print'
-
-#  gem 'better_errors'
+  gem 'zeus'
+  gem 'sqlite3'
+  gem 'better_errors'
+  gem 'pry'
+  gem 'yard'
 #  gem 'binding_of_caller'
 end

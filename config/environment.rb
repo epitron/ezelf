@@ -1,5 +1,8 @@
 # encoding: UTF-8
 
+require 'yard/rubygems/backports/gem'
+require 'yard/rubygems/backports/source_index'
+
 #############################################################################
 ## Unicode!
 #require 'iconv'
