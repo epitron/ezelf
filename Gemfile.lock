@@ -61,7 +61,7 @@ DEPENDENCIES
   mysql
   pry
   rails (~> 2.3.18)
-  rake (~> 0.9)
+  rake (~> 0.9.6)
   ruby-ogginfo
   rubyzip
   sass
