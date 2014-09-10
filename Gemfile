@@ -5,6 +5,7 @@ gem 'haml'
 gem 'sass'
 gem 'mysql'
 gem 'iconv'
+gem 'yard'
 
 #gem 'epitools'
 
@@ -48,6 +49,5 @@ group :development do
   gem 'sqlite3'
   gem 'better_errors'
   gem 'pry'
-  gem 'yard'
 #  gem 'binding_of_caller'
 end
