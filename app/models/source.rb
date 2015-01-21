@@ -67,7 +67,7 @@ class Source < ActiveRecord::Base
   
   def each_album(fast=false, &block)
     #path = rio(uri)
-    path = Path[uri]
+    paths = [Path[uri]].flatten
     
     p [:path, path]
     raise "can only scan dirs" unless path.dir?
