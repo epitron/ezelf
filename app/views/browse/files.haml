@@ -19,7 +19,7 @@
     - @tree.each do |relative_path,tracks|
       - the_id = Digest::SHA1.hexdigest(relative_path)
       %p.subtitle
-        = link_to "<img src='/images/play16.png' width=16 height=16>", :controller=>"stream", :action=>"folder", :relative_path=>relative_path
+        = link_to "<img src='/images/play16.png' width=16 height=16>", :controller=>"stream", :action=>"folder.xspf", :relative_path=>relative_path
         = link_to_function highlight(relative_path,@query) + "/", "Element.toggle('#{the_id}')"
       %div{:id=>the_id, :class=>"foldable", :style=>"display:none;"}
         %ul.tracks
